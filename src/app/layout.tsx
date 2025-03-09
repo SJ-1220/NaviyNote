@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import { getServerSession } from 'next-auth'
 import SessionWrapper from './api/auth/[...nextauth]/SessionWrapper'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -16,7 +18,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="kr">
       <body>
+        <Header />
         <SessionWrapper session={session}>{children}</SessionWrapper>
+        <Footer />
       </body>
     </html>
   )
