@@ -17,7 +17,7 @@
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "warn",
     "tailwindcss/no-unnecessary-arbitrary-value": "off",
-
+    "linebreak-style": ["error", "unix"],
     "prettier/prettier": [
       "error",
       {
