@@ -8,8 +8,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        navy: '#003366',
       },
       fontFamily: {
         nanumgothic_regular: ['var(--font-nanumgothic-regular)', 'sans-serif'],
