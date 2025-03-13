@@ -6,6 +6,9 @@ export default {
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      sm: { max: '1104px' },
+    },
     extend: {
       colors: {
         navy: '#003366',

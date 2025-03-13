@@ -13,8 +13,8 @@ export const HeaderWrapper = () => {
   const isStatsPage = router.startsWith('/stats')
   const isFriendPage = router.startsWith('/friend')
   return (
-    <header className="flex justify-center">
-      <div className=" w-[100rem] h-[8.6rem] flex justify-between items-center">
+    <header className="flex justify-center sm:flex-col">
+      <div className="w-[100rem] h-[8.6rem] flex sm:flex-col justify-between items-center sm:w-full sm:h-[32rem]">
         <Header
           isMainPage={isMainPage}
           isMemoPage={isMemoPage}
@@ -22,11 +22,11 @@ export const HeaderWrapper = () => {
           isStatsPage={isStatsPage}
           isFriendPage={isFriendPage}
         />
-        <div>
+        <div className="flex sm:flex-col">
           <HeaderNaverAuth />
           {/* Dark */}
           <button
-            className="font-nanumgothic_regular text-[2rem] ml-[1.5rem]"
+            className="font-nanumgothic_regular text-[2rem] ml-[1.5rem] sm:ml-0"
             type="button"
           >
             Dark
@@ -47,22 +47,22 @@ export const HeaderNaverAuth = () => {
     signOut().catch((error) => console.error('로그아웃 실패:', error))
   }
   return (
-    <>
+    <div className="sm:flex-col">
       {session ? (
         <button
-          className="font-nanumgothic_regular text-[2rem] ml-[1.5rem]"
+          className="font-nanumgothic_regular text-[2rem] ml-[1.5rem] sm:ml-0"
           onClick={handleSignOut}
         >
           로그아웃
         </button>
       ) : (
         <button
-          className="font-nanumgothic_regular text-[2rem] ml-[1.5rem]"
+          className="font-nanumgothic_regular text-[2rem] ml-[1.5rem] sm:ml-0"
           onClick={handleSignIn}
         >
           로그인
         </button>
       )}
-    </>
+    </div>
   )
 }
