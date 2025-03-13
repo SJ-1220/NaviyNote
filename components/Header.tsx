@@ -21,9 +21,9 @@ export default function Header({
   return (
     <div>
       {/* Logo, Title, 홈/메모/ToDo/통계/친구 */}
-      <div className="flex items-center">
+      <div className="sm:flex-col flex items-center">
         {/* Logo, Title */}
-        <div className="flex items-center">
+        <div className="sm:flex-col flex items-center">
           <div className="relative size-[6rem]">
             <Image
               src={LogoImage}
@@ -32,7 +32,7 @@ export default function Header({
               style={{ objectFit: 'contain' }}
             />
           </div>
-          <div className="ml-[1rem] relative w-[14.4rem] h-[3.2rem]">
+          <div className="ml-[1rem] relative w-[14.4rem] h-[3.2rem] sm:ml-0">
             <Image
               src={TitleImage}
               alt="TitleImage"
@@ -42,9 +42,9 @@ export default function Header({
           </div>
         </div>
         {/* 홈/메모/ToDo/통계/친구 */}
-        <div className="ml-[3.5rem] flex items-center">
+        <div className="sm:flex-col ml-[3.5rem] flex items-center sm:ml-0">
           <div
-            className={`flex justify-center items-center w-[3.3rem] h-[3.4rem]  ${isMainPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+            className={`sm:flex-col flex justify-center items-center w-[3.3rem] h-[3.4rem]  ${isMainPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
           >
             <Link
               className={`font-nanumgothic_regular text-[2rem] `}
@@ -54,7 +54,7 @@ export default function Header({
             </Link>
           </div>
           <div
-            className={`flex justify-center items-center ml-[1rem] w-[5.2rem] h-[3.4rem]  ${isMemoPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+            className={`sm:flex-col flex justify-center items-center ml-[1rem] w-[5.2rem] h-[3.4rem]   sm:ml-0 ${isMemoPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
           >
             <Link
               className={`font-nanumgothic_regular text-[2rem] `}
@@ -64,7 +64,7 @@ export default function Header({
             </Link>
           </div>
           <div
-            className={`flex ml-[1rem] justify-center items-center w-[6.4rem] h-[3.4rem]  ${isToDoPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+            className={`sm:ml-0 sm:flex-col flex ml-[1rem] justify-center items-center w-[6.4rem] h-[3.4rem]  ${isToDoPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
           >
             <Link
               className={`font-nanumgothic_regular text-[2rem] `}
@@ -74,7 +74,7 @@ export default function Header({
             </Link>
           </div>
           <div
-            className={`flex ml-[1rem] justify-center items-center w-[5.2rem] h-[3.4rem]  ${isStatsPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+            className={`sm:ml-0 sm:flex-col flex ml-[1rem] justify-center items-center w-[5.2rem] h-[3.4rem]  ${isStatsPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
           >
             <Link
               className={`font-nanumgothic_regular text-[2rem] `}
@@ -84,7 +84,7 @@ export default function Header({
             </Link>
           </div>
           <div
-            className={`flex ml-[1rem] justify-center items-center w-[5.2rem] h-[3.4rem]  ${isFriendPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+            className={`sm:ml-0 sm:flex-col flex ml-[1rem] justify-center items-center w-[5.2rem] h-[3.4rem]  ${isFriendPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
           >
             <Link
               className={`font-nanumgothic_regular text-[2rem] `}
