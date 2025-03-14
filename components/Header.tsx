@@ -23,7 +23,7 @@ export default function Header({
       {/* Logo, Title, 홈/메모/ToDo/통계/친구 */}
       <div className="sm:flex-col flex items-center">
         {/* Logo, Title */}
-        <div className="sm:flex-col flex items-center">
+        <div className="sm:mt-[1rem] sm:flex-col flex items-center">
           <div className="relative size-[6rem]">
             <Image
               src={LogoImage}
@@ -32,7 +32,7 @@ export default function Header({
               style={{ objectFit: 'contain' }}
             />
           </div>
-          <div className="ml-[1rem] relative w-[14.4rem] h-[3.2rem] sm:ml-0">
+          <div className="sm:mt-[1rem] ml-[1rem] relative w-[14.4rem] h-[3.2rem] sm:ml-0">
             <Image
               src={TitleImage}
               alt="TitleImage"
@@ -42,7 +42,7 @@ export default function Header({
           </div>
         </div>
         {/* 홈/메모/ToDo/통계/친구 */}
-        <div className="sm:flex-col ml-[3.5rem] flex items-center sm:ml-0">
+        <div className="sm:mt-[1rem] sm:flex-col ml-[3.5rem] flex items-center sm:ml-0">
           <div
             className={`sm:flex-col flex justify-center items-center w-[3.3rem] h-[3.4rem]  ${isMainPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
           >

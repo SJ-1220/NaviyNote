@@ -36,13 +36,15 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <html
       lang="kr"
-      className={` ${NanumGothicRegular.variable} ${NanumGothicBold.variable} ${NanumGothicExtraBold.variable}`}
+      className={`${NanumGothicRegular.variable} ${NanumGothicBold.variable} ${NanumGothicExtraBold.variable}`}
     >
       <body>
         <SessionWrapper session={session}>
           <HeaderWrapper />
         </SessionWrapper>
-        <SessionWrapper session={session}>{children}</SessionWrapper>
+        <SessionWrapper session={session}>
+          <div className="bg-navy text-white">{children}</div>
+        </SessionWrapper>
         <Footer />
       </body>
     </html>
