@@ -14,7 +14,7 @@ export const HeaderWrapper = () => {
   const isFriendPage = router.startsWith('/friend')
   return (
     <header className="flex justify-center sm:flex-col">
-      <div className="w-[100rem] h-[8.6rem] flex sm:flex-col justify-between items-center sm:w-full sm:h-[32rem]">
+      <div className="w-[100rem] h-[8.6rem] flex sm:flex-col justify-between items-center sm:w-full sm:h-[35rem]">
         <Header
           isMainPage={isMainPage}
           isMemoPage={isMemoPage}
@@ -26,7 +26,7 @@ export const HeaderWrapper = () => {
           <HeaderNaverAuth />
           {/* Dark */}
           <button
-            className="font-nanumgothic_regular text-[2rem] ml-[1.5rem] sm:ml-0"
+            className="font-nanumgothic_regular text-[2rem] ml-[2.2rem] sm:ml-0"
             type="button"
           >
             Dark

@@ -6,7 +6,6 @@ export default function Home() {
   return (
     <>
       <div className="text-2xl font-nanumgothic_extrabold">웹 사이트 설명</div>
-      <div>음</div>
       <div className="font-nanumgothic_extrabold">어디있지음</div>
       {!session || !session.user ? (
         <button
