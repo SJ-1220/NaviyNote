@@ -4,7 +4,7 @@ import { getServerSession } from 'next-auth'
 import SessionWrapper from '../api/auth/[...nextauth]/SessionWrapper'
 import Footer from '@/components/Footer'
 import localFont from 'next/font/local'
-import { HeaderWrapper } from '@/components/HeaderClients'
+import { HeaderWrapper } from '@/components/Header/HeaderClients'
 
 const NanumGothicRegular = localFont({
   src: '../../../public/fonts/NanumGothic-Regular.ttf',
@@ -43,7 +43,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <HeaderWrapper />
         </SessionWrapper>
         <SessionWrapper session={session}>
-          <div className="bg-navy text-white">{children}</div>
+          <div className="flex justify-center bg-navy text-white">
+            {/* 테스트용 */}
+            {/* <div className="bg-slate-300 w-[100rem]">{children}</div> */}
+            {/* 확인용 */}
+            <div className="w-[100rem]">{children}</div>
+          </div>
         </SessionWrapper>
         <Footer />
       </body>
