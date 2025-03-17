@@ -1,3 +1,9 @@
+import ToDos from '@/components/ToDo/ToDos'
+
 export default function ToDoPage() {
-  return <div>ToDo 페이지입니다</div>
+  return (
+    <div>
+      <ToDos />
+    </div>
+  )
 }
