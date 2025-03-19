@@ -1,9 +1,9 @@
-import ToDos from '@/components/ToDo/ToDos'
+import ToDos from '@/components/ToDo/todos'
 
 export default function ToDoPage() {
   return (
-    <div>
+    <>
       <ToDos />
-    </div>
+    </>
   )
 }
