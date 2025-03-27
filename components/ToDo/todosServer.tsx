@@ -19,10 +19,10 @@ export const fetchTodos = async (userEmail: string) => {
   return data
 }
 
-export const addTodo = async (todo: Todo) => {
-  const { data, error } = await supabase.from('todo').insert(todo)
+export const addTodo = async (todo: Omit<Todo, 'id'>) => {
+  const { data, error } = await supabase.from('todo').insert([todo]).select()
   if (error) throw new Error(error.message)
-  return data
+  return data[0]
 }
 
 export const deleteTodo = async (todoId: string) => {
