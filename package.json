@@ -16,6 +16,7 @@
     "*.{md,json}": "prettier --write"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
     "next": "15.1.7",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
