@@ -1,4 +1,4 @@
-import ToDos from '@/components/ToDo/todos'
+import ToDos from '@/components/ToDo/ToDos'
 
 export default function ToDoPage() {
   return (
