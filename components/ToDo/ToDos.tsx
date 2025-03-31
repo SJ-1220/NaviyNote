@@ -38,16 +38,15 @@ export default function ToDos() {
   const handleAddTodo = async () => {
     if (newTask.trim() === '') return
     if (session && session.user && session.user.email) {
-      const userEmail = session.user.email
       const todo: Omit<Todo, 'id'> = {
-        user_email: userEmail,
+        user_email: session.user.email,
         task: newTask,
         completed: newCompleted,
         important: newImportant,
         date: newDate != null ? newDate : undefined,
       }
       try {
-        const result = await addTodo(todo)
+        const result = await addTodo(todo, session.user.email)
         if (result) {
           setTodos([...todos, { ...todo, id: result.id }])
         }
@@ -62,8 +61,9 @@ export default function ToDos() {
   }
 
   const handleDeleteTodo = async (deleteTodoId: string) => {
+    if (!session?.user?.email) return
     try {
-      await deleteTodo(deleteTodoId)
+      await deleteTodo(deleteTodoId, session.user.email)
       setTodos(todos.filter((todo) => todo.id !== deleteTodoId))
     } catch (error) {
       setError((error as Error).message)
@@ -76,20 +76,21 @@ export default function ToDos() {
     setNewTask(todo.task)
     setNewImportant(todo.important)
     setNewCompleted(todo.completed)
-    setNewDate(todo.date || '')
+    setNewDate(todo.date || null)
   }
 
   const updateTodoInput = async () => {
-    if (!editTodo) return
+    if (!editTodo || !session?.user?.email) return
+    const updatedDate = newDate === '' ? null : newDate
     const updatedTodo = {
       ...editTodo,
       task: newTask,
       important: newImportant,
       completed: newCompleted,
-      date: newDate || '',
+      date: updatedDate,
     }
     try {
-      await updateTodo(editTodo.id, updatedTodo)
+      await updateTodo(editTodo.id, updatedTodo, session.user.email)
       setTodos(
         todos.map((todo) => (todo.id == editTodo.id ? updatedTodo : todo))
       )
@@ -101,6 +102,9 @@ export default function ToDos() {
     } catch (error) {
       setError((error as Error).message)
     }
+  }
+  const handleClearDate = () => {
+    setNewDate(null)
   }
 
   if (loading) return <p className="text-green-400">로딩 중</p>
@@ -146,6 +150,11 @@ export default function ToDos() {
           onChange={(e) => setNewDate(e.target.value || null)}
         />
       </label>
+      {editTodo && (
+        <button type="button" onClick={handleClearDate}>
+          날짜 미정
+        </button>
+      )}
       {editTodo ? (
         <button type="button" onClick={updateTodoInput}>
           수정
