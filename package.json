@@ -16,6 +16,9 @@
     "*.{md,json}": "prettier --write"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/react": "^6.1.15",
     "@supabase/supabase-js": "^2.49.1",
     "next": "15.1.7",
     "next-auth": "^4.24.11",
