@@ -20,18 +20,26 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
   const calendarAllDayRef = useRef<HTMLTableCellElement[]>([])
   const calendarDropRef = useRef<HTMLDivElement>(null)
 
-  // Todo의 날짜 update
+  // Todo를 캘린더에 드롭했을 때 해당 todo의 날짜를 업데이트하는 함수
   const handleDrop = async (calendarDroppedDate: string, todoId: string) => {
     if (!todoId || !session?.user?.email) return
     try {
+      const calendarCorrectedDate = new Date(calendarDroppedDate)
+      calendarCorrectedDate.setDate(calendarCorrectedDate.getDate() + 1)
+
       await updateTodo(
         todoId,
-        { date: calendarDroppedDate },
+        { date: calendarCorrectedDate.toISOString().split('T')[0] },
         session.user.email
       )
       setTodos((prevTodos) =>
         prevTodos.map((todo: Todo) =>
-          todo.id === todoId ? { ...todo, date: calendarDroppedDate } : todo
+          todo.id === todoId
+            ? {
+                ...todo,
+                date: calendarCorrectedDate.toISOString().split('T')[0],
+              }
+            : todo
         )
       )
     } catch (error) {
@@ -39,7 +47,7 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
     }
   }
 
-  // 특정 todo가 캘린더에 드롭된 좌표를 통해 날짜를 찾아, todo와 캘린더를 update
+  // todo가 캘린더에 드롭된 좌표를 통해 날짜를 찾는 함수
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'TODO',
     drop: (item: { id: string }, monitor) => {
@@ -77,6 +85,7 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
   }, [drop])
 
   // todos 배열이 변경될 때마다 캘린더에 표시할 events 배열을 업데이트
+  // 날짜가 있는 todo만 필터링하여 캘린더에 표시
   useEffect(() => {
     setEvents(
       todos
@@ -89,7 +98,7 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
     )
   }, [todos])
 
-  // 캘린더 내에서 todo를 드래그앤드롭했을 때 todo와 calendar를 upate하는 함수
+  // 캘린더 내에서 todo를 드래그앤드롭하여 날짜를 변경했을 때 db에서 해당 todo의 날짜를 업데이트하는 함수
   const handleEventDrop = async (eventDropInfo: EventChangeArg) => {
     const todoId = eventDropInfo.event.id
     if (!todoId || !session?.user?.email) return
@@ -108,12 +117,15 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
   }
 
   // DayCellMountArg : FullCalendar에서 제공하는 날짜 셀에 대한 정보
+  // 각 날짜가 화면에 마운트될 때(처음 보여질 때) 호출되는 함수
   const handleDayCellDidMount = (info: DayCellMountArg) => {
     calendarAllDayRef.current.push(info.el as HTMLTableCellElement)
-    // info.el.dataset.date : info에서 날짜만 추출
+    // info에서 날짜만 추출해서 data-date 속성에 저장
     info.el.dataset.date = info.date.toISOString().split('T')[0]
   }
 
+  // 컴포넌트가 언마운트될 때(페이지 이동이나 레이아웃 변경으로 안보여질 때) calendarAllDayRef.current 초기화하는 함수
+  // 메모리 누수 방지
   useEffect(() => {
     return () => {
       calendarAllDayRef.current = []
@@ -121,7 +133,8 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
   }, [])
 
   return (
-    <div ref={calendarDropRef} className={isOver ? 'bg-gray-200' : ''}>
+    <div ref={calendarDropRef}>
+      {/* <div ref={calendarDropRef} className={isOver ? 'bg-gray-200' : ''}> */}
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"

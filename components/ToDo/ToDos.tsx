@@ -9,7 +9,7 @@ import {
   updateTodo,
 } from './todosServer'
 import Calendar from './Calendar'
-import TodoItem from './TodoItem'
+import NoDateTodos from './NoDateTodos'
 
 export default function ToDos() {
   const { data: session } = useSession()
@@ -118,7 +118,7 @@ export default function ToDos() {
         {/* 드래그 가능 TodoList */}
         <div>
           {todos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} /> // TodoItem 사용
+            <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
           ))}
         </div>
         {/* 처음 Todo List */}

@@ -2,11 +2,11 @@ import React, { useRef, useEffect } from 'react'
 import { useDrag } from 'react-dnd'
 import { Todo } from './todosServer'
 
-interface TodoItemProps {
+interface NoDateTodosProps {
   todo: Todo
 }
 
-export default function TodoItem({ todo }: TodoItemProps) {
+export default function NoDateTodos({ todo }: NoDateTodosProps) {
   const todoRef = useRef<HTMLDivElement>(null)
 
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -21,7 +21,9 @@ export default function TodoItem({ todo }: TodoItemProps) {
       drag(todoRef.current)
     }
   }, [drag])
-
+  if (todo.date) {
+    return null
+  }
   return (
     <div
       ref={todoRef}
