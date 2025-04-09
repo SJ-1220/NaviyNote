@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { useDrag } from 'react-dnd'
 import { Todo } from './todosServer'
+import TodoBox from './TodoBox'
 
 interface NoDateTodosProps {
   todo: Todo
@@ -25,11 +26,8 @@ export default function NoDateTodos({ todo }: NoDateTodosProps) {
     return null
   }
   return (
-    <div
-      ref={todoRef}
-      className={`text-green-300 {isDragging ? 'opacity-50' : 'opacity-100'}`}
-    >
-      {todo.task}
+    <div ref={todoRef}>
+      <TodoBox todo={todo} isDragging={isDragging} />
     </div>
   )
 }
