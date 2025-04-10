@@ -14,6 +14,8 @@ import Calendar from './Calendar'
 import NoDateTodos from './NoDateTodos'
 import { formatDate, todayDateFormat } from './TodayDateFormat'
 import TodoBox from './TodoBox'
+import LoadingPage from '../Loading'
+import Button from '../Button'
 
 export default function ToDos() {
   const { data: session } = useSession()
@@ -26,6 +28,8 @@ export default function ToDos() {
   const [newDate, setNewDate] = useState<string | null>(null)
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [selectedPrevDate, setSelectedPrevDate] = useState<string | null>(null)
+  const [selectedNextDate, setSelectedNextDate] = useState<string | null>(null)
   const [threeDaysTodos, setThreeDaysTodos] = useState<Todo[]>([])
   const [todayTodos, setTodayTodos] = useState<Todo[]>([])
 
@@ -54,8 +58,11 @@ export default function ToDos() {
 
           targetPrevDate.setDate(targetDate.getDate() - 1)
           const targetPrevDateFormat = formatDate(targetPrevDate)
+          setSelectedPrevDate(targetPrevDateFormat)
+
           targetNextDate.setDate(targetDate.getDate() + 1)
           const targetNextDateFormat = formatDate(targetNextDate)
+          setSelectedNextDate(targetNextDateFormat)
 
           const todos = await fetchThreeDaysTodo(
             session.user.email,
@@ -159,50 +166,72 @@ export default function ToDos() {
     setNewDate(null)
   }
 
-  if (loading) return <p className="text-green-400">로딩 중</p>
+  if (loading) return <LoadingPage />
   if (error) return <p>{error}</p>
 
   return (
     <div className="flex">
       <div>
         {/* 오늘의 Todo */}
-        <div>
-          <h1>오늘({todayDateFormat()})의 Todo</h1>
-          <div className="flex flex-wrap w-[15rem]">
+        <div className="mt-[2rem] outline-offset-[1rem] outline rounded-md">
+          <div className="text-[2rem]">오늘({todayDateFormat()})의 Todo</div>
+          <div className="flex flex-wrap w-[40rem]">
             {todayTodos.length === 0 ? (
-              <div>할일없서</div>
+              <div>🍀오늘은 할일이 없네용🍀</div>
             ) : (
               todayTodos.map((todo) => <TodoBox key={todo.id} todo={todo} />)
             )}
           </div>
         </div>
-        {/* 드래그 가능 TodoList */}
-        <div className="flex flex-wrap w-[15rem]">
-          {todos.map((todo) => (
-            <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
-          ))}
+        {/* 드래그 가능한 날짜없는 TodoList */}
+        <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div className="text-[2rem]">날짜없는 Todo</div>
+          <div>
+            날짜를 설정하고 싶다면, 캘린더로&nbsp;
+            <span className="font-bold text-[1.3rem]">드래그앤드롭</span>해용
+          </div>
+          <div className="flex flex-wrap w-[40rem]">
+            {todos.length === 0 ? (
+              <div>🌻모든 Todo의 날짜가 있네용🌻</div>
+            ) : (
+              todos.map((todo) => (
+                <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
+              ))
+            )}
+          </div>
         </div>
         {/* 캘린더에서 선택한 날짜의 전날, 당일, 다음날의 Todo */}
-        <div>
-          {!selectedDate && <div>날짜를 선택해</div>}
+        <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div>선택한 날짜의 전날, 당일, 다음날의 Todo를 보여줄게용</div>
+          {!selectedDate && (
+            <div>
+              <div className="text-[2rem]">
+                캘린더에서 Todo를 보고싶은 날짜를 선택해용
+              </div>
+            </div>
+          )}
           {selectedDate && (
             <div>
-              <h1 className="text-green-400">{selectedDate} Todo</h1>
-              {threeDaysTodos.length === 0 ? (
-                <div>할일없서</div>
-              ) : (
-                threeDaysTodos.map((todo) => (
-                  <TodoBox key={todo.id} todo={todo} />
-                ))
-              )}
+              <div className="text-[2rem]">
+                {selectedPrevDate},{selectedDate},{selectedNextDate}의 Todo
+              </div>
+              <div className="flex flex-wrap w-[40rem]">
+                {threeDaysTodos.length === 0 ? (
+                  <div>🍀{selectedDate} 전후로는 할일이 없네용🍀</div>
+                ) : (
+                  threeDaysTodos.map((todo) => (
+                    <TodoBox key={todo.id} todo={todo} />
+                  ))
+                )}
+              </div>
             </div>
           )}
         </div>
-        {/* 로그인한 사용자의 전체 Todo List */}
-        <div>
-          <h1 className="text-green-400">Todo List</h1>
+        {/* Todo 추가/삭제 Input */}
+        <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md text-[1.5rem]">
+          <div className="text-[2rem]">Todo 추가/삭제</div>
           <input
-            className="w-[30rem] text-black"
+            className="w-[30rem] text-black mb-[1rem]"
             type="text"
             value={newTask}
             placeholder="새로운 ToDo를 추가하세요"
@@ -210,24 +239,29 @@ export default function ToDos() {
           />
           <div>
             <label>
-              중요도 :
+              중요도
               <input
                 type="checkbox"
                 checked={newImportant}
+                className="size-[1.4rem]"
                 onChange={(e) => setNewImportant(e.target.checked)}
               />
             </label>
-            <label>
-              완료 :
+            <label className="ml-[2rem]">
+              완료
               <input
                 type="checkbox"
                 checked={newCompleted}
+                className="size-[1.4rem]"
                 onChange={(e) => setNewCompleted(e.target.checked)}
               />
             </label>
             {editTodo && (
               <div>
-                기존 날짜 : <span>{editTodo.date || '없음'}</span>
+                기존 날짜 :{' '}
+                <span>
+                  {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
+                </span>
               </div>
             )}
             <label>
@@ -240,41 +274,65 @@ export default function ToDos() {
               />
             </label>
             {editTodo && (
-              <button type="button" onClick={handleClearDate}>
+              <Button
+                type="button"
+                onClick={handleClearDate}
+                className="ml-[2rem] w-[8rem] bg-blue-800"
+              >
                 날짜 미정
-              </button>
+              </Button>
             )}
             {editTodo ? (
-              <button type="button" onClick={updateTodoInput}>
+              <Button
+                type="button"
+                onClick={updateTodoInput}
+                className="ml-[2rem] w-[5rem] bg-blue-800"
+              >
                 수정
-              </button>
+              </Button>
             ) : (
-              <button type="button" onClick={handleAddTodo}>
+              <Button
+                type="button"
+                onClick={handleAddTodo}
+                className="ml-[2rem] w-[5rem] bg-blue-800"
+              >
                 추가
-              </button>
+              </Button>
             )}
           </div>
-
-          <div>
+        </div>
+        {/* 로그인한 사용자의 전체 Todo List */}
+        <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div className="text-[2rem]">{session?.user?.name}의Todo List</div>
+          <div className="flex flex-wrap w-[40rem]">
             {todos.map((todo) => (
-              <div key={todo.id}>
+              <div key={todo.id} className="h-[14rem]">
                 <TodoBox key={todo.id} todo={todo} />
-                <button
-                  type="button"
-                  onClick={() => {
-                    handleEditTodo(todo)
-                  }}
-                >
-                  수정
-                </button>
-                <button onClick={() => handleDeleteTodo(todo.id)}>삭제</button>
+                <div className="items-center justify-center flex mt-[0.5rem]">
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      handleEditTodo(todo)
+                    }}
+                  >
+                    수정
+                  </Button>
+                  <Button
+                    type="button"
+                    className="ml-[2rem]"
+                    onClick={() => handleDeleteTodo(todo.id)}
+                  >
+                    삭제
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
         </div>
+        <div className="mb-[2rem]"></div>
       </div>
       {/* 캘린더 */}
-      <div className="size-[50rem]">
+      <div className="ml-[3rem] size-[50rem]">
         <Calendar
           todos={todos}
           setTodos={setTodos}
