@@ -7,9 +7,13 @@ import {
   deleteTodo,
   fetchTodos,
   updateTodo,
+  fetchThreeDaysTodo,
+  fetchTodayTodo,
 } from './todosServer'
 import Calendar from './Calendar'
 import NoDateTodos from './NoDateTodos'
+import { formatDate, todayDateFormat } from './TodayDateFormat'
+import TodoBox from './TodoBox'
 
 export default function ToDos() {
   const { data: session } = useSession()
@@ -21,6 +25,9 @@ export default function ToDos() {
   const [newCompleted, setNewCompleted] = useState<boolean>(false)
   const [newDate, setNewDate] = useState<string | null>(null)
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
+  const [selectedDate, setSelectedDate] = useState<string | null>(null)
+  const [threeDaysTodos, setThreeDaysTodos] = useState<Todo[]>([])
+  const [todayTodos, setTodayTodos] = useState<Todo[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +43,49 @@ export default function ToDos() {
     }
     fetchData()
   }, [session])
+
+  useEffect(() => {
+    const handleFetchThreeDaysTodos = async () => {
+      if (session?.user?.email && selectedDate) {
+        try {
+          const targetDate = new Date(selectedDate)
+          const targetPrevDate = new Date(targetDate)
+          const targetNextDate = new Date(targetDate)
+
+          targetPrevDate.setDate(targetDate.getDate() - 1)
+          const targetPrevDateFormat = formatDate(targetPrevDate)
+          targetNextDate.setDate(targetDate.getDate() + 1)
+          const targetNextDateFormat = formatDate(targetNextDate)
+
+          const todos = await fetchThreeDaysTodo(
+            session.user.email,
+            targetNextDateFormat,
+            targetPrevDateFormat
+          )
+          setThreeDaysTodos(todos)
+        } catch (error) {
+          setError((error as Error).message)
+        }
+      } else {
+        setThreeDaysTodos([])
+      }
+    }
+    handleFetchThreeDaysTodos()
+  }, [session, selectedDate])
+
+  useEffect(() => {
+    const handleTodayTodos = async () => {
+      if (!session?.user?.email) return
+      const today = todayDateFormat()
+      try {
+        const todos = await fetchTodayTodo(session.user.email, today)
+        setTodayTodos(todos)
+      } catch (error) {
+        setError((error as Error).message)
+      }
+    }
+    handleTodayTodos()
+  }, [todos, session])
 
   const handleAddTodo = async () => {
     if (newTask.trim() === '') return
@@ -115,13 +165,40 @@ export default function ToDos() {
   return (
     <div className="flex">
       <div>
+        {/* 오늘의 Todo */}
+        <div>
+          <h1>오늘({todayDateFormat()})의 Todo</h1>
+          <div className="flex flex-wrap w-[15rem]">
+            {todayTodos.length === 0 ? (
+              <div>할일없서</div>
+            ) : (
+              todayTodos.map((todo) => <TodoBox key={todo.id} todo={todo} />)
+            )}
+          </div>
+        </div>
         {/* 드래그 가능 TodoList */}
         <div className="flex flex-wrap w-[15rem]">
           {todos.map((todo) => (
             <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
           ))}
         </div>
-        {/* 처음 Todo List */}
+        {/* 캘린더에서 선택한 날짜의 전날, 당일, 다음날의 Todo */}
+        <div>
+          {!selectedDate && <div>날짜를 선택해</div>}
+          {selectedDate && (
+            <div>
+              <h1 className="text-green-400">{selectedDate} Todo</h1>
+              {threeDaysTodos.length === 0 ? (
+                <div>할일없서</div>
+              ) : (
+                threeDaysTodos.map((todo) => (
+                  <TodoBox key={todo.id} todo={todo} />
+                ))
+              )}
+            </div>
+          )}
+        </div>
+        {/* 로그인한 사용자의 전체 Todo List */}
         <div>
           <h1 className="text-green-400">Todo List</h1>
           <input
@@ -181,13 +258,7 @@ export default function ToDos() {
           <div>
             {todos.map((todo) => (
               <div key={todo.id}>
-                <div>todo id : {todo.id}</div>
-                <div>todo user-id : {todo.user_email}</div>
-                <div>task : {todo.task}</div>
-                <div>completed : {todo.completed ? 'true' : 'false'}</div>
-                <div>date : {todo.date}</div>
-                <div>memo_id : {todo.memo_id}</div>
-                <div>important : {todo.important ? 'true' : 'false'}</div>
+                <TodoBox key={todo.id} todo={todo} />
                 <button
                   type="button"
                   onClick={() => {
@@ -202,9 +273,13 @@ export default function ToDos() {
           </div>
         </div>
       </div>
-
+      {/* 캘린더 */}
       <div className="size-[50rem]">
-        <Calendar todos={todos} setTodos={setTodos} />
+        <Calendar
+          todos={todos}
+          setTodos={setTodos}
+          onDateClick={setSelectedDate}
+        />
       </div>
     </div>
   )

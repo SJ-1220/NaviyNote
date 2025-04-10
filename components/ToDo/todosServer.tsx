@@ -55,3 +55,30 @@ export const updateTodo = async (
   if (error) throw new Error(error.message)
   return data
 }
+
+export const fetchThreeDaysTodo = async (
+  userEmail: string,
+  endDate: string,
+  startDate: string
+) => {
+  if (!userEmail) throw new Error('User email is required')
+  const { data, error } = await supabase
+    .from('todo')
+    .select('*')
+    .eq('user_email', userEmail)
+    .gte('date', startDate)
+    .lte('date', endDate)
+  if (error) throw new Error(error.message)
+  return data || []
+}
+
+export const fetchTodayTodo = async (userEmail: string, todayDate: string) => {
+  if (!userEmail) throw new Error('User email is required')
+  const { data, error } = await supabase
+    .from('todo')
+    .select('*')
+    .eq('user_email', userEmail)
+    .eq('date', todayDate)
+  if (error) throw new Error(error.message)
+  return data || []
+}

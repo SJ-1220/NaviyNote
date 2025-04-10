@@ -12,9 +12,14 @@ import { DayCellMountArg } from '@fullcalendar/core'
 interface CalendarProps {
   todos: Todo[]
   setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  onDateClick?: (date: string) => void
 }
 
-export default function Calendar({ todos, setTodos }: CalendarProps) {
+export default function Calendar({
+  todos,
+  setTodos,
+  onDateClick,
+}: CalendarProps) {
   const { data: session } = useSession()
   const [events, setEvents] = useState<EventInput[]>([])
   const calendarAllDayRef = useRef<HTMLTableCellElement[]>([])
@@ -134,7 +139,6 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
 
   return (
     <div ref={calendarDropRef}>
-      {/* <div ref={calendarDropRef} className={isOver ? 'bg-gray-200' : ''}> */}
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
@@ -143,6 +147,10 @@ export default function Calendar({ todos, setTodos }: CalendarProps) {
         droppable={true}
         eventDrop={handleEventDrop}
         dayCellDidMount={handleDayCellDidMount}
+        dateClick={(info) => {
+          const clickedDate = info.dateStr
+          onDateClick?.(clickedDate)
+        }}
       />
     </div>
   )
