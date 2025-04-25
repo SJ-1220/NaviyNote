@@ -1,3 +1,9 @@
+import Memos from '@/components/Memo/Memos'
+
 export default function MemoPage() {
-  return <div>메모 페이지입니다</div>
+  return (
+    <div>
+      <Memos />
+    </div>
+  )
 }

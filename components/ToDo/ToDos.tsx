@@ -167,7 +167,7 @@ export default function ToDos() {
   }
 
   if (loading) return <LoadingPage />
-  if (error) return <p>{error}</p>
+  if (error) return <div>{error}</div>
 
   return (
     <div className="flex">
@@ -227,9 +227,9 @@ export default function ToDos() {
             </div>
           )}
         </div>
-        {/* Todo 추가/삭제 Input */}
+        {/* Todo 추가/수정 Input */}
         <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md text-[1.5rem]">
-          <div className="text-[2rem]">Todo 추가/삭제</div>
+          <div className="text-[2rem]">Todo 추가/수정</div>
           <input
             className="w-[30rem] text-black mb-[1rem]"
             type="text"

@@ -18,7 +18,7 @@ export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
         {todo.task}
         <br />
         {todo.completed ? '완료✅' : '미완❌'}
-        {todo.important ? '중요⭐' : '중요❌'}
+        {todo.important ? '중요⭐' : '안중요❌'}
         <br />
         {`날짜: ${formattedDate}`}
       </div>
