@@ -16,10 +16,11 @@ import { formatDate, todayDateFormat } from './TodayDateFormat'
 import TodoBox from './TodoBox'
 import LoadingPage from '../Loading'
 import Button from '../Button'
+import useTodoStore from '@/src/store/todoStore'
 
 export default function ToDos() {
   const { data: session } = useSession()
-  const [todos, setTodos] = useState<Todo[]>([])
+  const { todolist, setTodosStore } = useTodoStore()
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [newTask, setNewTask] = useState<string>('')
@@ -38,7 +39,7 @@ export default function ToDos() {
       if (session && session.user && session.user.email) {
         try {
           const todosData = await fetchTodos(session.user.email)
-          setTodos(todosData)
+          setTodosStore(todosData)
         } catch (error) {
           setError((error as Error).message)
         }
@@ -46,7 +47,7 @@ export default function ToDos() {
       setLoading(false)
     }
     fetchData()
-  }, [session])
+  }, [session, setTodosStore])
 
   useEffect(() => {
     const handleFetchThreeDaysTodos = async () => {
@@ -92,7 +93,7 @@ export default function ToDos() {
       }
     }
     handleTodayTodos()
-  }, [todos, session])
+  }, [todolist, session])
 
   const handleAddTodo = async () => {
     if (newTask.trim() === '') return
@@ -107,7 +108,7 @@ export default function ToDos() {
       try {
         const result = await addTodo(todo, session.user.email)
         if (result) {
-          setTodos([...todos, { ...todo, id: result.id }])
+          setTodosStore([...todolist, { ...todo, id: result.id }])
         }
         setNewTask('')
         setNewImportant(false)
@@ -123,7 +124,7 @@ export default function ToDos() {
     if (!session?.user?.email) return
     try {
       await deleteTodo(deleteTodoId, session.user.email)
-      setTodos(todos.filter((todo) => todo.id !== deleteTodoId))
+      setTodosStore(todolist.filter((todo) => todo.id !== deleteTodoId))
     } catch (error) {
       setError((error as Error).message)
     }
@@ -150,8 +151,8 @@ export default function ToDos() {
     }
     try {
       await updateTodo(editTodo.id, updatedTodo, session.user.email)
-      setTodos(
-        todos.map((todo) => (todo.id == editTodo.id ? updatedTodo : todo))
+      setTodosStore(
+        todolist.map((todo) => (todo.id == editTodo.id ? updatedTodo : todo))
       )
       setEditTodo(null)
       setNewTask('')
@@ -191,10 +192,10 @@ export default function ToDos() {
             <span className="font-bold text-[1.3rem]">드래그앤드롭</span>해용
           </div>
           <div className="flex flex-wrap w-[40rem]">
-            {todos.length === 0 ? (
+            {todolist.length === 0 ? (
               <div>🌻모든 Todo의 날짜가 있네용🌻</div>
             ) : (
-              todos.map((todo) => (
+              todolist.map((todo) => (
                 <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
               ))
             )}
@@ -305,7 +306,7 @@ export default function ToDos() {
         <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
           <div className="text-[2rem]">{session?.user?.name}의Todo List</div>
           <div className="flex flex-wrap w-[40rem]">
-            {todos.map((todo) => (
+            {todolist.map((todo) => (
               <div key={todo.id} className="h-[14rem]">
                 <TodoBox key={todo.id} todo={todo} />
                 <div className="items-center justify-center flex mt-[0.5rem]">
@@ -332,13 +333,13 @@ export default function ToDos() {
         <div className="mb-[2rem]"></div>
       </div>
       {/* 캘린더 */}
-      <div className="ml-[3rem] size-[50rem]">
+      {/* <div className="ml-[3rem] size-[50rem]">
         <Calendar
           todos={todos}
-          setTodos={setTodos}
+          setTodos={(newTodos) => setTodos(newTodos)}
           onDateClick={setSelectedDate}
         />
-      </div>
+      </div> */}
     </div>
   )
 }
