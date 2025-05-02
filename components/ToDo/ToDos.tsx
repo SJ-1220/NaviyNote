@@ -333,13 +333,13 @@ export default function ToDos() {
         <div className="mb-[2rem]"></div>
       </div>
       {/* 캘린더 */}
-      {/* <div className="ml-[3rem] size-[50rem]">
+      <div className="ml-[3rem] size-[50rem]">
         <Calendar
-          todos={todos}
-          setTodos={(newTodos) => setTodos(newTodos)}
+          todos={todolist}
+          setTodos={(newTodos) => setTodosStore(newTodos)}
           onDateClick={setSelectedDate}
         />
-      </div> */}
+      </div>
     </div>
   )
 }
