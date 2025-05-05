@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react'
 import {
   Todo,
   addTodo,
-  deleteTodo,
   fetchTodos,
-  updateTodo,
   fetchThreeDaysTodo,
   fetchTodayTodo,
 } from './todosServer'
@@ -27,7 +25,6 @@ export default function ToDos() {
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newCompleted, setNewCompleted] = useState<boolean>(false)
   const [newDate, setNewDate] = useState<string | null>(null)
-  const [editTodo, setEditTodo] = useState<Todo | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedPrevDate, setSelectedPrevDate] = useState<string | null>(null)
   const [selectedNextDate, setSelectedNextDate] = useState<string | null>(null)
@@ -120,53 +117,6 @@ export default function ToDos() {
     }
   }
 
-  const handleDeleteTodo = async (deleteTodoId: string) => {
-    if (!session?.user?.email) return
-    try {
-      await deleteTodo(deleteTodoId, session.user.email)
-      setTodosStore(todolist.filter((todo) => todo.id !== deleteTodoId))
-    } catch (error) {
-      setError((error as Error).message)
-    }
-  }
-
-  const handleEditTodo = (todo: Todo) => {
-    if (!todo) return
-    setEditTodo(todo)
-    setNewTask(todo.task)
-    setNewImportant(todo.important)
-    setNewCompleted(todo.completed)
-    setNewDate(todo.date || null)
-  }
-
-  const updateTodoInput = async () => {
-    if (!editTodo || !session?.user?.email) return
-    const updatedDate = newDate === '' ? null : newDate
-    const updatedTodo = {
-      ...editTodo,
-      task: newTask,
-      important: newImportant,
-      completed: newCompleted,
-      date: updatedDate,
-    }
-    try {
-      await updateTodo(editTodo.id, updatedTodo, session.user.email)
-      setTodosStore(
-        todolist.map((todo) => (todo.id == editTodo.id ? updatedTodo : todo))
-      )
-      setEditTodo(null)
-      setNewTask('')
-      setNewImportant(false)
-      setNewCompleted(false)
-      setNewDate(null)
-    } catch (error) {
-      setError((error as Error).message)
-    }
-  }
-  const handleClearDate = () => {
-    setNewDate(null)
-  }
-
   if (loading) return <LoadingPage />
   if (error) return <div>{error}</div>
 
@@ -228,9 +178,9 @@ export default function ToDos() {
             </div>
           )}
         </div>
-        {/* Todo 추가/수정 Input */}
+        {/* Todo 추가 Input */}
         <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md text-[1.5rem]">
-          <div className="text-[2rem]">Todo 추가/수정</div>
+          <div className="text-[2rem]">Todo 추가</div>
           <input
             className="w-[30rem] text-black mb-[1rem]"
             type="text"
@@ -257,15 +207,7 @@ export default function ToDos() {
                 onChange={(e) => setNewCompleted(e.target.checked)}
               />
             </label>
-            {editTodo && (
-              <div>
-                기존 날짜 :{' '}
-                <span>
-                  {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
-                </span>
-              </div>
-            )}
-            <label>
+            <label className="ml-[2rem]">
               날짜 :
               <input
                 className="text-black"
@@ -274,32 +216,13 @@ export default function ToDos() {
                 onChange={(e) => setNewDate(e.target.value || null)}
               />
             </label>
-            {editTodo && (
-              <Button
-                type="button"
-                onClick={handleClearDate}
-                className="ml-[2rem] w-[8rem] bg-blue-800"
-              >
-                날짜 미정
-              </Button>
-            )}
-            {editTodo ? (
-              <Button
-                type="button"
-                onClick={updateTodoInput}
-                className="ml-[2rem] w-[5rem] bg-blue-800"
-              >
-                수정
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                onClick={handleAddTodo}
-                className="ml-[2rem] w-[5rem] bg-blue-800"
-              >
-                추가
-              </Button>
-            )}
+            <Button
+              type="button"
+              onClick={handleAddTodo}
+              className="ml-[2rem] w-[5rem] bg-blue-800"
+            >
+              추가
+            </Button>
           </div>
         </div>
         {/* 로그인한 사용자의 전체 Todo List */}
@@ -307,26 +230,7 @@ export default function ToDos() {
           <div className="text-[2rem]">{session?.user?.name}의Todo List</div>
           <div className="flex flex-wrap w-[40rem]">
             {todolist.map((todo) => (
-              <div key={todo.id} className="h-[14rem]">
-                <TodoBox key={todo.id} todo={todo} />
-                <div className="items-center justify-center flex mt-[0.5rem]">
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      handleEditTodo(todo)
-                    }}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    type="button"
-                    className="ml-[2rem]"
-                    onClick={() => handleDeleteTodo(todo.id)}
-                  >
-                    삭제
-                  </Button>
-                </div>
-              </div>
+              <TodoBox key={todo.id} todo={todo} />
             ))}
           </div>
         </div>
