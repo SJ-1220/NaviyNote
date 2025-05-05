@@ -4,9 +4,7 @@ import { useEffect, useState } from 'react'
 import {
   Todo,
   addTodo,
-  deleteTodo,
   fetchTodos,
-  updateTodo,
   fetchThreeDaysTodo,
   fetchTodayTodo,
 } from './todosServer'
@@ -16,17 +14,17 @@ import { formatDate, todayDateFormat } from './TodayDateFormat'
 import TodoBox from './TodoBox'
 import LoadingPage from '../Loading'
 import Button from '../Button'
+import useTodoStore from '@/src/store/todoStore'
 
 export default function ToDos() {
   const { data: session } = useSession()
-  const [todos, setTodos] = useState<Todo[]>([])
+  const { todolist, setTodosStore } = useTodoStore()
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [newTask, setNewTask] = useState<string>('')
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newCompleted, setNewCompleted] = useState<boolean>(false)
   const [newDate, setNewDate] = useState<string | null>(null)
-  const [editTodo, setEditTodo] = useState<Todo | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedPrevDate, setSelectedPrevDate] = useState<string | null>(null)
   const [selectedNextDate, setSelectedNextDate] = useState<string | null>(null)
@@ -38,7 +36,7 @@ export default function ToDos() {
       if (session && session.user && session.user.email) {
         try {
           const todosData = await fetchTodos(session.user.email)
-          setTodos(todosData)
+          setTodosStore(todosData)
         } catch (error) {
           setError((error as Error).message)
         }
@@ -46,7 +44,7 @@ export default function ToDos() {
       setLoading(false)
     }
     fetchData()
-  }, [session])
+  }, [session, setTodosStore])
 
   useEffect(() => {
     const handleFetchThreeDaysTodos = async () => {
@@ -92,7 +90,7 @@ export default function ToDos() {
       }
     }
     handleTodayTodos()
-  }, [todos, session])
+  }, [todolist, session])
 
   const handleAddTodo = async () => {
     if (newTask.trim() === '') return
@@ -107,7 +105,7 @@ export default function ToDos() {
       try {
         const result = await addTodo(todo, session.user.email)
         if (result) {
-          setTodos([...todos, { ...todo, id: result.id }])
+          setTodosStore([...todolist, { ...todo, id: result.id }])
         }
         setNewTask('')
         setNewImportant(false)
@@ -117,53 +115,6 @@ export default function ToDos() {
         setError((error as Error).message)
       }
     }
-  }
-
-  const handleDeleteTodo = async (deleteTodoId: string) => {
-    if (!session?.user?.email) return
-    try {
-      await deleteTodo(deleteTodoId, session.user.email)
-      setTodos(todos.filter((todo) => todo.id !== deleteTodoId))
-    } catch (error) {
-      setError((error as Error).message)
-    }
-  }
-
-  const handleEditTodo = (todo: Todo) => {
-    if (!todo) return
-    setEditTodo(todo)
-    setNewTask(todo.task)
-    setNewImportant(todo.important)
-    setNewCompleted(todo.completed)
-    setNewDate(todo.date || null)
-  }
-
-  const updateTodoInput = async () => {
-    if (!editTodo || !session?.user?.email) return
-    const updatedDate = newDate === '' ? null : newDate
-    const updatedTodo = {
-      ...editTodo,
-      task: newTask,
-      important: newImportant,
-      completed: newCompleted,
-      date: updatedDate,
-    }
-    try {
-      await updateTodo(editTodo.id, updatedTodo, session.user.email)
-      setTodos(
-        todos.map((todo) => (todo.id == editTodo.id ? updatedTodo : todo))
-      )
-      setEditTodo(null)
-      setNewTask('')
-      setNewImportant(false)
-      setNewCompleted(false)
-      setNewDate(null)
-    } catch (error) {
-      setError((error as Error).message)
-    }
-  }
-  const handleClearDate = () => {
-    setNewDate(null)
   }
 
   if (loading) return <LoadingPage />
@@ -191,10 +142,10 @@ export default function ToDos() {
             <span className="font-bold text-[1.3rem]">드래그앤드롭</span>해용
           </div>
           <div className="flex flex-wrap w-[40rem]">
-            {todos.length === 0 ? (
+            {todolist.length === 0 ? (
               <div>🌻모든 Todo의 날짜가 있네용🌻</div>
             ) : (
-              todos.map((todo) => (
+              todolist.map((todo) => (
                 <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
               ))
             )}
@@ -227,9 +178,9 @@ export default function ToDos() {
             </div>
           )}
         </div>
-        {/* Todo 추가/수정 Input */}
+        {/* Todo 추가 Input */}
         <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md text-[1.5rem]">
-          <div className="text-[2rem]">Todo 추가/수정</div>
+          <div className="text-[2rem]">Todo 추가</div>
           <input
             className="w-[30rem] text-black mb-[1rem]"
             type="text"
@@ -256,15 +207,7 @@ export default function ToDos() {
                 onChange={(e) => setNewCompleted(e.target.checked)}
               />
             </label>
-            {editTodo && (
-              <div>
-                기존 날짜 :{' '}
-                <span>
-                  {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
-                </span>
-              </div>
-            )}
-            <label>
+            <label className="ml-[2rem]">
               날짜 :
               <input
                 className="text-black"
@@ -273,69 +216,31 @@ export default function ToDos() {
                 onChange={(e) => setNewDate(e.target.value || null)}
               />
             </label>
-            {editTodo && (
-              <Button
-                type="button"
-                onClick={handleClearDate}
-                className="ml-[2rem] w-[8rem] bg-blue-800"
-              >
-                날짜 미정
-              </Button>
-            )}
-            {editTodo ? (
-              <Button
-                type="button"
-                onClick={updateTodoInput}
-                className="ml-[2rem] w-[5rem] bg-blue-800"
-              >
-                수정
-              </Button>
-            ) : (
-              <Button
-                type="button"
-                onClick={handleAddTodo}
-                className="ml-[2rem] w-[5rem] bg-blue-800"
-              >
-                추가
-              </Button>
-            )}
+            <Button
+              type="button"
+              onClick={handleAddTodo}
+              className="ml-[2rem] w-[5rem] bg-blue-800"
+            >
+              추가
+            </Button>
           </div>
         </div>
         {/* 로그인한 사용자의 전체 Todo List */}
         <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
           <div className="text-[2rem]">{session?.user?.name}의Todo List</div>
           <div className="flex flex-wrap w-[40rem]">
-            {todos.map((todo) => (
-              <div key={todo.id} className="h-[14rem]">
-                <TodoBox key={todo.id} todo={todo} />
-                <div className="items-center justify-center flex mt-[0.5rem]">
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      handleEditTodo(todo)
-                    }}
-                  >
-                    수정
-                  </Button>
-                  <Button
-                    type="button"
-                    className="ml-[2rem]"
-                    onClick={() => handleDeleteTodo(todo.id)}
-                  >
-                    삭제
-                  </Button>
-                </div>
-              </div>
+            {todolist.map((todo) => (
+              <TodoBox key={todo.id} todo={todo} />
             ))}
           </div>
         </div>
         <div className="mb-[2rem]"></div>
       </div>
       {/* 캘린더 */}
-      <div className="ml-[3rem] size-[50rem]">
+      <div className="ml-[3rem] size-[50rem] z-10">
         <Calendar
-          todos={todos}
-          setTodos={setTodos}
+          todos={todolist}
+          setTodos={(newTodos) => setTodosStore(newTodos)}
           onDateClick={setSelectedDate}
         />
       </div>

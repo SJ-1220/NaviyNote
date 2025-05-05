@@ -11,7 +11,7 @@ import { DayCellMountArg } from '@fullcalendar/core'
 
 interface CalendarProps {
   todos: Todo[]
-  setTodos: React.Dispatch<React.SetStateAction<Todo[]>>
+  setTodos: (todos: Todo[]) => void
   onDateClick?: (date: string) => void
 }
 
@@ -37,16 +37,15 @@ export default function Calendar({
         { date: calendarCorrectedDate.toISOString().split('T')[0] },
         session.user.email
       )
-      setTodos((prevTodos) =>
-        prevTodos.map((todo: Todo) =>
-          todo.id === todoId
-            ? {
-                ...todo,
-                date: calendarCorrectedDate.toISOString().split('T')[0],
-              }
-            : todo
-        )
+      const newTodos = todos.map((todo: Todo) =>
+        todo.id === todoId
+          ? {
+              ...todo,
+              date: calendarCorrectedDate.toISOString().split('T')[0],
+            }
+          : todo
       )
+      setTodos(newTodos)
     } catch (error) {
       console.log('Error updating date:', error)
     }
@@ -111,11 +110,10 @@ export default function Calendar({
     const updatedDate = eventDropInfo.event.startStr
     try {
       await updateTodo(todoId, { date: updatedDate }, session.user.email)
-      setTodos((prevTodos) =>
-        prevTodos.map((todo: Todo) =>
-          todo.id === todoId ? { ...todo, date: updatedDate } : todo
-        )
+      const newTodos = todos.map((todo: Todo) =>
+        todo.id === todoId ? { ...todo, date: updatedDate } : todo
       )
+      setTodos(newTodos)
     } catch (error) {
       console.log('Error updating date:', error)
     }

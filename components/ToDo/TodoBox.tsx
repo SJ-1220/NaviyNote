@@ -1,6 +1,9 @@
+'use client'
 import React from 'react'
 import { Todo } from './todosServer'
 import { formatDate } from './TodayDateFormat'
+import Link from 'next/link'
+
 interface TodoBoxProps {
   todo: Todo
   isDragging?: boolean
@@ -9,10 +12,13 @@ interface TodoBoxProps {
 export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
   // console.log(todo.date)
   const formattedDate = todo.date ? formatDate(new Date(todo.date)) : '날짜없음'
-
+  const todoId = todo.id
   return (
-    <div
-      className={`size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-blue-800  ${isDragging ? 'text-green-300' : 'text-white'}`}
+    <Link
+      passHref
+      key={todoId}
+      href={`/todo/todoItem/${todoId}`}
+      className={`size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-blue-800  ${isDragging ? 'text-gray-400' : 'text-white'}`}
     >
       <div>
         {todo.task}
@@ -20,8 +26,10 @@ export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
         {todo.completed ? '완료✅' : '미완❌'}
         {todo.important ? '중요⭐' : '안중요❌'}
         <br />
+        {todo.memo_id ? `${todo.memo_id}` : '메모연결❌'}
+        <br />
         {`날짜: ${formattedDate}`}
       </div>
-    </div>
+    </Link>
   )
 }
