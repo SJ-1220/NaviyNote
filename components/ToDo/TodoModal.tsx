@@ -35,7 +35,12 @@ const TodoModal = () => {
     }
     fetchData()
   }, [session, todolist.length, setTodosStore])
+
   const todo = todolist.find((todo: Todo) => todo.id === todoId)
+
+  useEffect(() => {
+    window.scroll(0, 0)
+  }, [])
 
   const onClose = useCallback(() => {
     router.back()
@@ -86,6 +91,7 @@ const TodoModal = () => {
   const handleClearDate = () => {
     setNewDate(null)
   }
+
   if (loading) {
     return <div>Loading...</div>
   }
@@ -96,8 +102,14 @@ const TodoModal = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/20 flex justify-center items-center z-20">
-      <div className="bg-black rounded-lg p-[4rem]">
+    <div
+      className="fixed inset-0 bg-black/10 flex justify-center items-center z-20"
+      onClick={onClose}
+    >
+      <div
+        className="bg-black rounded-lg p-[4rem]"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Button className="m-[2rem]" type="button" onClick={onClose}>
           모달닫기
         </Button>
