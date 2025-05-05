@@ -333,7 +333,7 @@ export default function ToDos() {
         <div className="mb-[2rem]"></div>
       </div>
       {/* 캘린더 */}
-      <div className="ml-[3rem] size-[50rem]">
+      <div className="ml-[3rem] size-[50rem] z-10">
         <Calendar
           todos={todolist}
           setTodos={(newTodos) => setTodosStore(newTodos)}

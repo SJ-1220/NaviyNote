@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { Todo } from './todosServer'
 import { formatDate } from './TodayDateFormat'
@@ -24,6 +25,8 @@ export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
         <br />
         {todo.completed ? '완료✅' : '미완❌'}
         {todo.important ? '중요⭐' : '안중요❌'}
+        <br />
+        {todo.memo_id ? `${todo.memo_id}` : '메모연결❌'}
         <br />
         {`날짜: ${formattedDate}`}
       </div>
