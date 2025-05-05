@@ -18,7 +18,7 @@ export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
       passHref
       key={todoId}
       href={`/todo/todoItem/${todoId}`}
-      className={`size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-blue-800  ${isDragging ? 'text-green-300' : 'text-white'}`}
+      className={`size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-blue-800  ${isDragging ? 'text-gray-400' : 'text-white'}`}
     >
       <div>
         {todo.task}

@@ -35,7 +35,12 @@ const TodoModal = () => {
     }
     fetchData()
   }, [session, todolist.length, setTodosStore])
+
   const todo = todolist.find((todo: Todo) => todo.id === todoId)
+
+  useEffect(() => {
+    window.scroll(0, 0)
+  }, [])
 
   const onClose = useCallback(() => {
     router.back()
@@ -86,6 +91,7 @@ const TodoModal = () => {
   const handleClearDate = () => {
     setNewDate(null)
   }
+
   if (loading) {
     return <div>Loading...</div>
   }
@@ -96,91 +102,100 @@ const TodoModal = () => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/20 flex justify-center items-center z-20">
-      <div className="bg-black rounded-lg p-[4rem]">
-        <Button className="m-[2rem]" type="button" onClick={onClose}>
-          모달닫기
-        </Button>
-
-        {editTodo ? (
-          <Button className="m-[2rem]" type="button" onClick={updateTodoInput}>
-            적용
+    <>
+      <div
+        className="fixed inset-0 bg-black/10 flex justify-center items-center z-20"
+        onClick={onClose}
+      >
+        <div className="bg-black rounded-lg p-[4rem] onClick={(e) => e.stopPropagation()}">
+          <Button className="m-[2rem]" type="button" onClick={onClose}>
+            모달닫기
           </Button>
-        ) : (
+
+          {editTodo ? (
+            <Button
+              className="m-[2rem]"
+              type="button"
+              onClick={updateTodoInput}
+            >
+              적용
+            </Button>
+          ) : (
+            <Button
+              className="m-[2rem]"
+              type="button"
+              onClick={() => {
+                handleEditTodo(todo)
+              }}
+            >
+              수정
+            </Button>
+          )}
           <Button
             className="m-[2rem]"
             type="button"
-            onClick={() => {
-              handleEditTodo(todo)
-            }}
+            onClick={() => handleDeleteTodo(todo.id)}
           >
-            수정
+            삭제
           </Button>
-        )}
-        <Button
-          className="m-[2rem]"
-          type="button"
-          onClick={() => handleDeleteTodo(todo.id)}
-        >
-          삭제
-        </Button>
-        <div>TodoModal</div>
-        <div>Todo Task : {todo.task}</div>
-        <div>Todo ID : {todo.id}</div>
-        {editTodo && (
-          <div>
-            <label>
-              task
-              <input
-                className="w-[30rem] text-black mb-[1rem]"
-                type="text"
-                value={newTask}
-                onChange={(e) => setNewTask(e.target.value)}
-              />
-            </label>
-            <br />
-            <label>
-              important
-              <input
-                type="checkbox"
-                checked={newImportant}
-                onChange={(e) => setNewImportant(e.target.checked)}
-              />
-            </label>
-            <label>
-              completed
-              <input
-                type="checkbox"
-                checked={newCompleted}
-                onChange={(e) => setNewCompleted(e.target.checked)}
-              />
-            </label>
+          <div>TodoModal</div>
+          <div>Todo Task : {todo.task}</div>
+          <div>Todo ID : {todo.id}</div>
+          {editTodo && (
             <div>
-              기존 날짜 :{' '}
-              <span>
-                {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
-              </span>
+              <label>
+                task
+                <input
+                  className="w-[30rem] text-black mb-[1rem]"
+                  type="text"
+                  value={newTask}
+                  onChange={(e) => setNewTask(e.target.value)}
+                />
+              </label>
+              <br />
+              <label>
+                important
+                <input
+                  type="checkbox"
+                  checked={newImportant}
+                  onChange={(e) => setNewImportant(e.target.checked)}
+                />
+              </label>
+              <label>
+                completed
+                <input
+                  type="checkbox"
+                  checked={newCompleted}
+                  onChange={(e) => setNewCompleted(e.target.checked)}
+                />
+              </label>
+              <div>
+                기존 날짜 :{' '}
+                <span>
+                  {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
+                </span>
+              </div>
+              <label>
+                날짜 :
+                <input
+                  className="text-black"
+                  type="date"
+                  value={newDate || ''}
+                  onChange={(e) => setNewDate(e.target.value || null)}
+                />
+              </label>
+              <Button
+                type="button"
+                onClick={handleClearDate}
+                className="ml-[2rem] w-[8rem] bg-blue-800"
+              >
+                날짜 미정
+              </Button>
             </div>
-            <label>
-              날짜 :
-              <input
-                className="text-black"
-                type="date"
-                value={newDate || ''}
-                onChange={(e) => setNewDate(e.target.value || null)}
-              />
-            </label>
-            <Button
-              type="button"
-              onClick={handleClearDate}
-              className="ml-[2rem] w-[8rem] bg-blue-800"
-            >
-              날짜 미정
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 export default TodoModal
