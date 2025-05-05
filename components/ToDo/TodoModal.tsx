@@ -113,7 +113,6 @@ const TodoModal = () => {
         <Button className="m-[2rem]" type="button" onClick={onClose}>
           모달닫기
         </Button>
-
         {editTodo ? (
           <Button className="m-[2rem]" type="button" onClick={updateTodoInput}>
             적용
