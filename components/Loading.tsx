@@ -1,3 +1,3 @@
 export default function LoadingPage() {
-  return <div className="text-center h-[30rem]">로딩중이에용</div>
+  return <div className="text-center h-[60rem]">로딩중이에용</div>
 }
