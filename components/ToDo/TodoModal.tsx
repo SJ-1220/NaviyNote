@@ -6,6 +6,7 @@ import useTodoStore from '@/src/store/todoStore'
 import { useSession } from 'next-auth/react'
 import Button from '../Button'
 import { formatDate } from './TodayDateFormat'
+import LoadingPage from '../Loading'
 
 const TodoModal = () => {
   const { todoId } = useParams()
@@ -17,6 +18,7 @@ const TodoModal = () => {
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newCompleted, setNewCompleted] = useState<boolean>(false)
   const [newDate, setNewDate] = useState<string | null>(null)
+  const [newMemoId, setNewMemoId] = useState<string | null>(null)
   const [editTodo, setEditTodo] = useState<Todo | null>(null)
   const todolist = useTodoStore((state) => state.todolist)
   const setTodosStore = useTodoStore((state) => state.setTodosStore)
@@ -63,16 +65,19 @@ const TodoModal = () => {
     setNewImportant(todo.important)
     setNewCompleted(todo.completed)
     setNewDate(todo.date || null)
+    setNewMemoId(todo.memo_id || null)
   }
   const updateTodoInput = async () => {
     if (!editTodo || !session?.user?.email) return
     const updatedDate = newDate === '' ? null : newDate
+    const updatedTodoId = newMemoId === '' ? null : newMemoId
     const updatedTodo = {
       ...editTodo,
       task: newTask,
       important: newImportant,
       completed: newCompleted,
       date: updatedDate,
+      memo_id: updatedTodoId,
     }
     try {
       await updateTodo(editTodo.id, updatedTodo, session.user.email)
@@ -84,6 +89,7 @@ const TodoModal = () => {
       setNewImportant(false)
       setNewCompleted(false)
       setNewDate(null)
+      setNewMemoId(null)
     } catch (error) {
       setError((error as Error).message)
     }
@@ -93,7 +99,7 @@ const TodoModal = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingPage />
   }
   if (error) return <div>{error}</div>
   if (!todo) {
@@ -138,6 +144,8 @@ const TodoModal = () => {
         <div>TodoModal</div>
         <div>Todo Task : {todo.task}</div>
         <div>Todo ID : {todo.id}</div>
+        <div>메모 연결 : {todo.memo_id ? `${todo.memo_id}` : '메모연결❌'}</div>
+
         {editTodo && (
           <div>
             <label>

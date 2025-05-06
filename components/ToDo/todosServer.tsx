@@ -6,7 +6,7 @@ export interface Todo {
   task: string
   completed: boolean
   date?: string | null
-  memo_id?: string
+  memo_id?: string | null
   important: boolean
 }
 

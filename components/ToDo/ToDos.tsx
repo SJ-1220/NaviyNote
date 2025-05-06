@@ -25,6 +25,7 @@ export default function ToDos() {
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newCompleted, setNewCompleted] = useState<boolean>(false)
   const [newDate, setNewDate] = useState<string | null>(null)
+  const [newMemoId, setNewMemoId] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [selectedPrevDate, setSelectedPrevDate] = useState<string | null>(null)
   const [selectedNextDate, setSelectedNextDate] = useState<string | null>(null)
@@ -101,6 +102,7 @@ export default function ToDos() {
         completed: newCompleted,
         important: newImportant,
         date: newDate != null ? newDate : undefined,
+        memo_id: newMemoId != null ? newMemoId : undefined,
       }
       try {
         const result = await addTodo(todo, session.user.email)
@@ -111,6 +113,7 @@ export default function ToDos() {
         setNewImportant(false)
         setNewCompleted(false)
         setNewDate(null)
+        setNewMemoId(null)
       } catch (error) {
         setError((error as Error).message)
       }
@@ -214,6 +217,16 @@ export default function ToDos() {
                 type="date"
                 value={newDate || ''}
                 onChange={(e) => setNewDate(e.target.value || null)}
+              />
+            </label>
+            <br />
+            <label>
+              메모 연동 :
+              <input
+                type="text"
+                className="text-black"
+                value={newMemoId ?? ''}
+                onChange={(e) => setNewMemoId(e.target.value)}
               />
             </label>
             <Button
