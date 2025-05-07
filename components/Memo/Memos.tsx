@@ -1,7 +1,7 @@
 'use client'
 import { useSession } from 'next-auth/react'
 import { addMemo, fetchMemos, Memo } from './memosServer'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import LoadingPage from '../Loading'
 import Button from '../Button'
 import MemoBox from './MemoBox'
@@ -59,59 +59,120 @@ const Memos = () => {
       }
     }
   }
+  const AcImMemolist = useMemo(
+    () => memolist.filter((memo) => memo.active && memo.important),
+    [memolist]
+  )
+  const InacImMemolist = useMemo(
+    () => memolist.filter((memo) => !memo.active && memo.important),
+    [memolist]
+  )
+  const InacUnimMemolist = useMemo(
+    () => memolist.filter((memo) => !memo.active && !memo.important),
+    [memolist]
+  )
+  const AcUnimMemolist = useMemo(
+    () => memolist.filter((memo) => memo.active && memo.important),
+    [memolist]
+  )
 
   if (loading) return <LoadingPage />
   if (error) return <div>{error}</div>
   return (
     <div>
-      <div>메모</div>
-      <div>메모 추가</div>
+      {/* 메모 추가 + 연결된 메모 */}
       <div>
-        <input
-          className="w-[30rem] text-black mb-[1rem]"
-          type="text"
-          value={newContent}
-          placeholder="새로운 Memo를 추가하세요"
-          onChange={(e) => setNewContent(e.target.value)}
-        />
-        <label>
-          중요도
-          <input
-            type="checkbox"
-            checked={newImportant}
-            onChange={(e) => setNewImportant(e.target.checked)}
-          />
-        </label>
-        <label>
-          활성화
-          <input
-            type="checkbox"
-            checked={newActive}
-            onChange={(e) => setNewActive(e.target.checked)}
-          />
-        </label>
-        <label>
-          연동가능
-          <input
-            type="checkbox"
-            checked={newConnect}
-            onChange={(e) => setNewConnect(e.target.checked)}
-          />
-        </label>
-        <label>
-          Todo연동
-          <input
-            type="text"
-            className="text-black mb-[1rem]"
-            value={newTodoId ?? ''}
-            onChange={(e) => setNewTodoId(e.target.value)}
-          />
-        </label>
-        <Button type="button" onClick={handleAddMemo}>
-          추가
-        </Button>
+        {/* 메모 추가 */}
+        <div>
+          <div>메모 추가</div>
+          <div>
+            <input
+              className="w-[30rem] text-black mb-[1rem]"
+              type="text"
+              value={newContent}
+              placeholder="새로운 Memo를 추가하세요"
+              onChange={(e) => setNewContent(e.target.value)}
+            />
+            <label>
+              중요도
+              <input
+                type="checkbox"
+                checked={newImportant}
+                onChange={(e) => setNewImportant(e.target.checked)}
+              />
+            </label>
+            <label>
+              활성화
+              <input
+                type="checkbox"
+                checked={newActive}
+                onChange={(e) => setNewActive(e.target.checked)}
+              />
+            </label>
+            <label>
+              연동가능
+              <input
+                type="checkbox"
+                checked={newConnect}
+                onChange={(e) => setNewConnect(e.target.checked)}
+              />
+            </label>
+            <label>
+              Todo연동
+              <input
+                type="text"
+                className="text-black mb-[1rem]"
+                value={newTodoId ?? ''}
+                onChange={(e) => setNewTodoId(e.target.value)}
+              />
+            </label>
+            <Button type="button" onClick={handleAddMemo}>
+              추가
+            </Button>
+          </div>
+        </div>
+        {/* 연결된 메모 */}
+        <div>연결된 메모</div>
       </div>
-      <div>
+      <div className="grid grid-cols-2 gap-[1rem]">
+        {/* 안중요+활성 메모 */}
+        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
+          안중요+활성 메모
+          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+            {AcUnimMemolist.map((memo) => (
+              <MemoBox key={memo.id} memo={memo} />
+            ))}
+          </div>
+        </div>
+        {/* 중요+활성화 메모 */}
+        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
+          중요+활성화 메모
+          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+            {AcImMemolist.map((memo) => (
+              <MemoBox key={memo.id} memo={memo} />
+            ))}
+          </div>
+        </div>
+        {/* 안중요+비활성 메모 */}
+        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
+          안중요+비활성 메모
+          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+            {InacUnimMemolist.map((memo) => (
+              <MemoBox key={memo.id} memo={memo} />
+            ))}
+          </div>
+        </div>
+        {/* 중요+비활성 메모 */}
+        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
+          중요+비활성 메모
+          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+            {InacImMemolist.map((memo) => (
+              <MemoBox key={memo.id} memo={memo} />
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-wrap">
         {memolist.map((memo) => (
           <MemoBox key={memo.id} memo={memo} />
         ))}

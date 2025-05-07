@@ -132,13 +132,15 @@ export default function ToDos() {
           {/* 오늘의 Todo */}
           <div className="mt-[2rem] outline-offset-[1rem] outline rounded-md">
             <div className="text-[2rem]">오늘({todayDateFormat()})의 Todo</div>
-            <div className="flex flex-wrap w-[40rem] justify-center">
-              {todayTodos.length === 0 ? (
-                <div>🍀오늘은 할일이 없네용🍀</div>
-              ) : (
-                todayTodos.map((todo) => <TodoBox key={todo.id} todo={todo} />)
-              )}
-            </div>
+            {todayTodos.length === 0 ? (
+              <div className="text-center">🍀오늘은 할일이 없네용🍀</div>
+            ) : (
+              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+                {todayTodos.map((todo) => (
+                  <TodoBox key={todo.id} todo={todo} />
+                ))}
+              </div>
+            )}
           </div>
           {/* Todo 추가 Input */}
           <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md text-[1.5rem]">
@@ -207,15 +209,15 @@ export default function ToDos() {
                 해용
               </div>
             </div>
-            <div className="flex justify-center flex-wrap w-[40rem]">
-              {todolist.length === 0 ? (
-                <div>🌻모든 Todo의 날짜가 있네용🌻</div>
-              ) : (
-                todolist.map((todo) => (
+            {todolist.length === 0 ? (
+              <div className="text-center">🌻모든 Todo의 날짜가 있네용🌻</div>
+            ) : (
+              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+                {todolist.map((todo) => (
                   <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
           {/* 캘린더에서 선택한 날짜의 전날, 당일, 다음날의 Todo */}
           <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
@@ -234,15 +236,17 @@ export default function ToDos() {
                 <div className="text-[2rem]">
                   {selectedPrevDate},{selectedDate},{selectedNextDate}의 Todo
                 </div>
-                <div className="flex justify-center flex-wrap w-[40rem]">
-                  {threeDaysTodos.length === 0 ? (
-                    <div>🍀{selectedDate} 전후로는 할일이 없네용🍀</div>
-                  ) : (
-                    threeDaysTodos.map((todo) => (
+                {threeDaysTodos.length === 0 ? (
+                  <div className="text-center">
+                    🍀{selectedDate} 전후로는 할일이 없네용🍀
+                  </div>
+                ) : (
+                  <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+                    {threeDaysTodos.map((todo) => (
                       <TodoBox key={todo.id} todo={todo} />
-                    ))
-                  )}
-                </div>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -261,7 +265,7 @@ export default function ToDos() {
         <div className="text-center mb-[2rem] text-[2rem]">
           {session?.user?.name}의Todo List
         </div>
-        <div className="flex flex-wrap justify-center">
+        <div className="w-fit gap-[1rem] mx-auto grid grid-cols-7">
           {todolist.map((todo) => (
             <TodoBox key={todo.id} todo={todo} />
           ))}
