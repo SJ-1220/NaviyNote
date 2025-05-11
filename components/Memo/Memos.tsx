@@ -1,11 +1,12 @@
 'use client'
 import { useSession } from 'next-auth/react'
-import { addMemo, fetchMemos, Memo } from './memosServer'
+import { addMemo, fetchMemos, Memo, updateMemo } from './memosServer'
 import { useEffect, useMemo, useState } from 'react'
 import LoadingPage from '../Loading'
 import Button from '../Button'
 import MemoBox from './MemoBox'
 import useMemoStore from '@/src/store/memoStore'
+import MemoDropZone from './MemoDropZone'
 
 const Memos = () => {
   const { data: session } = useSession()
@@ -59,6 +60,32 @@ const Memos = () => {
       }
     }
   }
+
+  const handleDropMemo = async (
+    id: string,
+    newActive: boolean,
+    newImportant: boolean
+  ) => {
+    const updatedMemos = memolist.map((memo) => {
+      if (memo.id === id) {
+        return { ...memo, active: newActive, important: newImportant }
+      }
+      return memo
+    })
+    setMemosStore(updatedMemos)
+    if (session?.user?.email) {
+      try {
+        await updateMemo(
+          id,
+          { active: newActive, important: newImportant },
+          session.user.email
+        )
+      } catch (error) {
+        setError((error as Error).message)
+      }
+    }
+  }
+
   const AcImMemolist = useMemo(
     () => memolist.filter((memo) => memo.active && memo.important),
     [memolist]
@@ -72,7 +99,7 @@ const Memos = () => {
     [memolist]
   )
   const AcUnimMemolist = useMemo(
-    () => memolist.filter((memo) => memo.active && memo.important),
+    () => memolist.filter((memo) => memo.active && !memo.important),
     [memolist]
   )
 
@@ -136,41 +163,65 @@ const Memos = () => {
       </div>
       <div className="grid grid-cols-2 gap-[1rem]">
         {/* 안중요+활성 메모 */}
-        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
-          안중요+활성 메모
-          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-            {AcUnimMemolist.map((memo) => (
-              <MemoBox key={memo.id} memo={memo} />
-            ))}
+        <MemoDropZone
+          zoneIsActive={true}
+          zoneIsImportant={false}
+          MemoDrop={handleDropMemo}
+        >
+          <div className="min-h-[30rem] m-[3rem] outline-offset-[1rem] outline rounded-md">
+            안중요+활성 메모
+            <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              {AcUnimMemolist.map((memo) => (
+                <MemoBox key={memo.id} memo={memo} />
+              ))}
+            </div>
           </div>
-        </div>
+        </MemoDropZone>
         {/* 중요+활성화 메모 */}
-        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
-          중요+활성화 메모
-          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-            {AcImMemolist.map((memo) => (
-              <MemoBox key={memo.id} memo={memo} />
-            ))}
+        <MemoDropZone
+          zoneIsActive={true}
+          zoneIsImportant={true}
+          MemoDrop={handleDropMemo}
+        >
+          <div className="min-h-[30rem] m-[3rem] outline-offset-[1rem] outline rounded-md">
+            중요+활성화 메모
+            <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              {AcImMemolist.map((memo) => (
+                <MemoBox key={memo.id} memo={memo} />
+              ))}
+            </div>
           </div>
-        </div>
+        </MemoDropZone>
         {/* 안중요+비활성 메모 */}
-        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
-          안중요+비활성 메모
-          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-            {InacUnimMemolist.map((memo) => (
-              <MemoBox key={memo.id} memo={memo} />
-            ))}
+        <MemoDropZone
+          zoneIsActive={false}
+          zoneIsImportant={false}
+          MemoDrop={handleDropMemo}
+        >
+          <div className="min-h-[30rem] m-[3rem] outline-offset-[1rem] outline rounded-md">
+            안중요+비활성 메모
+            <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              {InacUnimMemolist.map((memo) => (
+                <MemoBox key={memo.id} memo={memo} />
+              ))}
+            </div>
           </div>
-        </div>
+        </MemoDropZone>
         {/* 중요+비활성 메모 */}
-        <div className="m-[3rem] outline-offset-[1rem] outline rounded-md">
-          중요+비활성 메모
-          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-            {InacImMemolist.map((memo) => (
-              <MemoBox key={memo.id} memo={memo} />
-            ))}
+        <MemoDropZone
+          zoneIsActive={false}
+          zoneIsImportant={true}
+          MemoDrop={handleDropMemo}
+        >
+          <div className="min-h-[30rem] m-[3rem] outline-offset-[1rem] outline rounded-md">
+            중요+비활성 메모
+            <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              {InacImMemolist.map((memo) => (
+                <MemoBox key={memo.id} memo={memo} />
+              ))}
+            </div>
           </div>
-        </div>
+        </MemoDropZone>
       </div>
       <div className="flex flex-wrap">
         {memolist.map((memo) => (
