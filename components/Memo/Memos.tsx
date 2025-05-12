@@ -11,6 +11,7 @@ import MemoDropZone from './MemoDropZone'
 const Memos = () => {
   const { data: session } = useSession()
   const { memolist, setMemosStore } = useMemoStore()
+  const [memolistOpen, setMemolistOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
   const [newContent, setNewContent] = useState<string>('')
@@ -84,6 +85,10 @@ const Memos = () => {
         setError((error as Error).message)
       }
     }
+  }
+
+  const MemoOpen = () => {
+    setMemolistOpen(!memolistOpen)
   }
 
   const AcImMemolist = useMemo(
@@ -223,11 +228,38 @@ const Memos = () => {
           </div>
         </MemoDropZone>
       </div>
-      <div className="flex flex-wrap">
-        {memolist.map((memo) => (
-          <MemoBox key={memo.id} memo={memo} />
-        ))}
-      </div>
+      {!memolistOpen && (
+        <div className="mb-[2rem] items-center text-center">
+          <Button
+            type="button"
+            onClick={MemoOpen}
+            className="text-[2rem] w-full px-[43rem] items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md"
+          >
+            전체 메모 보기
+          </Button>
+        </div>
+      )}
+      {memolistOpen && (
+        <div className="mb-[2rem] items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div className="text-center mb-[2rem] text-[2rem]">전체 메모</div>
+          <div>
+            <div className="grid grid-cols-7 gap-[1rem]">
+              {memolist.map((memo) => (
+                <MemoBox key={memo.id} memo={memo} />
+              ))}
+            </div>
+            <div className="text-[1.5rem] text-center items-center">
+              <Button
+                onClick={MemoOpen}
+                type="button"
+                className="ml-[2rem] w-[15rem] bg-blue-800 rounded-md"
+              >
+                전체 메모 숨김
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

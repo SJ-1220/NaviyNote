@@ -19,6 +19,7 @@ import useTodoStore from '@/src/store/todoStore'
 export default function ToDos() {
   const { data: session } = useSession()
   const { todolist, setTodosStore } = useTodoStore()
+  const [todolistOpen, setTodolistOpen] = useState(false)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
   const [newTask, setNewTask] = useState<string>('')
@@ -120,6 +121,10 @@ export default function ToDos() {
     }
   }
 
+  const TodoOpen = () => {
+    setTodolistOpen(!todolistOpen)
+  }
+
   if (loading) return <LoadingPage />
   if (error) return <div>{error}</div>
 
@@ -193,7 +198,7 @@ export default function ToDos() {
               <Button
                 type="button"
                 onClick={handleAddTodo}
-                className="ml-[2rem] w-[5rem] bg-blue-800"
+                className="ml-[2rem] w-[5rem] bg-blue-800 rounded-md"
               >
                 추가
               </Button>
@@ -260,17 +265,39 @@ export default function ToDos() {
           />
         </div>
       </div>
-      {/* 아래 : 로그인한 사용자의 전체 Todo List */}
-      <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
-        <div className="text-center mb-[2rem] text-[2rem]">
-          {session?.user?.name}의Todo List
+      {/* 아래 : 로그인한 사용자의 전체 Todo List 토글*/}
+      {!todolistOpen && (
+        <div className="items-center text-center">
+          <Button
+            onClick={TodoOpen}
+            type="button"
+            className="text-[2rem] w-full px-[43rem] items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md"
+          >
+            전체 Todo 보기
+          </Button>
         </div>
-        <div className="w-fit gap-[1rem] mx-auto grid grid-cols-7">
-          {todolist.map((todo) => (
-            <TodoBox key={todo.id} todo={todo} />
-          ))}
+      )}
+      {todolistOpen && (
+        <div className="items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div className="text-center mb-[2rem] text-[2rem]">전체 Todo</div>
+          <div>
+            <div className="grid grid-cols-7 gap-[1rem]">
+              {todolist.map((todo) => (
+                <TodoBox key={todo.id} todo={todo} />
+              ))}
+            </div>
+            <div className="text-[1.5rem] text-center items-center">
+              <Button
+                onClick={TodoOpen}
+                type="button"
+                className="ml-[2rem] w-[15rem] bg-blue-800 rounded-md"
+              >
+                전체 Todo 숨김
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
       <div className="mb-[2rem]"></div>
     </div>
   )
