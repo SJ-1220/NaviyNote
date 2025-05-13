@@ -23,7 +23,7 @@ export default function MemoBox({ memo }: MemoBoxProps) {
         passHref
         key={memoId}
         href={`/memo/memoItem/${memoId}`}
-        className={`size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-blue-800 ${isDragging ? 'text-gray-400' : 'text-white'}`}
+        className={`size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-navy2 ${isDragging ? 'text-gray-400' : 'text-white'}`}
       >
         <div>
           {memo.content}

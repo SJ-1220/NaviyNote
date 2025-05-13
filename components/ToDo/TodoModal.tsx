@@ -113,34 +113,44 @@ const TodoModal = () => {
       onClick={onClose}
     >
       <div
-        className="bg-black rounded-lg p-[4rem]"
+        className="bg-navy3 text-[1.5rem] rounded-lg p-[4rem]"
         onClick={(e) => e.stopPropagation()}
       >
-        <Button className="m-[2rem]" type="button" onClick={onClose}>
-          모달닫기
-        </Button>
-        {editTodo ? (
-          <Button className="m-[2rem]" type="button" onClick={updateTodoInput}>
-            적용
-          </Button>
-        ) : (
+        <div className="mb-[1rem] flex justify-between">
           <Button
-            className="m-[2rem]"
+            className="rounded-md p-[0.5rem] bg-navy2"
             type="button"
-            onClick={() => {
-              handleEditTodo(todo)
-            }}
+            onClick={onClose}
           >
-            수정
+            모달닫기
           </Button>
-        )}
-        <Button
-          className="m-[2rem]"
-          type="button"
-          onClick={() => handleDeleteTodo(todo.id)}
-        >
-          삭제
-        </Button>
+          {editTodo ? (
+            <Button
+              className="rounded-md p-[0.5rem] bg-navy2"
+              type="button"
+              onClick={updateTodoInput}
+            >
+              적용
+            </Button>
+          ) : (
+            <Button
+              className="rounded-md p-[0.5rem] bg-navy2"
+              type="button"
+              onClick={() => {
+                handleEditTodo(todo)
+              }}
+            >
+              수정
+            </Button>
+          )}
+          <Button
+            className="rounded-md p-[0.5rem] bg-navy2"
+            type="button"
+            onClick={() => handleDeleteTodo(todo.id)}
+          >
+            삭제
+          </Button>
+        </div>
         <div>TodoModal</div>
         <div>Todo Task : {todo.task}</div>
         <div>Todo ID : {todo.id}</div>
@@ -192,7 +202,7 @@ const TodoModal = () => {
             <Button
               type="button"
               onClick={handleClearDate}
-              className="ml-[2rem] w-[8rem] bg-blue-800"
+              className="ml-[2rem] p-[0.5rem] rounded-md bg-navy2"
             >
               날짜 미정
             </Button>

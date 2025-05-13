@@ -107,34 +107,45 @@ const MemoModal = () => {
       onClick={onClose}
     >
       <div
-        className="bg-black rounded-lg p-[4rem]"
+        className="bg-navy3 text-[1.5rem] rounded-lg p-[4rem]"
         onClick={(e) => e.stopPropagation()}
       >
-        <Button className="m-[2rem]" type="button" onClick={onClose}>
-          모달 닫기
-        </Button>
-        {editMemo ? (
-          <Button className="m-[2rem]" type="button" onClick={updateMemoInput}>
-            적용
-          </Button>
-        ) : (
+        <div className="mb-[1rem] flex justify-between">
           <Button
-            className="m-[2rem]"
+            className="rounded-md bg-navy2 p-[0.5rem]"
             type="button"
-            onClick={() => {
-              handleEditMemo(memo)
-            }}
+            onClick={onClose}
           >
-            수정
+            모달 닫기
           </Button>
-        )}
-        <Button
-          className="m-[2rem]"
-          type="button"
-          onClick={() => handleDeleteMemo(memo.id)}
-        >
-          삭제
-        </Button>
+          {editMemo ? (
+            <Button
+              className="rounded-md p-[0.5rem] bg-navy2"
+              type="button"
+              onClick={updateMemoInput}
+            >
+              적용
+            </Button>
+          ) : (
+            <Button
+              className="rounded-md p-[0.5rem] bg-navy2"
+              type="button"
+              onClick={() => {
+                handleEditMemo(memo)
+              }}
+            >
+              수정
+            </Button>
+          )}
+          <Button
+            className="rounded-md p-[0.5rem] bg-navy2"
+            type="button"
+            onClick={() => handleDeleteMemo(memo.id)}
+          >
+            삭제
+          </Button>
+        </div>
+
         <div>MemoModal</div>
         <div>Memo Connent : {memo.content}</div>
         <div>Memo ID : {memo.id}</div>
