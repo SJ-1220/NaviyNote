@@ -2,15 +2,15 @@ import React from 'react'
 
 const layout = ({
   children,
-  todoModal,
+  memoModal,
 }: {
   children: React.ReactNode
-  todoModal: React.ReactNode
+  memoModal: React.ReactNode
 }) => {
   return (
     <>
       {children}
-      {todoModal}
+      {memoModal}
     </>
   )
 }

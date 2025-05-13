@@ -6,7 +6,7 @@ export interface Todo {
   task: string
   completed: boolean
   date?: string | null
-  memo_id?: string
+  memo_id?: string | null
   important: boolean
 }
 
@@ -79,6 +79,17 @@ export const fetchTodayTodo = async (userEmail: string, todayDate: string) => {
     .select('*')
     .eq('user_email', userEmail)
     .eq('date', todayDate)
+  if (error) throw new Error(error.message)
+  return data || []
+}
+
+export const fetchNoDateTodo = async (userEmail: string) => {
+  if (!userEmail) throw new Error('User email is required')
+  const { data, error } = await supabase
+    .from('todo')
+    .select('*')
+    .eq('user_email', userEmail)
+    .is('date', null)
   if (error) throw new Error(error.message)
   return data || []
 }
