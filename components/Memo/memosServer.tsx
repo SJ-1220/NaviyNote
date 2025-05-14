@@ -27,7 +27,16 @@ export const addMemo = async (memo: Omit<Memo, 'id'>, userEmail: string) => {
     .insert([{ ...memo, user_email: userEmail }])
     .select()
   if (error) throw new Error(error.message)
-  return data[0]
+  const newMemo = data[0]
+
+  if (newMemo.todo_id) {
+    const { error } = await supabase
+      .from('todo')
+      .update({ memo_id: newMemo.id })
+      .eq('id', newMemo.todo_id)
+    if (error) throw new Error(error.message)
+  }
+  return newMemo
 }
 export const deleteMemo = async (memoId: string, userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')

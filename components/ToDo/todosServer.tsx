@@ -93,3 +93,19 @@ export const fetchNoDateTodo = async (userEmail: string) => {
   if (error) throw new Error(error.message)
   return data || []
 }
+
+export const fetchMonthTodo = async (
+  userEmail: string,
+  startDate: string,
+  endDate: string
+) => {
+  if (!userEmail) throw new Error('User Email is required')
+  const { data, error } = await supabase
+    .from('todo')
+    .select('*')
+    .eq('user_email', userEmail)
+    .gte('date', startDate)
+    .lte('date', endDate)
+  if (error) throw new Error(error.message)
+  return data || []
+}
