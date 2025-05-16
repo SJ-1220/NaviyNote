@@ -18,16 +18,15 @@ export default function MonthTodoBox({ todo, todoFetch }: MonthTodoBoxProps) {
       type="button"
       key={todoId}
       onClick={() => todoFetch(todoTask)}
-      className={`size-[10rem] rounded-lg flex justify-center items-center text-center m-[1.5rem] outline-offset-0 outline`}
+      className={`flex flex-col size-[10rem] rounded-lg justify-center items-center text-center m-[1.5rem] outline-offset-0 outline`}
     >
-      {todo.task}
-      <br />
-      {todo.completed ? '완료✅' : '미완❌'}
-      {todo.important ? '중요⭐' : '안중요❌'}
-      <br />
-      {todo.memo_id ? `${todo.memo_id}` : '메모연결❌'}
-      <br />
-      {`날짜: ${formattedDate}`}
+      <div className="text-[1.5rem]">{todo.task}</div>
+      <div className="flex">
+        {todo.completed ? '완료✅' : '미완❌'}
+        {todo.important ? '중요⭐' : '안중요❌'}
+      </div>
+      <div> {todo.memo_id ? '메모연결✅' : '메모연결❌'}</div>
+      <div> {`${formattedDate}`}</div>
     </Button>
   )
 }

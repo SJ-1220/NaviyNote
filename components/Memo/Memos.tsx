@@ -68,6 +68,7 @@ const Memos = () => {
       setSelectedMonth('')
     }
   }
+
   const handleAddMemo = async () => {
     if (newContent.trim() === '') return
     if (session && session.user && session.user.email) {
@@ -190,37 +191,42 @@ const Memos = () => {
               />
             </label>
           </div>
-          <div className="text-[1.5rem] mb-[1rem]">연동할 날짜 선택</div>
-          <div className="items-center flex mb-[1rem]">
-            <div className="mr-[1rem]">▶</div>
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-              title="month"
-              className="text-[1.5rem] text-black"
-            >
-              <option value="2025-01">2025년 1월</option>
-              <option value="2025-02">2025년 2월</option>
-              <option value="2025-03">2025년 3월</option>
-              <option value="2025-04">2025년 4월</option>
-              <option value="2025-05">2025년 5월</option>
-              <option value="2025-06">2025년 6월</option>
-              <option value="2025-07">2025년 7월</option>
-              <option value="2025-08">2025년 8월</option>
-              <option value="2025-09">2025년 9월</option>
-              <option value="2025-10">2025년 10월</option>
-              <option value="2025-11">2025년 11월</option>
-              <option value="2025-12">2025년 12월</option>
-            </select>
-            <Button
-              className="text-[1.5rem] ml-[2rem] p-[0.5rem] bg-navy2 rounded-md"
-              type="button"
-              onClick={MonthNull}
-            >
-              연동 초기화
-            </Button>
-          </div>
-          <div>연결된 Todo : {connectTodoTask}</div>
+          {newConnect && (
+            <div>
+              <div className="text-[1.5rem] mb-[1rem]">연동할 날짜 선택</div>
+              <div className="items-center flex mb-[1rem]">
+                <div className="mr-[1rem]">▶</div>
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  title="month"
+                  className="text-[1.5rem] text-black"
+                >
+                  <option value="">월 선택</option>
+                  <option value="2025-01">2025년 1월</option>
+                  <option value="2025-02">2025년 2월</option>
+                  <option value="2025-03">2025년 3월</option>
+                  <option value="2025-04">2025년 4월</option>
+                  <option value="2025-05">2025년 5월</option>
+                  <option value="2025-06">2025년 6월</option>
+                  <option value="2025-07">2025년 7월</option>
+                  <option value="2025-08">2025년 8월</option>
+                  <option value="2025-09">2025년 9월</option>
+                  <option value="2025-10">2025년 10월</option>
+                  <option value="2025-11">2025년 11월</option>
+                  <option value="2025-12">2025년 12월</option>
+                </select>
+                <Button
+                  className="text-[1.5rem] ml-[2rem] p-[0.5rem] bg-navy2 rounded-md"
+                  type="button"
+                  onClick={MonthNull}
+                >
+                  연동 초기화
+                </Button>
+              </div>
+              <div>연결된 Todo : {connectTodoTask}</div>
+            </div>
+          )}
           <Button
             type="button"
             className="my-[1rem] py-[1rem] w-[30rem] bg-navy2 rounded-md"
@@ -241,7 +247,7 @@ const Memos = () => {
         </div>
         {/* 연결된 메모 */}
       </div>
-      {selectedMonth && (
+      {newConnect && selectedMonth && (
         <div className="text-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
           선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
           <div className="w-fit gap-[1rem] mx-auto grid grid-cols-7 text-[1rem]">

@@ -185,7 +185,7 @@ const TodoModal = () => {
               />
             </label>
             <div>
-              기존 날짜 :{' '}
+              기존 날짜 :
               <span>
                 {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
               </span>
