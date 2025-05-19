@@ -148,9 +148,17 @@ const MemoModal = () => {
       todo_id: updatedTodoId,
     }
     try {
-      await updateMemo(editMemo.id, updatedMemo, session.user.email)
-      setMemosStore(
-        memolist.map((memo) => (memo.id == editMemo.id ? updatedMemo : memo))
+      const updatedMemos = await updateMemo(
+        editMemo.id,
+        updatedMemo,
+        session.user.email
+      )
+
+      setMemosStore((prev) =>
+        prev.map((memo) => {
+          const updated = updatedMemos.find((m) => m.id === memo.id)
+          return updated ? updated : memo
+        })
       )
       setEditMemo(null)
       setNewContent('')

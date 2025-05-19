@@ -76,15 +76,44 @@ export const updateMemo = async (
   userEmail: string
 ) => {
   if (!userEmail) throw new Error('User email is required')
-  const { data, error } = await supabase
+
+  const memosUpdate: Memo[] = []
+
+  // 1.todo_id가 달라졌다면, 달라진 todo_id를 참고하고 있던 다른 memo(prevMemo)를 찾기
+  if (updates.todo_id) {
+    const { data: prevMemo, error } = await supabase
+      .from('memo')
+      .select('id')
+      .eq('todo_id', updates.todo_id)
+      .neq('id', memoId)
+      .eq('user_email', userEmail)
+      .maybeSingle()
+    if (error) throw new Error(error.message)
+
+    // 2.memo를 찾아서 해당 memo의 todo_id를 null로 변경
+    if (prevMemo) {
+      const { data: prevMemoNull, error } = await supabase
+        .from('memo')
+        .update({ todo_id: null })
+        .eq('id', prevMemo.id)
+        .select()
+      if (error) throw new Error(error.message)
+      memosUpdate.push(prevMemoNull[0])
+    }
+  }
+
+  // 3.현재 메모의 todo_id를 포함한 변경된 부분을 update
+  const { data: nowMemo, error } = await supabase
     .from('memo')
     .update(updates)
     .eq('id', memoId)
     .eq('user_email', userEmail)
     .select()
   if (error) throw new Error(error.message)
-  const updatedMemo = data[0]
+  const updatedMemo = nowMemo[0]
+  memosUpdate.push(updatedMemo)
 
+  // 4. 현재 메모에서 todo_id가 달라진 부분이 있다면, todo table에서 해당 todo의 memo_id를 update
   if (updatedMemo.todo_id) {
     const { error } = await supabase
       .from('todo')
@@ -92,5 +121,5 @@ export const updateMemo = async (
       .eq('id', updatedMemo.todo_id)
     if (error) throw new Error(error.message)
   }
-  return updatedMemo
+  return memosUpdate
 }
