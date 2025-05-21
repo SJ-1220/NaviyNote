@@ -9,6 +9,7 @@ export interface Memo {
   important: boolean
   connect: boolean
 }
+
 export interface MemoWithTodo {
   id: string
   user_email: string
@@ -124,7 +125,8 @@ export const updateMemo = async (
       .eq('todo_id', updates.todo_id)
       .neq('id', memoId)
       .eq('user_email', userEmail)
-      .maybeSingle()
+      .limit(1)
+      .single()
     if (error) throw new Error(error.message)
 
     // 2.memo를 찾아서 해당 memo의 todo_id를 null로 변경

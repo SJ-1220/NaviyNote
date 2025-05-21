@@ -170,6 +170,7 @@ export default function ToDos() {
         setNewDate(null)
         setNewMemoId(null)
         setNewConnect(false)
+        setConnectMemoContent('')
       } catch (error) {
         setError((error as Error).message)
       }
@@ -265,7 +266,7 @@ export default function ToDos() {
             </div>
             <div className="ml-[3rem]">
               <input
-                className="w-[35rem] text-black mb-[1rem]"
+                className="rounded-md px-[0.5rem] w-[35rem] text-black mb-[1rem]"
                 type="text"
                 value={newTask}
                 placeholder="새로운 ToDo를 추가하세요"
@@ -293,7 +294,7 @@ export default function ToDos() {
                 <label className="flex ml-[2rem]">
                   <div className="mr-[1rem]">날짜 :</div>
                   <input
-                    className="text-black"
+                    className="px-[0.5rem] rounded-md text-black"
                     type="date"
                     value={newDate || ''}
                     onChange={(e) => setNewDate(e.target.value || null)}

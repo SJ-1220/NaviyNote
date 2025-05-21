@@ -160,6 +160,13 @@ const MemoModal = () => {
           return updated ? updated : memo
         })
       )
+
+      const updatedMemoWithTodo = await fetchMemoWithTodo(
+        editMemo.id,
+        session.user.email
+      )
+      setMemoTodo(updatedMemoWithTodo)
+
       setEditMemo(null)
       setNewContent('')
       setNewActive(false)
@@ -185,7 +192,7 @@ const MemoModal = () => {
       onClick={onClose}
     >
       <div
-        className="bg-navy3 text-[1.5rem] rounded-lg p-[4rem]"
+        className="min-w-[30rem] bg-navy3 text-[1.5rem] rounded-lg p-[4rem]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-[1rem] flex justify-between">
@@ -257,38 +264,38 @@ const MemoModal = () => {
             <label className="flex">
               <div className="mr-[1rem]">메모 내용</div>
               <input
-                className="w-[49rem] text-black mb-[1rem]"
+                className="px-[0.5rem] rounded-md w-[49rem] text-black mb-[1rem]"
                 type="text"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
               />
             </label>
             <div className="flex mb-[1rem]">
-              <label className="mr-[2rem]">
-                활성화
+              <label className="flex mr-[2rem]">
+                <div className="mr-[0.5rem]">활성화</div>
                 <input
                   type="checkbox"
                   checked={newActive}
                   onChange={(e) => setNewActive(e.target.checked)}
-                  className="size-[1.5rem]"
+                  className="self-center size-[1.5rem]"
                 />
               </label>
-              <label className="mr-[2rem]">
-                중요
+              <label className="flex mr-[2rem]">
+                <div className="mr-[0.5rem]">중요</div>
                 <input
                   type="checkbox"
                   checked={newImportant}
                   onChange={(e) => setNewImportant(e.target.checked)}
-                  className="size-[1.5rem]"
+                  className="self-center size-[1.5rem]"
                 />
               </label>
-              <label>
-                연동
+              <label className="flex">
+                <div className="mr-[0.5rem]">연동</div>
                 <input
                   type="checkbox"
                   checked={newConnect}
                   onChange={(e) => setNewConnect(e.target.checked)}
-                  className="size-[1.5rem]"
+                  className="self-center size-[1.5rem]"
                 />
               </label>
             </div>

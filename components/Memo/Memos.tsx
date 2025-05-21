@@ -172,7 +172,7 @@ const Memos = () => {
         <div className="my-[2rem] text-[1.5rem] outline-offset-[1rem] outline rounded-md">
           <div className="text-[2rem]">메모를 추가하세요</div>
           <input
-            className="w-[30rem] text-black mb-[1rem]"
+            className="px-[0.5rem] rounded-md w-[30rem] text-black mb-[1rem]"
             type="text"
             value={newContent}
             placeholder="새로운 Memo를 추가하세요"

@@ -21,12 +21,14 @@ export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
     >
       <div>
         <div className="text-[1.5rem]">{todo.task}</div>
-        <div className="text-center">
-          {todo.completed ? '완료✅' : '미완❌'}
-          {todo.important ? '중요⭐' : '안중요❌'}
+        <div className="flex justify-center text-center">
+          <div className="mr-[0.5rem]">
+            {todo.completed ? '완료✅' : '미완❌'}
+          </div>
+          <div>{todo.important ? '중요⭐' : '안중요❌'}</div>
         </div>
         <div> {todo.memo_id ? `메모연결✅` : '메모연결❌'}</div>
-        <div>{`날짜: ${formattedDate}`}</div>
+        <div>{`${formattedDate}`}</div>
       </div>
     </Link>
   )
