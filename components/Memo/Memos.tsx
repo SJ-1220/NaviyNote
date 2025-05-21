@@ -83,7 +83,22 @@ const Memos = () => {
       try {
         const result = await addMemo(memo, session.user.email)
         if (result) {
-          setMemosStore([...memolist, { ...memo, id: result.id }])
+          const { newMemo, memosUpdate } = result
+          setMemosStore((prev) => {
+            // 기존 항목 수정
+            let updated = prev.map((m) =>
+              m.id === newMemo.id
+                ? newMemo
+                : memosUpdate && m.id === memosUpdate.id
+                  ? memosUpdate
+                  : m
+            )
+            // 새 항목 추가
+            if (!prev.some((m) => m.id === newMemo.id)) {
+              updated = [...updated, newMemo]
+            }
+            return updated
+          })
         }
         setNewContent('')
         setNewActive(false)

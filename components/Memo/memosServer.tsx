@@ -43,21 +43,47 @@ export const fetchMemoWithTodo = async (memoId: string, userEmail: string) => {
 
 export const addMemo = async (memo: Omit<Memo, 'id'>, userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')
+
   const { data, error } = await supabase
     .from('memo')
     .insert([{ ...memo, user_email: userEmail }])
     .select()
   if (error) throw new Error(error.message)
-  const newMemo = data[0]
 
+  // newMemo : 새로 생성한 memo
+  const newMemo = data[0]
+  let memosUpdate: Memo | null = null
+
+  // newMemo의 todo_id가 있으면, todo table의 memo_id도 update
   if (newMemo.todo_id) {
-    const { error } = await supabase
+    const { error: updateError } = await supabase
       .from('todo')
       .update({ memo_id: newMemo.id })
       .eq('id', newMemo.todo_id)
-    if (error) throw new Error(error.message)
+    if (updateError) throw new Error(updateError.message)
+
+    // newMemo의 todo_id가 있으면, 해당 todo_id를 이미 사용하고 있던 memo(prevMemo) 찾기
+    const { data: prevMemos, error: findError } = await supabase
+      .from('memo')
+      .select('*')
+      .eq('todo_id', newMemo.todo_id)
+      .neq('id', newMemo.id)
+      .eq('user_email', userEmail)
+      .limit(1)
+    if (findError) throw new Error(findError.message)
+
+    if (prevMemos && prevMemos.length > 0) {
+      const prevMemo = prevMemos[0]
+      const { error } = await supabase
+        .from('memo')
+        .update({ todo_id: null })
+        .eq('id', prevMemo.id)
+      if (error) throw new Error(error.message)
+
+      memosUpdate = { ...prevMemo, todo_id: null }
+    }
   }
-  return newMemo
+  return { newMemo, memosUpdate }
 }
 export const deleteMemo = async (memoId: string, userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')
