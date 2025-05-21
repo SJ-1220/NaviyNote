@@ -147,13 +147,29 @@ export default function ToDos() {
       try {
         const result = await addTodo(todo, session.user.email)
         if (result) {
-          setTodosStore([...todolist, { ...todo, id: result.id }])
+          const { newTodo, todosUpdate } = result
+          setTodosStore((prev) => {
+            // 기존 항목 수정
+            let updated = prev.map((m) =>
+              m.id === newTodo.id
+                ? newTodo
+                : todosUpdate && m.id === todosUpdate.id
+                  ? todosUpdate
+                  : m
+            )
+            // 새 항목 추가
+            if (!prev.some((m) => m.id === newTodo.id)) {
+              updated = [...updated, newTodo]
+            }
+            return updated
+          })
         }
         setNewTask('')
         setNewImportant(false)
         setNewCompleted(false)
         setNewDate(null)
         setNewMemoId(null)
+        setNewConnect(false)
       } catch (error) {
         setError((error as Error).message)
       }
