@@ -140,6 +140,7 @@ const Memos = () => {
     setConnectTodoTask(task)
     setNewTodoId(id)
   }
+
   const MemoOpen = () => {
     setMemolistOpen(!memolistOpen)
   }
@@ -182,7 +183,7 @@ const Memos = () => {
               중요도
               <input
                 type="checkbox"
-                className="size-[1.5rem]"
+                className="self-center ml-[0.5rem] size-[1.5rem]"
                 checked={newImportant}
                 onChange={(e) => setNewImportant(e.target.checked)}
               />
@@ -191,7 +192,7 @@ const Memos = () => {
               활성화
               <input
                 type="checkbox"
-                className="size-[1.5rem]"
+                className="self-center ml-[0.5rem] size-[1.5rem]"
                 checked={newActive}
                 onChange={(e) => setNewActive(e.target.checked)}
               />
@@ -200,7 +201,7 @@ const Memos = () => {
               연동가능
               <input
                 type="checkbox"
-                className="size-[1.5rem]"
+                className="self-center ml-[0.5rem] size-[1.5rem]"
                 checked={newConnect}
                 onChange={(e) => setNewConnect(e.target.checked)}
               />
@@ -208,7 +209,7 @@ const Memos = () => {
           </div>
           {newConnect && (
             <div>
-              <div className="text-[1.5rem] mb-[1rem]">연동할 날짜 선택</div>
+              <div className="text-[1.5rem] mb-[1rem]">연결할 날짜 선택</div>
               <div className="items-center flex mb-[1rem]">
                 <div className="mr-[1rem]">▶</div>
                 <select
@@ -244,7 +245,7 @@ const Memos = () => {
           )}
           <Button
             type="button"
-            className="my-[1rem] py-[1rem] w-[30rem] bg-navy2 rounded-md"
+            className="my-[1rem] py-[0.5rem] w-[30rem] bg-navy2 rounded-md"
             onClick={handleAddMemo}
           >
             추가

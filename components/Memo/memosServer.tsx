@@ -41,6 +41,17 @@ export const fetchMemoWithTodo = async (memoId: string, userEmail: string) => {
   return data[0]
 }
 
+export const fetchConnectMemo = async (userEmail: string) => {
+  if (!userEmail) throw new Error('User email is required')
+  const { data, error } = await supabase
+    .from('memo')
+    .select('*')
+    .eq('user_email', userEmail)
+    .is('connect', true)
+  if (error) throw new Error(error.message)
+  return data
+}
+
 export const addMemo = async (memo: Omit<Memo, 'id'>, userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')
 

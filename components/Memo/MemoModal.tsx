@@ -316,6 +316,7 @@ const MemoModal = () => {
                       title="month"
                       className="text-black mr-[1rem]"
                     >
+                      <option value="">월 선택</option>
                       <option value="2025-01">2025년 1월</option>
                       <option value="2025-02">2025년 2월</option>
                       <option value="2025-03">2025년 3월</option>
