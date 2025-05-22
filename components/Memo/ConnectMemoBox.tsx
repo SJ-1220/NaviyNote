@@ -26,8 +26,6 @@ export default function ConnectMemoBox({
         {memo.active ? '표시✅' : '숨김❌'}
         {memo.important ? '중요✅' : '안중요❌'}
       </div>
-      <div>{memo.connect ? '연결가능✅' : '연결불가❌'}</div>
-      {/* connect는 나중에 뺄거임. 확인용 */}
       <div>{memo.todo_id ? `todo연결✅` : 'todo연결❌'}</div>
     </Button>
   )
