@@ -7,6 +7,8 @@ import Button from '../Button'
 import MemoBox from './MemoBox'
 import useMemoStore from '@/src/store/memoStore'
 import MemoDropZone from './MemoDropZone'
+import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
+import MonthTodoBox from '../ToDo/MonthTodoBox'
 
 const Memos = () => {
   const { data: session } = useSession()
@@ -19,6 +21,9 @@ const Memos = () => {
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newConnect, setNewConnect] = useState<boolean>(false)
   const [newTodoId, setNewTodoId] = useState<string | null>(null)
+  const [selectedMonth, setSelectedMonth] = useState<string>('')
+  const [monthTodolist, setMonthTodolist] = useState<Todo[]>([])
+  const [connectTodoTask, setConnectTodoTask] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +40,35 @@ const Memos = () => {
     fetchData()
   }, [session, setMemosStore])
 
+  useEffect(() => {
+    const fetchMonthTodoData = async () => {
+      if (!selectedMonth || selectedMonth.trim() === '') return
+      const year = Number(selectedMonth.split('-')[0])
+      const month = Number(selectedMonth.split('-')[1]) - 1
+      const start = new Date(year, month, 1)
+      const end = new Date(year, month + 1, 0, 23, 59, 59)
+      if (session && session.user && session.user.email) {
+        try {
+          const monthTodos = await fetchMonthTodo(
+            session.user.email,
+            start.toISOString(),
+            end.toISOString()
+          )
+          setMonthTodolist(monthTodos)
+        } catch (error) {
+          setError((error as Error).message)
+        }
+      }
+    }
+    fetchMonthTodoData()
+  }, [session, selectedMonth])
+
+  const MonthNull = () => {
+    if (selectedMonth) {
+      setSelectedMonth('')
+    }
+  }
+
   const handleAddMemo = async () => {
     if (newContent.trim() === '') return
     if (session && session.user && session.user.email) {
@@ -49,7 +83,22 @@ const Memos = () => {
       try {
         const result = await addMemo(memo, session.user.email)
         if (result) {
-          setMemosStore([...memolist, { ...memo, id: result.id }])
+          const { newMemo, memosUpdate } = result
+          setMemosStore((prev) => {
+            // 기존 항목 수정
+            let updated = prev.map((m) =>
+              m.id === newMemo.id
+                ? newMemo
+                : memosUpdate && m.id === memosUpdate.id
+                  ? memosUpdate
+                  : m
+            )
+            // 새 항목 추가
+            if (!prev.some((m) => m.id === newMemo.id)) {
+              updated = [...updated, newMemo]
+            }
+            return updated
+          })
         }
         setNewContent('')
         setNewActive(false)
@@ -87,6 +136,11 @@ const Memos = () => {
     }
   }
 
+  const TodoIDTask = (id: string, task: string) => {
+    setConnectTodoTask(task)
+    setNewTodoId(id)
+  }
+
   const MemoOpen = () => {
     setMemolistOpen(!memolistOpen)
   }
@@ -115,62 +169,87 @@ const Memos = () => {
       {/* 메모 추가 + 연결된 메모 */}
       <div className="flex justify-between">
         {/* 메모 추가 */}
-        <div className="my-[2rem] outline-offset-[1rem] outline rounded-md">
+        <div className="my-[2rem] text-[1.5rem] outline-offset-[1rem] outline rounded-md">
           <div className="text-[2rem]">메모를 추가하세요</div>
-          <div className="text-[1.5rem]">
-            <input
-              className="w-[30rem] text-black mb-[1rem]"
-              type="text"
-              value={newContent}
-              placeholder="새로운 Memo를 추가하세요"
-              onChange={(e) => setNewContent(e.target.value)}
-            />
-            <div className="mb-[1rem]">
-              <label className="mr-[2rem]">
-                중요도
-                <input
-                  type="checkbox"
-                  className="size-[1.5rem]"
-                  checked={newImportant}
-                  onChange={(e) => setNewImportant(e.target.checked)}
-                />
-              </label>
-              <label className="mr-[2rem]">
-                활성화
-                <input
-                  type="checkbox"
-                  className="size-[1.5rem]"
-                  checked={newActive}
-                  onChange={(e) => setNewActive(e.target.checked)}
-                />
-              </label>
-              <label className="mr-[2rem]">
-                연동가능
-                <input
-                  type="checkbox"
-                  className="size-[1.5rem]"
-                  checked={newConnect}
-                  onChange={(e) => setNewConnect(e.target.checked)}
-                />
-              </label>
-            </div>
-            <label>
-              Todo연동
+          <input
+            className="px-[0.5rem] rounded-md w-[30rem] text-black mb-[1rem]"
+            type="text"
+            value={newContent}
+            placeholder="새로운 Memo를 추가하세요"
+            onChange={(e) => setNewContent(e.target.value)}
+          />
+          <div className="mb-[1rem]">
+            <label className="mr-[2rem]">
+              중요도
               <input
-                type="text"
-                className="text-black mb-[1rem]"
-                value={newTodoId ?? ''}
-                onChange={(e) => setNewTodoId(e.target.value)}
+                type="checkbox"
+                className="self-center ml-[0.5rem] size-[1.5rem]"
+                checked={newImportant}
+                onChange={(e) => setNewImportant(e.target.checked)}
               />
             </label>
-            <Button
-              type="button"
-              className="ml-[2rem] w-[6rem] p-[0.5rem] bg-navy2 rounded-md"
-              onClick={handleAddMemo}
-            >
-              추가
-            </Button>
+            <label className="mr-[2rem]">
+              활성화
+              <input
+                type="checkbox"
+                className="self-center ml-[0.5rem] size-[1.5rem]"
+                checked={newActive}
+                onChange={(e) => setNewActive(e.target.checked)}
+              />
+            </label>
+            <label className="mr-[2rem]">
+              연동가능
+              <input
+                type="checkbox"
+                className="self-center ml-[0.5rem] size-[1.5rem]"
+                checked={newConnect}
+                onChange={(e) => setNewConnect(e.target.checked)}
+              />
+            </label>
           </div>
+          {newConnect && (
+            <div>
+              <div className="text-[1.5rem] mb-[1rem]">연결할 날짜 선택</div>
+              <div className="items-center flex mb-[1rem]">
+                <div className="mr-[1rem]">▶</div>
+                <select
+                  value={selectedMonth}
+                  onChange={(e) => setSelectedMonth(e.target.value)}
+                  title="month"
+                  className="text-[1.5rem] text-black"
+                >
+                  <option value="">월 선택</option>
+                  <option value="2025-01">2025년 1월</option>
+                  <option value="2025-02">2025년 2월</option>
+                  <option value="2025-03">2025년 3월</option>
+                  <option value="2025-04">2025년 4월</option>
+                  <option value="2025-05">2025년 5월</option>
+                  <option value="2025-06">2025년 6월</option>
+                  <option value="2025-07">2025년 7월</option>
+                  <option value="2025-08">2025년 8월</option>
+                  <option value="2025-09">2025년 9월</option>
+                  <option value="2025-10">2025년 10월</option>
+                  <option value="2025-11">2025년 11월</option>
+                  <option value="2025-12">2025년 12월</option>
+                </select>
+                <Button
+                  className="text-[1.5rem] ml-[2rem] p-[0.5rem] bg-navy2 rounded-md"
+                  type="button"
+                  onClick={MonthNull}
+                >
+                  연동 초기화
+                </Button>
+              </div>
+              <div>연결된 Todo : {connectTodoTask}</div>
+            </div>
+          )}
+          <Button
+            type="button"
+            className="my-[1rem] py-[0.5rem] w-[30rem] bg-navy2 rounded-md"
+            onClick={handleAddMemo}
+          >
+            추가
+          </Button>
         </div>
         <div className="self-center text-end text-[2rem]">
           메모는 네 구역(활성/비활성 + 중요/안중요)으로 분류되어 표시됩니다.
@@ -184,9 +263,21 @@ const Memos = () => {
         </div>
         {/* 연결된 메모 */}
       </div>
-      <div className="text-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
-        연결된 메모
-      </div>
+      {newConnect && selectedMonth && (
+        <div className="text-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
+          선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
+          <div className="w-fit gap-[1rem] mx-auto grid grid-cols-7 text-[1rem]">
+            {monthTodolist.map((todo: Todo) => (
+              <MonthTodoBox
+                todoFetch={() => TodoIDTask(todo.id, todo.task)}
+                key={todo.id}
+                todo={todo}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-[1rem]">
         {/* 안중요+활성 메모 */}
         <MemoDropZone
