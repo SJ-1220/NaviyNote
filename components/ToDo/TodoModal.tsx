@@ -303,7 +303,7 @@ const TodoModal = () => {
                 날짜 미정
               </Button>
             </div>
-            <label className="flex mb-[1rem]">
+            <label className="items-center flex mb-[1rem]">
               연결 메모 추가/수정
               <input
                 type="checkbox"
@@ -311,6 +311,13 @@ const TodoModal = () => {
                 className="ml-[0.5rem] self-center size-[1.5rem]"
                 onChange={(e) => setNewConnect(e.target.checked)}
               />
+              <Button
+                type="button"
+                className="ml-[2rem] rounded-md p-[0.5rem] bg-navy2"
+                onClick={NewConnectNull}
+              >
+                메모 연결 초기화
+              </Button>
             </label>
             <label>
               <div>
@@ -325,18 +332,10 @@ const TodoModal = () => {
                 )}
               </div>
             </label>
-
             {newConnect && (
               <div>
                 <div className="flex items-center mb-[1rem]">
                   <div>새로 연동할 메모 선택를 선택하세요</div>
-                  <Button
-                    type="button"
-                    className="ml-[2rem] rounded-md p-[0.5rem] bg-navy2"
-                    onClick={NewConnectNull}
-                  >
-                    메모 연결 초기화
-                  </Button>
                 </div>
                 <div className="flex">
                   <div className="mr-[1rem]">새로운 메모 :</div>
