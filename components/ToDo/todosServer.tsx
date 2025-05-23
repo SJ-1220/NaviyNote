@@ -71,7 +71,6 @@ export const addTodo = async (todo: Omit<Todo, 'id'>, userEmail: string) => {
       .neq('id', newTodo.id)
       .eq('user_email', userEmail)
       .limit(1)
-      .single()
     if (findError) throw new Error(findError.message)
 
     if (prevTodos && prevTodos.length > 0) {
@@ -110,18 +109,20 @@ export const updateTodo = async (
 
   // 1. memo_id가 달라졌다면, 달라진 memo_id를 참고하고 있던 다른 todo(prevTodo)를 찾기
   if (updates.memo_id) {
-    const { data: prevTodo, error } = await supabase
+    const { data: prevTodos, error } = await supabase
       .from('todo')
       .select('id')
       .eq('memo_id', updates.memo_id)
       .neq('id', todoId)
       .eq('user_email', userEmail)
       .limit(1)
-      .single()
+
     if (error) throw new Error(error.message)
 
     // 2. todo를 찾아서 해당 todo의 memo_id를 null로 변경
-    if (prevTodo) {
+    if (prevTodos && prevTodos.length > 0) {
+      const prevTodo = prevTodos[0]
+
       const { data: prevTodoNull, error } = await supabase
         .from('todo')
         .update({ memo_id: null })
