@@ -97,6 +97,7 @@ export const addMemo = async (memo: Omit<Memo, 'id'>, userEmail: string) => {
   }
   return { newMemo, memosUpdate }
 }
+
 export const deleteMemo = async (memoId: string, userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')
   const { data, error } = await supabase
@@ -119,18 +120,20 @@ export const updateMemo = async (
 
   // 1.todo_id가 달라졌다면, 달라진 todo_id를 참고하고 있던 다른 memo(prevMemo)를 찾기
   if (updates.todo_id) {
-    const { data: prevMemo, error } = await supabase
+    const { data: prevMemos, error } = await supabase
       .from('memo')
       .select('id')
       .eq('todo_id', updates.todo_id)
       .neq('id', memoId)
       .eq('user_email', userEmail)
       .limit(1)
-      .single()
+
     if (error) throw new Error(error.message)
 
     // 2.memo를 찾아서 해당 memo의 todo_id를 null로 변경
-    if (prevMemo) {
+    if (prevMemos && prevMemos.length > 0) {
+      const prevMemo = prevMemos[0]
+
       const { data: prevMemoNull, error } = await supabase
         .from('memo')
         .update({ todo_id: null })
