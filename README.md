@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<img src="https://github.com/user-attachments/assets/da57637e-83ee-415b-b2d2-6e38e6f8c101" width="200">
 
-## Getting Started
+## 프로젝트
 
-First, run the development server:
+NaviyNote는 어떤어떤것들을 할 수 있는 프로젝트입니다
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+**기획 의도**: 어쩌고어쩌고
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 기능 소개
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Main(메인 페이지)**
+   - 어저고
+   - 저쩌고
+2. **Todo**
+   - 어쩌고
+   - 저쩌고
+3. **메모**
+   - 어쩌고
+   - 저쩌고
+4. **친구**
+   - 개발 진행 중
+5. **통계**
+   - 개발 진행 중
+  
+### 활용 기술
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+이미지로도 넣고, 텍스트로도 넣음
 
-## Learn More
+### 프로젝트 구조
+ERD 및 아키텍쳐를 이미지로 넣기
 
-To learn more about Next.js, take a look at the following resources:
+### 기대효과
+뭘 쓸까나..
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 수행 결과
+사이트 활용 예시를 영상으로 넣기
