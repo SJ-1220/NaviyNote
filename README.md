@@ -76,7 +76,10 @@ NaviyNote는 두 기능을 연결해 효율적인 개인 기록 관리를 돕습
 | 기타 | 코드 컨벤션 | ESLint, Prettier |
 
 ## 프로젝트 구조
-ERD 및 아키텍쳐를 이미지로 넣기
+
+<img src="https://github.com/user-attachments/assets/3268a2d6-e7ad-4b81-be01-6b065037f145" width="600">
+<br />
+<img src="https://github.com/user-attachments/assets/1148424c-6693-4768-98b6-2d3d5b9eb6c0" width="700">
 
 ## 수행 결과
 사이트 활용 예시를 영상으로 넣기
