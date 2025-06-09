@@ -1,4 +1,6 @@
 'use client'
+import RecentMemos from '@/components/Main/RecentMemos'
+import RecentTodos from '@/components/Main/RecentTodos'
 import { signOut, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 
@@ -15,9 +17,8 @@ export default function MainPage() {
         <>
           <h3>{session.user.name}님!</h3>
           <h3>당신의 네이버 메일 주소는 {session.user.email}입니다</h3>
-          <button type="button" onClick={() => signOut()}>
-            로그아웃
-          </button>
+          <RecentMemos />
+          <RecentTodos />
         </>
       ) : (
         ''
