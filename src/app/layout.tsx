@@ -1,24 +1,24 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { getServerSession } from 'next-auth'
-import SessionWrapper from '../api/auth/[...nextauth]/SessionWrapper'
 import Footer from '@/components/Footer'
 import localFont from 'next/font/local'
 import { HeaderWrapper } from '@/components/Header/HeaderClients'
+import SessionWrapper from './api/auth/[...nextauth]/SessionWrapper'
 
 const NanumGothicRegular = localFont({
-  src: '../../../public/fonts/NanumGothic-Regular.ttf',
+  src: '../../public/fonts/NanumGothic-Regular.ttf',
   variable: '--font-nanumgothic-regular',
   weight: '400',
 })
 
 const NanumGothicBold = localFont({
-  src: '../../../public/fonts/NanumGothic-Bold.ttf',
+  src: '../../public/fonts/NanumGothic-Bold.ttf',
   variable: '--font-nanumgothic-bold',
   weight: '700',
 })
 const NanumGothicExtraBold = localFont({
-  src: '../../../public/fonts/NanumGothic-ExtraBold.ttf',
+  src: '../../public/fonts/NanumGothic-ExtraBold.ttf',
   variable: '--font-nanumgothic-extrabold',
   weight: '800',
 })

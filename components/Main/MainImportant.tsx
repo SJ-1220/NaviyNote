@@ -40,6 +40,7 @@ export default function MainImportant() {
               <MainTodoBox
                 title={todo.task}
                 key={todo.id}
+                date={todo.date}
                 important={todo.important}
               />
             ))}
