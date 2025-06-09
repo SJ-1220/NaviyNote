@@ -197,7 +197,7 @@ const MemoModal = () => {
       >
         <div className="mb-[1rem] flex justify-between">
           <Button
-            className="rounded-md bg-navy2 p-[0.5rem]"
+            className="rounded-lg bg-navy2 p-[0.5rem]"
             type="button"
             onClick={onClose}
           >
@@ -205,7 +205,7 @@ const MemoModal = () => {
           </Button>
           {editMemo ? (
             <Button
-              className="rounded-md p-[0.5rem] bg-navy2"
+              className="rounded-lg p-[0.5rem] bg-navy2"
               type="button"
               onClick={updateMemoInput}
             >
@@ -213,7 +213,7 @@ const MemoModal = () => {
             </Button>
           ) : (
             <Button
-              className="rounded-md p-[0.5rem] bg-navy2"
+              className="rounded-lg p-[0.5rem] bg-navy2"
               type="button"
               onClick={() => {
                 handleEditMemo(memo)
@@ -223,7 +223,7 @@ const MemoModal = () => {
             </Button>
           )}
           <Button
-            className="rounded-md p-[0.5rem] bg-navy2"
+            className="rounded-lg p-[0.5rem] bg-navy2"
             type="button"
             onClick={() => handleDeleteMemo(memo.id)}
           >
@@ -264,7 +264,7 @@ const MemoModal = () => {
             <label className="flex">
               <div className="mr-[1rem]">메모 내용</div>
               <input
-                className="px-[0.5rem] rounded-md w-[49rem] text-black mb-[1rem]"
+                className="px-[0.5rem] rounded-lg w-[49rem] text-black mb-[1rem]"
                 type="text"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
@@ -338,7 +338,7 @@ const MemoModal = () => {
                       <option value="2025-12">2025년 12월</option>
                     </select>
                     <Button
-                      className="rounded-md p-[0.5rem] bg-navy2"
+                      className="rounded-lg p-[0.5rem] bg-navy2"
                       type="button"
                       onClick={NewMonthNull}
                     >

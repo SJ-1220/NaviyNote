@@ -30,21 +30,23 @@ export default function RecentMemos() {
   if (error) return <div>{error}</div>
 
   return (
-    <>
-      <div>RecentMemos</div>
-      {recentMemos.length > 0 ? (
-        <div>
-          {recentMemos.map((memo: MainMemo) => (
-            <MainMemoBox
-              title={memo.content}
-              key={memo.id}
-              important={memo.important}
-            />
-          ))}
-        </div>
-      ) : (
-        <div>최근 수정/추가된 메모가 없습니다</div>
-      )}
-    </>
+    <div>
+      <div className="flex justify-center text-[2rem] mb-[2rem]">최근 메모</div>
+      <div className="outline-offset-[1rem] outline rounded-lg mb-[2rem]">
+        {recentMemos.length > 0 ? (
+          <div>
+            {recentMemos.map((memo: MainMemo) => (
+              <MainMemoBox
+                title={memo.content}
+                key={memo.id}
+                important={memo.important}
+              />
+            ))}
+          </div>
+        ) : (
+          <div>최근 수정/추가된 메모가 없습니다</div>
+        )}
+      </div>
+    </div>
   )
 }

@@ -169,10 +169,10 @@ const Memos = () => {
       {/* 메모 추가 + 연결된 메모 */}
       <div className="flex justify-between">
         {/* 메모 추가 */}
-        <div className="my-[2rem] text-[1.5rem] outline-offset-[1rem] outline rounded-md">
+        <div className="my-[2rem] text-[1.5rem] outline-offset-[1rem] outline rounded-lg">
           <div className="text-[2rem]">메모를 추가하세요</div>
           <input
-            className="px-[0.5rem] rounded-md w-[30rem] text-black mb-[1rem]"
+            className="px-[0.5rem] rounded-lg w-[30rem] text-black mb-[1rem]"
             type="text"
             value={newContent}
             placeholder="새로운 Memo를 추가하세요"
@@ -233,7 +233,7 @@ const Memos = () => {
                   <option value="2025-12">2025년 12월</option>
                 </select>
                 <Button
-                  className="text-[1.5rem] ml-[2rem] p-[0.5rem] bg-navy2 rounded-md"
+                  className="text-[1.5rem] ml-[2rem] p-[0.5rem] bg-navy2 rounded-lg"
                   type="button"
                   onClick={MonthNull}
                 >
@@ -245,7 +245,7 @@ const Memos = () => {
           )}
           <Button
             type="button"
-            className="my-[1rem] py-[0.5rem] w-[30rem] bg-navy2 rounded-md"
+            className="my-[1rem] py-[0.5rem] w-[30rem] bg-navy2 rounded-lg"
             onClick={handleAddMemo}
           >
             추가
@@ -264,7 +264,7 @@ const Memos = () => {
         {/* 연결된 메모 */}
       </div>
       {newConnect && selectedMonth && (
-        <div className="text-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
+        <div className="text-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-lg">
           선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
           <div className="w-fit gap-[1rem] mx-auto grid grid-cols-7 text-[1rem]">
             {monthTodolist.map((todo: Todo) => (
@@ -285,7 +285,7 @@ const Memos = () => {
           zoneIsImportant={false}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] my-[2rem] mr-[2rem] outline-offset-[1rem] outline rounded-md">
+          <div className="min-h-[30rem] my-[2rem] mr-[2rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-center text-[2rem] mb-[1rem]">
               안중요+활성 메모
             </div>
@@ -302,7 +302,7 @@ const Memos = () => {
           zoneIsImportant={true}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] ml-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
+          <div className="min-h-[30rem] ml-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-center text-[2rem] mb-[1rem]">
               중요+활성화 메모
             </div>
@@ -319,7 +319,7 @@ const Memos = () => {
           zoneIsImportant={false}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] mr-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
+          <div className="min-h-[30rem] mr-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-center text-[2rem] mb-[1rem]">
               안중요+비활성 메모
             </div>
@@ -336,7 +336,7 @@ const Memos = () => {
           zoneIsImportant={true}
           MemoDrop={handleDropMemo}
         >
-          <div className=" min-h-[30rem] ml-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-md">
+          <div className=" min-h-[30rem] ml-[2rem] my-[2rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-center text-[2rem] mb-[1rem]">
               중요+비활성 메모
             </div>
@@ -353,14 +353,14 @@ const Memos = () => {
           <Button
             type="button"
             onClick={MemoOpen}
-            className=" px-[43rem] text-[2rem] w-full items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md"
+            className=" px-[43rem] text-[2rem] w-full items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-lg"
           >
             전체 메모 보기
           </Button>
         </div>
       )}
       {memolistOpen && (
-        <div className="mb-[2rem] items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+        <div className="mb-[2rem] items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
           <div className="text-center mb-[2rem] text-[2rem]">전체 메모</div>
           <div>
             <div className="grid grid-cols-7 gap-[1rem]">
@@ -372,7 +372,7 @@ const Memos = () => {
               <Button
                 onClick={MemoOpen}
                 type="button"
-                className="ml-[2rem] p-[0.5rem] bg-navy2 rounded-md"
+                className="ml-[2rem] p-[0.5rem] bg-navy2 rounded-lg"
               >
                 전체 메모 숨김
               </Button>

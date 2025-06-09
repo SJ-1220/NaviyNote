@@ -5,9 +5,9 @@ interface MainMemoBoxProps {
 }
 export default function MainMemoBox({ title, important }: MainMemoBoxProps) {
   return (
-    <div>
-      <div>title:{title}</div>
-      <div>important:{important}</div>
+    <div className="flex-col w-[10rem] h-[5rem] rounded-lg flex justify-center items-center text-center mx-[1rem] bg-navy2 mb-[1rem]">
+      <div className="text-[1.5rem]">{title}</div>
+      <div>{important ? '🌟' : ''}</div>
     </div>
   )
 }

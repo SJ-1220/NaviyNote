@@ -20,6 +20,7 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/react": "^6.1.15",
     "@supabase/supabase-js": "^2.49.1",
+    "chart.js": "^4.4.9",
     "next": "15.1.7",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
