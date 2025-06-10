@@ -191,7 +191,7 @@ export default function ToDos() {
         {/* 위 왼쪽 */}
         <div>
           {/* 오늘의 Todo */}
-          <div className="mt-[2rem] outline-offset-[1rem] outline rounded-md">
+          <div className="mt-[2rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-[2rem] text-center mb-[1rem]">
               오늘({todayDateFormat()})의 Todo
             </div>
@@ -209,7 +209,7 @@ export default function ToDos() {
           </div>
 
           {/* 드래그 가능한 날짜없는 TodoList */}
-          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-[2rem] text-center">날짜없는 Todo</div>
             <div className=" mb-[1rem] text-center text-[1.5rem]">
               날짜를 설정하고 싶다면, 캘린더로
@@ -229,7 +229,7 @@ export default function ToDos() {
             )}
           </div>
           {/* 캘린더에서 선택한 날짜의 전날, 당일, 다음날의 Todo */}
-          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
             <div className="text-center text-[1.5rem]">
               선택한 날짜의 전날, 당일, 다음날의 Todo를 보여줄게용
             </div>
@@ -260,13 +260,13 @@ export default function ToDos() {
             )}
           </div>
           {/* Todo 추가 Input */}
-          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-md text-[1.5rem]">
+          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-lg text-[1.5rem]">
             <div className="text-[2rem] text-center mb-[1rem]">
               Todo를 추가하세요
             </div>
             <div className="ml-[3rem]">
               <input
-                className="rounded-md px-[0.5rem] w-[35rem] text-black mb-[1rem]"
+                className="rounded-lg px-[0.5rem] w-[35rem] text-black mb-[1rem]"
                 type="text"
                 value={newTask}
                 placeholder="새로운 ToDo를 추가하세요"
@@ -294,7 +294,7 @@ export default function ToDos() {
                 <label className="flex ml-[2rem]">
                   <div className="mr-[1rem]">날짜 :</div>
                   <input
-                    className="px-[0.5rem] rounded-md text-black"
+                    className="px-[0.5rem] rounded-lg text-black"
                     type="date"
                     value={newDate || ''}
                     onChange={(e) => setNewDate(e.target.value || null)}
@@ -314,7 +314,7 @@ export default function ToDos() {
               <Button
                 type="button"
                 onClick={handleAddTodo}
-                className="my-[1rem] py-[0.5rem] w-[35rem] bg-navy2 rounded-md"
+                className="my-[1rem] py-[0.5rem] w-[35rem] bg-navy2 rounded-lg"
               >
                 추가
               </Button>
@@ -347,7 +347,7 @@ export default function ToDos() {
       </div>
 
       {newConnect && (
-        <div className="mt-[3.5rem] items-center outline-offset-[1rem] outline rounded-md">
+        <div className="mt-[3.5rem] items-center outline-offset-[1rem] outline rounded-lg">
           <div className="text-center text-[2rem]">
             연결할 메모를 선택하세요
           </div>
@@ -368,14 +368,14 @@ export default function ToDos() {
           <Button
             onClick={TodoOpen}
             type="button"
-            className="text-[2rem] px-[43rem] w-full items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md"
+            className="text-[2rem] px-[43rem] w-full items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-lg"
           >
             전체 Todo 보기
           </Button>
         </div>
       )}
       {todolistOpen && (
-        <div className="items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-md">
+        <div className="items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
           <div className="text-center mb-[2rem] text-[2rem]">전체 Todo</div>
           <div>
             <div className="grid grid-cols-7 gap-[1rem]">
@@ -387,7 +387,7 @@ export default function ToDos() {
               <Button
                 onClick={TodoOpen}
                 type="button"
-                className="p-[0.5rem] bg-navy2 rounded-md"
+                className="p-[0.5rem] bg-navy2 rounded-lg"
               >
                 전체 Todo 숨김
               </Button>

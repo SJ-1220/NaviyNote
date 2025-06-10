@@ -187,7 +187,7 @@ const TodoModal = () => {
       >
         <div className="mb-[1rem] flex justify-between">
           <Button
-            className="rounded-md p-[0.5rem] bg-navy2"
+            className="rounded-lg p-[0.5rem] bg-navy2"
             type="button"
             onClick={onClose}
           >
@@ -195,7 +195,7 @@ const TodoModal = () => {
           </Button>
           {editTodo ? (
             <Button
-              className="rounded-md p-[0.5rem] bg-navy2"
+              className="rounded-lg p-[0.5rem] bg-navy2"
               type="button"
               onClick={updateTodoInput}
             >
@@ -203,7 +203,7 @@ const TodoModal = () => {
             </Button>
           ) : (
             <Button
-              className="rounded-md p-[0.5rem] bg-navy2"
+              className="rounded-lg p-[0.5rem] bg-navy2"
               type="button"
               onClick={() => {
                 handleEditTodo(todo)
@@ -213,7 +213,7 @@ const TodoModal = () => {
             </Button>
           )}
           <Button
-            className="rounded-md p-[0.5rem] bg-navy2"
+            className="rounded-lg p-[0.5rem] bg-navy2"
             type="button"
             onClick={() => handleDeleteTodo(todo.id)}
           >
@@ -253,7 +253,7 @@ const TodoModal = () => {
             <label className="flex">
               <div className="mr-[1rem]">Todo :</div>
               <input
-                className="px-[0.5rem] w-[64rem] rounded-md text-black mb-[1rem]"
+                className="px-[0.5rem] w-[64rem] rounded-lg text-black mb-[1rem]"
                 type="text"
                 value={newTask}
                 onChange={(e) => setNewTask(e.target.value)}
@@ -289,7 +289,7 @@ const TodoModal = () => {
               <label>
                 새 날짜 :
                 <input
-                  className="px-[0.5rem] rounded-md ml-[1rem] text-black"
+                  className="px-[0.5rem] rounded-lg ml-[1rem] text-black"
                   type="date"
                   value={newDate || ''}
                   onChange={(e) => setNewDate(e.target.value || null)}
@@ -298,7 +298,7 @@ const TodoModal = () => {
               <Button
                 type="button"
                 onClick={handleClearDate}
-                className="ml-[2rem] p-[0.5rem] rounded-md bg-navy2"
+                className="ml-[2rem] p-[0.5rem] rounded-lg bg-navy2"
               >
                 날짜 미정
               </Button>
@@ -313,7 +313,7 @@ const TodoModal = () => {
               />
               <Button
                 type="button"
-                className="ml-[2rem] rounded-md p-[0.5rem] bg-navy2"
+                className="ml-[2rem] rounded-lg p-[0.5rem] bg-navy2"
                 onClick={NewConnectNull}
               >
                 메모 연결 초기화
