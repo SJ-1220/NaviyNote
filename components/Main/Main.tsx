@@ -4,6 +4,7 @@ import RecentTodos from './RecentTodos'
 import MainFriend from './MainFriend'
 import MainStats from './MainStats'
 import MainImportant from './MainImportant'
+import CheckAccess from './CheckAccess'
 
 const Main = () => {
   const { data: session } = useSession()
@@ -24,6 +25,7 @@ const Main = () => {
             <div>
               <MainFriend />
               <MainStats />
+              <CheckAccess />
             </div>
           </div>
         </>
