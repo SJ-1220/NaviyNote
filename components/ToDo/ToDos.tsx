@@ -18,6 +18,7 @@ import useTodoStore from '@/src/store/todoStore'
 import NoDateTodos from './NoDateTodos'
 import { fetchConnectMemo, Memo } from '../Memo/memosServer'
 import ConnectMemoBox from '../Memo/ConnectMemoBox'
+import AddCalendar from './AddCalender'
 
 export default function ToDos() {
   const { data: session } = useSession()
@@ -393,6 +394,7 @@ export default function ToDos() {
               </Button>
             </div>
           </div>
+          <AddCalendar />
         </div>
       )}
       <div className="mb-[2rem]"></div>

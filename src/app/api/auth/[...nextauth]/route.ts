@@ -10,6 +10,8 @@ const handler = NextAuth({
         url: 'https://nid.naver.com/oauth2.0/authorize',
         params: {
           response_type: 'code',
+          scope: 'calendar',
+          auth_type: 'reprompt',
         },
       },
     }),
