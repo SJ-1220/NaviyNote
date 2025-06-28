@@ -79,10 +79,10 @@ export default function AddCalendar() {
     <Button
       type="button"
       onClick={handleAddCalendar}
-      className={`${session?.accessToken ? 'bg-black' : 'bg-gray-400'}`}
+      className={`text-[1.5rem] my-[1rem] py-[0.5rem] w-[35rem] rounded-lg ${session?.accessToken ? 'bg-navy2' : 'bg-gray-400'}`}
       disabled={!session?.accessToken}
     >
-      네이버 일정 추가
+      내 네이버캘린더에 배포일 일정 추가
     </Button>
   )
 }

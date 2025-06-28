@@ -322,7 +322,7 @@ export default function ToDos() {
             </div>
           </div>
         </div>
-        {/* 위 오른쪽 : 설명 + 캘린더 */}
+        {/* 위 오른쪽 : 설명 + 네이버 캘린더 추가 + 캘린더 */}
         <div>
           <div className="my-[2rem] text-end text-[2rem]">
             날짜가 없는 Todo를 드래그해서
@@ -336,6 +336,9 @@ export default function ToDos() {
             <br />
             <span className="font-bold"> 수정/삭제</span>할 수 있는 상세
             화면으로 이동합니다.
+          </div>
+          <div className="flex justify-center">
+            <AddCalendar />
           </div>
           <div className="ml-[3rem] size-[50rem] z-10">
             <Calendar
@@ -394,7 +397,6 @@ export default function ToDos() {
               </Button>
             </div>
           </div>
-          <AddCalendar />
         </div>
       )}
       <div className="mb-[2rem]"></div>
