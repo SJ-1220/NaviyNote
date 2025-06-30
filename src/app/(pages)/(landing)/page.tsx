@@ -38,6 +38,16 @@ export default function LandingPage() {
             지금 시작하기
           </button>
         </div>
+        <div className="text-center text-[2rem]">
+          <div className="mt-[2rem]">⚠️주의⚠️</div>
+          <div className="mt-[1rem]">
+            로그인 시,
+            <span className="font-nanumgothic_bold ml-[1rem]">
+              캘린더 일정담기 권한
+            </span>
+            을 추가해주세요
+          </div>
+        </div>
       </div>
       {/* 오른쪽 */}
       <div className="flex flex-col items-center justify-center flex-1">
