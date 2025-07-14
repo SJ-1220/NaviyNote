@@ -5,6 +5,7 @@ import Footer from '@/components/Footer'
 import localFont from 'next/font/local'
 import { HeaderWrapper } from '@/components/Header/HeaderClients'
 import SessionWrapper from './api/auth/[...nextauth]/SessionWrapper'
+import GoogleAnalytics from '@/lib/GoogleAnalytics'
 
 const NanumGothicRegular = localFont({
   src: '../../public/fonts/NanumGothic-Regular.ttf',
@@ -39,6 +40,11 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       className={`${NanumGothicRegular.variable} ${NanumGothicBold.variable} ${NanumGothicExtraBold.variable}`}
     >
       <body>
+        {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ? (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS} />
+        ) : (
+          <></>
+        )}
         <SessionWrapper session={session}>
           <HeaderWrapper />
         </SessionWrapper>
