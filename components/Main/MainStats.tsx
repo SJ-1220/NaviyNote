@@ -3,7 +3,7 @@ import MainFirstChart from './MainFirstChart'
 export default function MainStats() {
   return (
     <div>
-      <div className="mt-[4rem] mb-[2rem] justify-items-center outline-offset-[1rem] outline rounded-lg">
+      <div className="mt-[4rem] mb-[2rem] justify-items-center p-[1rem] outline-dashed outline-white bg-lightnavy text-navy rounded-lg">
         <div className="text-[1.5rem] mb-[1rem]">
           이번달에 할일이 가장 많은 요일은?
         </div>
@@ -12,7 +12,7 @@ export default function MainStats() {
         </div>
         <MainFirstChart />
       </div>
-      <div className="mt-[4rem] mb-[2rem] justify-items-center outline-offset-[1rem] outline rounded-lg">
+      <div className="mt-[4rem] mb-[2rem] justify-items-center p-[1rem] outline-dashed outline-white bg-lightnavy text-navy rounded-lg">
         <div className="text-[1.5rem] mb-[1rem]">
           최근 일주일 중 가장 할일이 많았던 날은?
         </div>

@@ -18,7 +18,7 @@ export default function MonthTodoBox({ todo, todoFetch }: MonthTodoBoxProps) {
       type="button"
       key={todoId}
       onClick={() => todoFetch(todoTask)}
-      className={`flex flex-col size-[10rem] rounded-lg justify-center items-center text-center m-[1.5rem] outline-offset-0 outline`}
+      className={`flex flex-col size-[10rem] rounded-lg justify-center items-center text-center m-[1.5rem] outline-[0.1rem] outline`}
     >
       <div className="text-[1.5rem]">{todo.task}</div>
       <div className="flex">

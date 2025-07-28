@@ -14,6 +14,8 @@ export default {
         navy: '#003366',
         navy2: '#4169E1',
         navy3: '#6495ED',
+        lightnavy: '#99CCFF',
+        red: '#FF6347',
       },
       fontFamily: {
         nanumgothic_regular: ['var(--font-nanumgothic-regular)', 'sans-serif'],

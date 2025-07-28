@@ -1,6 +1,6 @@
 export default function MainFriend() {
   return (
-    <div className="my-[2rem] justify-items-center outline-offset-[1rem] outline rounded-lg">
+    <div className="my-[2rem] justify-items-center p-[1rem] outline-dashed outline-white bg-lightnavy text-navy rounded-lg">
       <div className="text-[1.5rem] mb-[1rem]">
         이번달에 가장 많이 만나는 친구는?
       </div>

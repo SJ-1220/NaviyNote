@@ -39,8 +39,8 @@ export default function LandingPage() {
           </button>
         </div>
         <div className="text-center text-[2rem]">
-          <div className="mt-[2rem]">⚠️주의⚠️</div>
-          <div className="mt-[1rem]">
+          <div className="mt-[4rem]">⚠️주의⚠️</div>
+          <div className="mt-[2rem]">
             로그인 시,
             <span className="font-nanumgothic_bold ml-[1rem]">
               캘린더 일정담기 권한

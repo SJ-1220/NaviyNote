@@ -19,7 +19,7 @@ export default function ConnectMemoBox({
       type="button"
       key={memoId}
       onClick={() => memoFetch(memoContent)}
-      className="flex flex-col size-[10rem] rounded-lg justify-center items-center text-center m-[1.5rem] outline-offset-0 outline"
+      className="flex flex-col size-[10rem] rounded-lg justify-center items-center text-center m-[1.5rem] outline-[0.1rem] outline"
     >
       <div className="text-[1.5rem]">{memo.content}</div>
       <div>
