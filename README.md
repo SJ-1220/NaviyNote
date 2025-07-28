@@ -95,5 +95,4 @@ NaviyNote는 두 기능을 연결해 효율적인 개인 기록 관리를 돕습
 
 ## 수행 결과
 
-https://github.com/user-attachments/assets/4dd98fab-6066-4998-8358-21e063d838df
-
+https://github.com/user-attachments/assets/07f2cba9-548a-4c4e-bbca-fdb5c9853dda
