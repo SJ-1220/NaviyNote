@@ -192,133 +192,140 @@ export default function ToDos() {
         {/* 위 왼쪽 */}
         <div>
           {/* 오늘의 Todo */}
-          <div className="mt-[2rem] outline-offset-[1rem] outline rounded-lg">
-            <div className="text-[2rem] text-center mb-[1rem]">
-              오늘({todayDateFormat()})의 Todo
+          <div className="bg-lightnavy text-navy mt-[2rem] outline-dashed outline-white outline-[0.2rem] rounded-lg">
+            <div className="p-[1rem]">
+              <div className="text-[2rem] text-center mb-[1rem]">
+                오늘({todayDateFormat()})의 Todo
+              </div>
+              {todayTodos.length === 0 ? (
+                <div className="text-center text-[1.5rem]">
+                  🍀오늘은 할일이 없네용🍀
+                </div>
+              ) : (
+                <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+                  {todayTodos.map((todo) => (
+                    <TodoBox key={todo.id} todo={todo} />
+                  ))}
+                </div>
+              )}
             </div>
-            {todayTodos.length === 0 ? (
-              <div className="text-center text-[1.5rem]">
-                🍀오늘은 할일이 없네용🍀
-              </div>
-            ) : (
-              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-                {todayTodos.map((todo) => (
-                  <TodoBox key={todo.id} todo={todo} />
-                ))}
-              </div>
-            )}
           </div>
-
           {/* 드래그 가능한 날짜없는 TodoList */}
-          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
-            <div className="text-[2rem] text-center">날짜없는 Todo</div>
-            <div className=" mb-[1rem] text-center text-[1.5rem]">
-              날짜를 설정하고 싶다면, 캘린더로
-              <span className="font-bold"> 드래그앤드롭</span>
-              해용
+          <div className="mt-[3.5rem] bg-lightnavy text-navy outline-[0.2rem] outline-dashed outline-white rounded-lg">
+            <div className="p-[1rem]">
+              <div className="text-[2rem] text-center">날짜없는 Todo</div>
+              <div className=" mb-[1rem] text-center text-[1.5rem]">
+                날짜를 설정하고 싶다면, 캘린더로
+                <span className="font-bold"> 드래그앤드롭</span>
+                해용
+              </div>
+              {noDateTodos.length === 0 ? (
+                <div className="text-center text-[1.5rem]">
+                  🌻모든 Todo의 날짜가 있네용🌻
+                </div>
+              ) : (
+                <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+                  {noDateTodos.map((todo) => (
+                    <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
+                  ))}
+                </div>
+              )}
             </div>
-            {noDateTodos.length === 0 ? (
-              <div className="text-center text-[1.5rem]">
-                🌻모든 Todo의 날짜가 있네용🌻
-              </div>
-            ) : (
-              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-                {noDateTodos.map((todo) => (
-                  <NoDateTodos key={todo.id} todo={todo} /> // NoDateTodos 사용
-                ))}
-              </div>
-            )}
           </div>
           {/* 캘린더에서 선택한 날짜의 전날, 당일, 다음날의 Todo */}
-          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
-            <div className="text-center text-[1.5rem]">
-              선택한 날짜의 전날, 당일, 다음날의 Todo를 보여줄게용
+          <div className="mt-[3.5rem] bg-lightnavy text-navy outline-[0.2rem] outline-dashed outline-white rounded-lg">
+            <div className="p-[1rem]">
+              <div className="text-center text-[1.5rem]">
+                선택한 날짜의 전날, 당일, 다음날의 Todo를 보여줄게용
+              </div>
+              {!selectedDate && (
+                <div>
+                  <div className="text-[2rem] text-center">
+                    캘린더에서 Todo를 보고싶은 날짜를 선택해용
+                  </div>
+                </div>
+              )}
+              {selectedDate && (
+                <div>
+                  <div className="text-center text-[2rem] mb-[1rem]">
+                    {selectedPrevDate} ~ {selectedNextDate}의 Todo
+                  </div>
+                  {threeDaysTodos.length === 0 ? (
+                    <div className="text-[1.5rem] text-center">
+                      🍀{selectedDate} 전후로는 할일이 없네용🍀
+                    </div>
+                  ) : (
+                    <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+                      {threeDaysTodos.map((todo) => (
+                        <TodoBox key={todo.id} todo={todo} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-            {!selectedDate && (
-              <div>
-                <div className="text-[2rem] text-center">
-                  캘린더에서 Todo를 보고싶은 날짜를 선택해용
-                </div>
-              </div>
-            )}
-            {selectedDate && (
-              <div>
-                <div className="text-center text-[2rem] mb-[1rem]">
-                  {selectedPrevDate} ~ {selectedNextDate}의 Todo
-                </div>
-                {threeDaysTodos.length === 0 ? (
-                  <div className="text-[1.5rem] text-center">
-                    🍀{selectedDate} 전후로는 할일이 없네용🍀
-                  </div>
-                ) : (
-                  <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
-                    {threeDaysTodos.map((todo) => (
-                      <TodoBox key={todo.id} todo={todo} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
           </div>
           {/* Todo 추가 Input */}
-          <div className="mt-[3.5rem] outline-offset-[1rem] outline rounded-lg text-[1.5rem]">
-            <div className="text-[2rem] text-center mb-[1rem]">
-              Todo를 추가하세요
-            </div>
-            <div className="ml-[3rem]">
-              <input
-                className="rounded-lg px-[0.5rem] w-[35rem] text-black mb-[1rem]"
-                type="text"
-                value={newTask}
-                placeholder="새로운 ToDo를 추가하세요"
-                onChange={(e) => setNewTask(e.target.value)}
-              />
-              <div className="flex mb-[1rem]">
-                <label>
-                  중요도
-                  <input
-                    type="checkbox"
-                    checked={newImportant}
-                    className="self-center ml-[0.5rem] size-[1.5rem]"
-                    onChange={(e) => setNewImportant(e.target.checked)}
-                  />
-                </label>
-                <label className="ml-[2rem]">
-                  완료
-                  <input
-                    type="checkbox"
-                    checked={newCompleted}
-                    className="self-center ml-[0.5rem] size-[1.5rem]"
-                    onChange={(e) => setNewCompleted(e.target.checked)}
-                  />
-                </label>
-                <label className="flex ml-[2rem]">
-                  <div className="mr-[1rem]">날짜 :</div>
-                  <input
-                    className="px-[0.5rem] rounded-lg text-black"
-                    type="date"
-                    value={newDate || ''}
-                    onChange={(e) => setNewDate(e.target.value || null)}
-                  />
-                </label>
+          <div className="mt-[3.5rem] bg-lightnavy text-navy outline-[0.2rem] outline-dashed outline-white rounded-lg text-[1.5rem]">
+            <div className="p-[1rem]">
+              <div className="text-[2rem] text-center mb-[1rem]">
+                Todo를 추가하세요
               </div>
-              <label className="flex mb-[1rem]">
-                연결할 메모 선택
+              <div className="ml-[3rem]">
                 <input
-                  type="checkbox"
-                  checked={newConnect}
-                  className="self-center ml-[0.5rem] size-[1.5rem]"
-                  onChange={(e) => setNewConnect(e.target.checked)}
+                  className="rounded-lg px-[0.5rem] w-[35rem] text-black mb-[1rem]"
+                  type="text"
+                  value={newTask}
+                  placeholder="새로운 ToDo를 추가하세요"
+                  onChange={(e) => setNewTask(e.target.value)}
                 />
-              </label>
-              <div>연결된 메모 : {connectMemoContent}</div>
-              <Button
-                type="button"
-                onClick={handleAddTodo}
-                className="my-[1rem] py-[0.5rem] w-[35rem] bg-navy2 rounded-lg"
-              >
-                추가
-              </Button>
+                <div className="flex mb-[1rem]">
+                  <label>
+                    중요도
+                    <input
+                      type="checkbox"
+                      checked={newImportant}
+                      className="self-center ml-[0.5rem] size-[1.5rem]"
+                      onChange={(e) => setNewImportant(e.target.checked)}
+                    />
+                  </label>
+                  <label className="ml-[2rem]">
+                    완료
+                    <input
+                      type="checkbox"
+                      checked={newCompleted}
+                      className="self-center ml-[0.5rem] size-[1.5rem]"
+                      onChange={(e) => setNewCompleted(e.target.checked)}
+                    />
+                  </label>
+                  <label className="flex ml-[2rem]">
+                    <div className="mr-[1rem]">날짜 :</div>
+                    <input
+                      className="px-[0.5rem] rounded-lg text-black"
+                      type="date"
+                      value={newDate || ''}
+                      onChange={(e) => setNewDate(e.target.value || null)}
+                    />
+                  </label>
+                </div>
+                <label className="flex mb-[1rem]">
+                  연결할 메모 선택
+                  <input
+                    type="checkbox"
+                    checked={newConnect}
+                    className="self-center ml-[0.5rem] size-[1.5rem]"
+                    onChange={(e) => setNewConnect(e.target.checked)}
+                  />
+                </label>
+                <div>연결된 메모 : {connectMemoContent}</div>
+                <Button
+                  type="button"
+                  onClick={handleAddTodo}
+                  className="my-[1rem] py-[0.5rem] w-[35rem] text-white bg-navy2 rounded-lg"
+                >
+                  추가
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -337,7 +344,7 @@ export default function ToDos() {
             <span className="font-bold"> 수정/삭제</span>할 수 있는 상세
             화면으로 이동합니다.
           </div>
-          <div className="flex justify-center">
+          <div className="mb-[2rem] flex justify-center">
             <AddCalendar />
           </div>
           <div className="ml-[3rem] size-[50rem] z-10">
@@ -351,18 +358,20 @@ export default function ToDos() {
       </div>
 
       {newConnect && (
-        <div className="mt-[3.5rem] items-center outline-offset-[1rem] outline rounded-lg">
-          <div className="text-center text-[2rem]">
-            연결할 메모를 선택하세요
-          </div>
-          <div className="grid grid-cols-7 gap-[1rem]">
-            {connectMemos.map((memo: Memo) => (
-              <ConnectMemoBox
-                memoFetch={() => MemoIDContent(memo.id, memo.content)}
-                key={memo.id}
-                memo={memo}
-              />
-            ))}
+        <div className="mt-[3.5rem] items-center outline-[0.1rem] outline rounded-lg">
+          <div className="p-[1rem]">
+            <div className="text-center text-[2rem]">
+              연결할 메모를 선택하세요
+            </div>
+            <div className="grid grid-cols-7 gap-[1rem]">
+              {connectMemos.map((memo: Memo) => (
+                <ConnectMemoBox
+                  memoFetch={() => MemoIDContent(memo.id, memo.content)}
+                  key={memo.id}
+                  memo={memo}
+                />
+              ))}
+            </div>
           </div>
         </div>
       )}
@@ -372,14 +381,14 @@ export default function ToDos() {
           <Button
             onClick={TodoOpen}
             type="button"
-            className="text-[2rem] px-[43rem] w-full items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-lg"
+            className="text-[2rem] px-[43rem] py-[1rem] w-full items-center mt-[3.5rem] outline-[0.1rem] outline rounded-lg"
           >
             전체 Todo 보기
           </Button>
         </div>
       )}
       {todolistOpen && (
-        <div className="items-center mt-[3.5rem] outline-offset-[1rem] outline rounded-lg">
+        <div className="items-center mt-[3.5rem] p-[1rem] outline-[0.1rem] outline rounded-lg">
           <div className="text-center mb-[2rem] text-[2rem]">전체 Todo</div>
           <div>
             <div className="grid grid-cols-7 gap-[1rem]">

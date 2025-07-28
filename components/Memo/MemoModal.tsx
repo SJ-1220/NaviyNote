@@ -231,7 +231,7 @@ const MemoModal = () => {
           </Button>
         </div>
         <div className="text-center text-[2rem] font-bold mb-[2rem]">
-          MemoModal
+          {memo.content}
         </div>
         {!editMemo && (
           <div>

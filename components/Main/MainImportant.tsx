@@ -30,12 +30,10 @@ export default function MainImportant() {
 
   return (
     <div className="mt-[4rem]">
-      <div className="flex justify-center text-[2rem] mb-[2rem]">
-        🌟중요한 Todo🌟
-      </div>
-      <div className="outline-offset-[1rem] outline rounded-lg mb-[2rem]">
+      <div className="flex justify-center text-[2rem]">🌟중요한 Todo🌟</div>
+      <div className="rounded-lg mb-[2rem]">
         {importantTodos.length > 0 ? (
-          <div className="m-[2rem] outline-offset-[1rem] outline rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
+          <div className="m-[1rem] p-[1rem] outline-dashed bg-lightnavy rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
             {importantTodos.map((todo: MainTodo) => (
               <MainTodoBox
                 title={todo.task}

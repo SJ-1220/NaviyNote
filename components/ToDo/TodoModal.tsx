@@ -221,7 +221,7 @@ const TodoModal = () => {
           </Button>
         </div>
         <div className="my-[2rem] text-center text-[2rem] font-bold">
-          TodoModal
+          {todo.task}
         </div>
         {!editTodo && (
           <div>

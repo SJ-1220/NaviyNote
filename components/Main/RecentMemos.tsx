@@ -32,7 +32,7 @@ export default function RecentMemos() {
   return (
     <div>
       <div className="flex justify-center text-[2rem] mb-[2rem]">최근 메모</div>
-      <div className="outline-offset-[1rem] outline rounded-lg mb-[2rem]">
+      <div className="bg-lightnavy w-[14rem] min-h-[59rem] outline-[0.2rem] p-[1rem] outline-dashed rounded-lg mb-[2rem]">
         {recentMemos.length > 0 ? (
           <div>
             {recentMemos.map((memo: MainMemo) => (
@@ -44,7 +44,12 @@ export default function RecentMemos() {
             ))}
           </div>
         ) : (
-          <div>최근 수정/추가된 메모가 없습니다</div>
+          <div className="text-[1.5rem] text-navy py-[20rem] justify-items-center">
+            <div className="mb-[2rem]">최근</div>
+            <div className="mb-[2rem]">수정/추가된</div>
+            <div className="mb-[2rem]">메모가</div>
+            <div>없습니다</div>
+          </div>
         )}
       </div>
     </div>

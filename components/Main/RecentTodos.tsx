@@ -69,9 +69,9 @@ export default function RecentTodos() {
   return (
     <div>
       <div className="flex justify-center text-[2rem]">최근 10일의 Todo</div>
-      <div className="text-[1.5rem]">오늘</div>
+      <div className="text-[1.5rem] ml-[2rem]">오늘</div>
       {todayTodos.length > 0 ? (
-        <div className="m-[2rem] outline-offset-[1rem] outline rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
+        <div className="m-[1rem] p-[1rem] outline-dashed bg-lightnavy rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
           {todayTodos.map((todo: MainTodo) => (
             <MainTodoBox
               title={todo.task}
@@ -85,9 +85,9 @@ export default function RecentTodos() {
         <div>오늘의 Todo가 없습니다</div>
       )}
 
-      <div className="text-[1.5rem] mt-[4rem]">1~5일 후</div>
+      <div className="text-[1.5rem] mt-[2rem] ml-[2rem]">1~5일 후</div>
       {nextTodos.length > 0 ? (
-        <div className="m-[2rem] outline-offset-[1rem] outline rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
+        <div className="m-[1rem] p-[1rem] outline-dashed bg-lightnavy rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
           {nextTodos.map((todo: MainTodo) => (
             <MainTodoBox
               title={todo.task}
@@ -100,9 +100,9 @@ export default function RecentTodos() {
       ) : (
         <div>이후의 Todo가 없습니다</div>
       )}
-      <div className="text-[1.5rem] mt-[4rem]">1~5일 전</div>
+      <div className="text-[1.5rem] mt-[2rem] ml-[2rem]">1~5일 전</div>
       {prevTodos.length > 0 ? (
-        <div className="m-[2rem] outline-offset-[1rem] outline rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
+        <div className="m-[1rem] p-[1rem] outline-dashed bg-lightnavy rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
           {prevTodos.map((todo: MainTodo) => (
             <MainTodoBox
               title={todo.task}

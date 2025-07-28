@@ -33,34 +33,34 @@ const MainFirstChart = () => {
                 font: {
                   size: 16,
                 },
-                color: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 51, 102, 1)',
               },
             },
             tooltip: {
-              titleColor: 'rgba(255, 255, 255, 1)',
-              bodyColor: 'rgba(255, 255, 255, 1)',
-              footerColor: 'rgba(255, 255, 255, 1)',
+              titleColor: 'rgba(0, 51, 102, 1)',
+              bodyColor: 'rgba(0, 51, 102, 1)',
+              footerColor: 'rgba(0, 51, 102, 1)',
             },
             title: {
               display: false,
-              color: 'rgba(255, 255, 255, 1)',
+              color: 'rgba(0, 51, 102, 1)',
             },
           },
           scales: {
             x: {
               ticks: {
-                color: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 51, 102, 1)',
               },
               title: {
-                color: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 51, 102, 1)',
               },
             },
             y: {
               ticks: {
-                color: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 51, 102, 1)',
               },
               title: {
-                color: 'rgba(255, 255, 255, 1)',
+                color: 'rgba(0, 51, 102, 1)',
               },
             },
           },
