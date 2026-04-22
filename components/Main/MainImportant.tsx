@@ -29,28 +29,26 @@ export default function MainImportant() {
   if (error) return <div>{error}</div>
 
   return (
-    <div className="mt-16">
-      <div className="flex justify-center text-ui-md text-primary font-bold">
-        🌟중요한 Todo🌟
+    <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+      <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+        🌟 중요한 Todo
       </div>
-      <div className="rounded-xl mb-8">
-        {importantTodos.length > 0 ? (
-          <div className="m-4 p-4 border border-gray-200 bg-gray-50 rounded-xl w-fit gap-4 mx-auto grid grid-cols-3">
-            {importantTodos.map((todo: MainTodo) => (
-              <MainTodoBox
-                title={todo.task}
-                key={todo.id}
-                date={todo.date}
-                important={todo.important}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-gray-400 text-center text-ui-sm">
-            중요한 Todo가 없습니다
-          </div>
-        )}
-      </div>
+      {importantTodos.length > 0 ? (
+        <div className="flex flex-col gap-2">
+          {importantTodos.map((todo: MainTodo) => (
+            <MainTodoBox
+              title={todo.task}
+              key={todo.id}
+              date={todo.date}
+              important={todo.important}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-gray-400 text-center text-base py-1">
+          중요한 Todo가 없습니다
+        </div>
+      )}
     </div>
   )
 }

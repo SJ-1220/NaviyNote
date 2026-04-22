@@ -10,18 +10,21 @@ export default function MainTodoBox({
   important,
 }: MainTodoBoxProps) {
   const newDate = date ? date.split('T')[0] : '날짜 없음'
-
   return (
     <div
-      className={`flex-col w-52 h-20 rounded-lg flex justify-center items-center text-center mx-4 bg-secondary text-white ${important ? 'outline outline-2 outline-danger' : ''}`}
+      className={`rounded-lg p-3 bg-white border text-gray-800 text-ui-sm ${
+        important ? 'border-l-4 border-danger' : 'border-gray-200'
+      }`}
     >
-      <div className="text-ui-sm">{title}</div>
+      <div className="font-nanumgothic_bold mb-1 line-clamp-2 leading-snug">
+        {title}
+      </div>
+      <div className="text-xs text-gray-500">{newDate}</div>
       {important && (
-        <div className="flex">
-          <div className="mr-4">{newDate}</div>
+        <div className="text-xs text-danger font-nanumgothic_bold mt-1">
+          ⭐ 중요
         </div>
       )}
-      {!important && <div>{newDate}</div>}
     </div>
   )
 }

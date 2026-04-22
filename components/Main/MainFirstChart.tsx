@@ -26,7 +26,8 @@ const MainFirstChart = () => {
         data: data,
         options: {
           animation: false,
-          responsive: false,
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               labels: {
@@ -73,8 +74,8 @@ const MainFirstChart = () => {
     }
   })
   return (
-    <div>
-      <canvas height="300" ref={canvasElement} />
+    <div className="relative w-full h-[300px]">
+      <canvas ref={canvasElement} />
     </div>
   )
 }

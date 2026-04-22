@@ -30,26 +30,23 @@ export default function RecentMemos() {
 
   return (
     <div>
-      <div className="flex justify-center text-ui-md mb-8 text-primary font-bold">
+      <div className="flex justify-center text-ui-md mb-4 text-primary font-nanumgothic_bold">
         최근 메모
       </div>
-      <div className="bg-gray-50 border border-gray-200 w-56 min-h-memo-panel p-4 rounded-xl mb-8">
+      <div className="bg-gray-50 border border-gray-200 w-full min-h-[6rem] sm:min-h-memo-panel p-4 rounded-xl mb-8 flex flex-col gap-3">
         {recentMemos.length > 0 ? (
-          <div>
-            {recentMemos.map((memo: MainMemo) => (
-              <MainMemoBox
-                title={memo.content}
-                key={memo.id}
-                important={memo.important}
-              />
-            ))}
-          </div>
+          recentMemos.map((memo: MainMemo) => (
+            <MainMemoBox
+              title={memo.content}
+              key={memo.id}
+              important={memo.important}
+            />
+          ))
         ) : (
-          <div className="text-ui-sm text-primary py-80 justify-items-center">
-            <div className="mb-8">최근</div>
-            <div className="mb-8">수정/추가된</div>
-            <div className="mb-8">메모가</div>
-            <div>없습니다</div>
+          <div className="flex-1 flex items-center justify-center text-ui-sm text-gray-400 text-center">
+            최근 수정/추가된
+            <br />
+            메모가 없습니다
           </div>
         )}
       </div>

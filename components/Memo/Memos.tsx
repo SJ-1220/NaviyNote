@@ -1,14 +1,14 @@
 'use client'
-import { useSession } from 'next-auth/react'
-import { addMemo, fetchMemos, Memo, updateMemo } from './memosServer'
-import { useEffect, useMemo, useState } from 'react'
-import LoadingPage from '../Loading'
-import Button from '../Button'
-import MemoBox from './MemoBox'
 import useMemoStore from '@/src/store/memoStore'
-import MemoDropZone from './MemoDropZone'
-import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
+import { useSession } from 'next-auth/react'
+import { useEffect, useMemo, useState } from 'react'
+import Button from '../Button'
+import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
+import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
+import MemoBox from './MemoBox'
+import MemoDropZone from './MemoDropZone'
+import { addMemo, fetchMemos, Memo, updateMemo } from './memosServer'
 
 const Memos = () => {
   const { data: session } = useSession()
@@ -162,25 +162,61 @@ const Memos = () => {
 
   if (loading) return <LoadingPage />
   if (error) return <div>{error}</div>
+  const instructionBox = (
+    <div className="bg-secondary/5 border border-secondary/20 rounded-xl p-4 text-ui-sm">
+      <div className="text-center font-nanumgothic_bold text-secondary mb-2">
+        이용 안내
+      </div>
+      <ul className="space-y-2 text-gray-600">
+        <li className="flex gap-2 items-start">
+          <span className="shrink-0">🗂️</span>
+          <span>
+            메모는{' '}
+            <span className="font-bold text-gray-700">
+              활성/비활성 × 중요/일반
+            </span>{' '}
+            네 구역으로 자동 분류됩니다.
+          </span>
+        </li>
+        <li className="flex gap-2 items-start">
+          <span className="shrink-0">✋</span>
+          <span>
+            메모 카드를{' '}
+            <span className="font-bold text-gray-700">드래그&드롭</span>하면
+            활성·중요 여부가 자동으로 변경됩니다.
+          </span>
+        </li>
+        <li className="flex gap-2 items-start">
+          <span className="shrink-0">✏️</span>
+          <span>
+            카드를 클릭하면{' '}
+            <span className="font-bold text-gray-700">수정·삭제</span> 화면으로
+            이동합니다.
+          </span>
+        </li>
+      </ul>
+    </div>
+  )
+
   return (
-    <div>
+    <div className="px-4 sm:px-6">
       {/* 메모 추가 + 안내 */}
-      <div className="flex justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         {/* 메모 추가 */}
-        <div className="my-8 text-ui-sm border border-gray-200 rounded-xl bg-white shadow-sm">
-          <div className="p-4">
-            <div className="text-ui-md font-bold text-primary mb-4">
+        <div className="my-4 sm:my-8 text-ui-sm border border-gray-200 rounded-xl bg-white shadow-sm">
+          <div className="p-6">
+            <div className="text-ui-md font-nanumgothic_bold text-primary mb-4">
               메모를 추가하세요
             </div>
             <input
-              className="px-2 rounded-lg w-form-sm text-gray-800 mb-4 border border-gray-300"
+              className="h-10 px-3 rounded-lg w-full sm:w-form-sm text-gray-800 mb-4 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
               type="text"
               value={newContent}
               placeholder="새로운 Memo를 추가하세요"
               onChange={(e) => setNewContent(e.target.value)}
             />
             <div className="mb-4">
-              <label className="mr-8">
+              <label className="mr-8 font-nanumgothic_regular">
                 중요도
                 <input
                   type="checkbox"
@@ -189,7 +225,7 @@ const Memos = () => {
                   onChange={(e) => setNewImportant(e.target.checked)}
                 />
               </label>
-              <label className="mr-8">
+              <label className="mr-8 font-nanumgothic_regular">
                 활성화
                 <input
                   type="checkbox"
@@ -198,7 +234,7 @@ const Memos = () => {
                   onChange={(e) => setNewActive(e.target.checked)}
                 />
               </label>
-              <label className="mr-8">
+              <label className="mr-8 font-nanumgothic_regular">
                 연동가능
                 <input
                   type="checkbox"
@@ -217,7 +253,7 @@ const Memos = () => {
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(e.target.value)}
                     title="month"
-                    className="text-ui-sm text-gray-800 border border-gray-300 rounded px-2"
+                    className="h-9 text-ui-sm text-gray-800 border border-gray-300 rounded-lg px-2 focus:outline-none focus:border-secondary"
                   >
                     <option value="">월 선택</option>
                     <option value="2025-01">2025년 1월</option>
@@ -246,33 +282,28 @@ const Memos = () => {
             )}
             <Button
               type="button"
-              className="my-4 py-2 w-form-sm bg-secondary text-white rounded-lg"
+              className="my-4 py-2 w-full sm:w-form-sm bg-secondary text-white rounded-lg"
               onClick={handleAddMemo}
             >
               추가
             </Button>
           </div>
         </div>
-        <div className="self-center text-end text-ui-sm text-gray-600">
-          메모는 네 구역(활성/비활성 + 중요/안중요)으로 분류되어 표시됩니다.
-          <br />
-          메모를 드래그하여 구역을 옮기면
-          <span className="font-bold text-gray-800">활성/중요 여부</span>가
-          자동으로 변경됩니다.
-          <br />
-          메모를 클릭하면{' '}
-          <span className="font-bold text-gray-800">수정/삭제</span>할 수 있는
-          상세 화면으로 이동합니다.
+        <div className="sm:flex-1 sm:min-w-0 sm:self-start sm:my-8">
+          {instructionBox}
         </div>
       </div>
 
       {newConnect && selectedMonth && (
-        <div className="text-ui-md my-8 border border-gray-200 rounded-xl bg-white">
-          <div className="p-4">
-            <div className="text-gray-700 mb-4">
+        <div className="mb-8 border border-gray-200 rounded-xl bg-white shadow-sm">
+          <div className="p-6">
+            <div className="text-ui-md font-nanumgothic_bold text-primary mb-2">
+              연결할 Todo 선택
+            </div>
+            <div className="font-nanumgothic_regular text-gray-600 text-ui-sm mb-4 leading-relaxed">
               선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
             </div>
-            <div className="w-fit gap-4 mx-auto grid grid-cols-7 text-base">
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-7 sm:gap-4">
               {monthTodolist.map((todo: Todo) => (
                 <MonthTodoBox
                   todoFetch={() => TodoIDTask(todo.id, todo.task)}
@@ -285,19 +316,19 @@ const Memos = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {/* 안중요+활성 메모 */}
         <MemoDropZone
           zoneIsActive={true}
           zoneIsImportant={false}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-zone bg-white my-8 mr-8 border-2 border-dashed border-gray-200 rounded-xl">
+          <div className="h-full min-h-zone bg-white border-2 border-dashed border-secondary/30 rounded-xl">
             <div className="p-4">
-              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+              <div className="text-secondary text-center text-ui-md mb-4 font-nanumgothic_bold">
                 안중요 + 활성 메모
               </div>
-              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
                 {AcUnimMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -311,12 +342,12 @@ const Memos = () => {
           zoneIsImportant={true}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-zone ml-8 my-8 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+          <div className="h-full min-h-zone bg-white border-2 border-dashed border-danger/30 rounded-xl">
             <div className="p-4">
-              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+              <div className="text-danger text-center text-ui-md mb-4 font-nanumgothic_bold">
                 중요 + 활성화 메모
               </div>
-              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
                 {AcImMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -330,12 +361,12 @@ const Memos = () => {
           zoneIsImportant={false}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-zone mr-8 my-8 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+          <div className="h-full min-h-zone bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl">
             <div className="p-4">
-              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+              <div className="text-gray-500 text-center text-ui-md mb-4 font-nanumgothic_bold">
                 안중요 + 비활성 메모
               </div>
-              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
                 {InacUnimMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -349,12 +380,12 @@ const Memos = () => {
           zoneIsImportant={true}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-zone ml-8 my-8 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+          <div className="h-full min-h-zone bg-gray-50 border-2 border-dashed border-danger/20 rounded-xl">
             <div className="p-4">
-              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+              <div className="text-gray-500 text-center text-ui-md mb-4 font-nanumgothic_bold">
                 중요 + 비활성 메모
               </div>
-              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
                 {InacImMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -365,37 +396,40 @@ const Memos = () => {
       </div>
 
       {!memolistOpen && (
-        <div className="mb-8 items-center text-center">
-          <Button
-            type="button"
-            onClick={MemoOpen}
-            className="py-4 text-ui-md w-full text-center mt-14 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-primary"
-          >
-            전체 메모 보기
-          </Button>
+        <div className="my-8 border border-gray-200 rounded-xl bg-white shadow-sm">
+          <div className="px-6 py-4 flex items-center justify-between">
+            <div className="text-ui-md font-nanumgothic_bold text-primary">
+              전체 메모
+            </div>
+            <Button
+              type="button"
+              onClick={MemoOpen}
+              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors"
+            >
+              보기
+            </Button>
+          </div>
         </div>
       )}
       {memolistOpen && (
-        <div className="mb-8 items-center mt-14 border border-gray-200 rounded-xl bg-white">
-          <div className="p-4">
-            <div className="text-center mb-8 text-ui-md font-bold text-primary">
+        <div className="my-8 border border-gray-200 rounded-xl bg-white shadow-sm">
+          <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
+            <div className="text-ui-md font-nanumgothic_bold text-primary">
               전체 메모
             </div>
-            <div>
-              <div className="grid grid-cols-7 gap-4">
-                {memolist.map((memo) => (
-                  <MemoBox key={memo.id} memo={memo} />
-                ))}
-              </div>
-              <div className="text-ui-sm text-center items-center">
-                <Button
-                  onClick={MemoOpen}
-                  type="button"
-                  className="py-2 px-4 bg-secondary text-white rounded-lg"
-                >
-                  전체 메모 숨김
-                </Button>
-              </div>
+            <Button
+              type="button"
+              onClick={MemoOpen}
+              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors"
+            >
+              숨기기
+            </Button>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4">
+              {memolist.map((memo) => (
+                <MemoBox key={memo.id} memo={memo} isDraggable={false} />
+              ))}
             </div>
           </div>
         </div>

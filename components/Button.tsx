@@ -14,13 +14,15 @@ export default function Button({
   type,
   className,
   disabled,
-  ...props
 }: ButtonProps) {
   return (
-    <button type={type} onClick={onClick} disabled={disabled}>
-      <div {...props} className={`${className}`}>
-        {children}
-      </div>
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={className}
+    >
+      {children}
     </button>
   )
 }

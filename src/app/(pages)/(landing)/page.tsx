@@ -70,9 +70,9 @@ export default function LandingPage() {
     <div className="font-nanumgothic_regular">
       {/* ── Hero ── */}
       <section className="bg-primary text-white">
-        <div className="py-24 px-16 sm:py-16 sm:px-8 flex flex-col items-center text-center">
+        <div className="py-16 px-8 sm:py-24 sm:px-16 flex flex-col items-center text-center">
           {/* Brand mark */}
-          <div className="flex items-center gap-6 mb-16 sm:flex-col sm:gap-4 sm:mb-8">
+          <div className="flex flex-col items-center gap-4 mb-8 sm:flex-row sm:gap-6 sm:mb-16">
             <div className="relative size-32">
               <Image
                 src={LogoImage}
@@ -117,11 +117,11 @@ export default function LandingPage() {
       </section>
 
       {/* ── Features ── */}
-      <section className="p-16 sm:px-8 bg-white">
+      <section className="p-8 sm:p-16 bg-white">
         <h2 className="text-ui-md font-nanumgothic_bold text-primary text-center mb-12">
           NaviyNote 주요 기능
         </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           {features.map((feature) => (
             <div
               key={feature.title}
@@ -140,14 +140,14 @@ export default function LandingPage() {
       </section>
 
       {/* ── How it Works ── */}
-      <section className="p-16 sm:px-8 bg-gray-50">
+      <section className="p-8 sm:p-16 bg-gray-50">
         <h2 className="text-ui-md font-nanumgothic_bold text-primary text-center mb-12">
           이렇게 사용하세요
         </h2>
-        <div className="flex justify-center items-start sm:flex-col sm:items-center">
+        <div className="flex flex-col items-center sm:flex-row sm:justify-center sm:items-start">
           {steps.map((step, index) => (
             <React.Fragment key={step.number}>
-              <div className="text-center flex-1 px-4 sm:px-0 sm:mb-8">
+              <div className="text-center flex-1 px-0 mb-8 sm:px-4 sm:mb-0">
                 <div className="size-16 bg-secondary text-white rounded-full flex items-center justify-center text-ui-md font-nanumgothic_bold mx-auto mb-4">
                   {step.number}
                 </div>
@@ -157,7 +157,7 @@ export default function LandingPage() {
                 <p className="text-base text-gray-600">{step.description}</p>
               </div>
               {index < steps.length - 1 && (
-                <div className="text-secondary text-ui-xl self-center shrink-0 sm:hidden">
+                <div className="hidden sm:block text-secondary text-ui-xl self-center shrink-0">
                   →
                 </div>
               )}
@@ -167,7 +167,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Bottom CTA ── */}
-      <section className="py-20 px-16 sm:px-8 bg-primary text-white text-center">
+      <section className="py-20 px-8 sm:px-16 bg-primary text-white text-center">
         <h2 className="text-ui-lg font-nanumgothic_bold mb-4">
           지금 바로 시작해 보세요
         </h2>

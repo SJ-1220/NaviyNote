@@ -1,6 +1,13 @@
 'use client'
 
+import useMemoStore from '@/src/store/memoStore'
+import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import Button from '../Button'
+import LoadingPage from '../Loading'
+import MonthTodoBox from '../ToDo/MonthTodoBox'
+import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
 import {
   deleteMemo,
   fetchMemos,
@@ -9,13 +16,6 @@ import {
   MemoWithTodo,
   updateMemo,
 } from './memosServer'
-import useMemoStore from '@/src/store/memoStore'
-import { useSession } from 'next-auth/react'
-import Button from '../Button'
-import React, { useCallback, useEffect, useState } from 'react'
-import LoadingPage from '../Loading'
-import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
-import MonthTodoBox from '../ToDo/MonthTodoBox'
 
 const MemoModal = () => {
   const { memoId } = useParams()
@@ -74,6 +74,13 @@ const MemoModal = () => {
 
   useEffect(() => {
     window.scroll(0, 0)
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
   }, [])
 
   useEffect(() => {
@@ -188,11 +195,11 @@ const MemoModal = () => {
   }
   return (
     <div
-      className="fixed inset-0 bg-black/30 flex justify-center items-center"
+      className="fixed inset-0 bg-black/30 flex justify-center items-center p-2"
       onClick={onClose}
     >
       <div
-        className="min-w-form-sm bg-white text-gray-800 text-ui-sm rounded-2xl p-16 shadow-2xl"
+        className="w-full max-w-2xl bg-white text-gray-800 text-ui-sm rounded-2xl p-6 shadow-2xl max-h-[calc(100vh-16px)] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex justify-between gap-4">
@@ -230,39 +237,50 @@ const MemoModal = () => {
             삭제
           </Button>
         </div>
-        <div className="text-center text-ui-md font-bold mb-8 text-primary">
+        <div className="text-center text-ui-md font-bold font-nanumgothic_bold mb-8 text-primary">
           {memo.content}
         </div>
         {!editMemo && (
-          <div>
-            <div className="mb-4">메모 : {memo.content}</div>
-            <div className="mb-4 flex">
-              <div className="mr-4">{memo.active ? '표시✅' : '숨김❌'}</div>
-              <div className="mr-4">
-                {memo.important ? '중요✅' : '안중요❌'}
-              </div>
-              <div className="mr-4">
-                {memo.connect ? '연결가능✅' : '연결불가❌'}
-              </div>
+          <div className="space-y-3 font-nanumgothic_regular">
+            <div className="flex gap-2 flex-wrap">
+              <span
+                className={`text-md px-2.5 py-1 rounded-full font-nanumgothic_bold ${memo.active ? 'bg-secondary/10 text-secondary' : 'bg-gray-100 text-gray-400'}`}
+              >
+                {memo.active ? '표시' : '숨김'}
+              </span>
+              <span
+                className={`text-md px-2.5 py-1 rounded-full font-nanumgothic_bold ${memo.important ? 'bg-danger/10 text-danger' : 'bg-gray-100 text-gray-400'}`}
+              >
+                {memo.important ? '중요' : '안중요'}
+              </span>
+              <span
+                className={`text-md px-2.5 py-1 rounded-full font-nanumgothic_bold ${memo.connect ? 'bg-secondary/10 text-secondary' : 'bg-gray-100 text-gray-400'}`}
+              >
+                {memo.connect ? '연결가능' : '연결불가'}
+              </span>
             </div>
-            <div className="flex">
-              <div className="mr-4">연결된 Todo :</div>
-              {memo.todo_id &&
-              memo.todo_id.trim() !== '' &&
-              memoTodo &&
-              memoTodo.todo
-                ? `${memoTodo.todo.task}`
-                : 'todo연결❌'}
+            <div className="flex items-center gap-3">
+              <span className="text-gray-500 shrink-0">연결된 Todo</span>
+              <span className="text-gray-800">
+                {memo.todo_id &&
+                memo.todo_id.trim() !== '' &&
+                memoTodo &&
+                memoTodo.todo
+                  ? memoTodo.todo.task
+                  : '없음'}
+              </span>
             </div>
           </div>
         )}
 
         {editMemo && (
           <div>
-            <label className="flex">
-              <div className="mr-4">메모 내용</div>
+            <label className="flex items-center gap-4 mb-4">
+              <span className="text-gray-500 shrink-0 font-nanumgothic_regular">
+                메모 내용
+              </span>
               <input
-                className="px-2 rounded-lg w-form-xl text-gray-800 mb-4 border border-gray-300"
+                className="h-10 px-3 rounded-lg w-full text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
                 type="text"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
@@ -270,7 +288,7 @@ const MemoModal = () => {
             </label>
             <div className="flex mb-4">
               <label className="flex mr-8">
-                <div className="mr-2">활성화</div>
+                <div className="mr-2 font-nanumgothic_regular">활성화</div>
                 <input
                   type="checkbox"
                   checked={newActive}
@@ -279,7 +297,7 @@ const MemoModal = () => {
                 />
               </label>
               <label className="flex mr-8">
-                <div className="mr-2">중요</div>
+                <div className="mr-2 font-nanumgothic_regular">중요</div>
                 <input
                   type="checkbox"
                   checked={newImportant}
@@ -288,7 +306,7 @@ const MemoModal = () => {
                 />
               </label>
               <label className="flex">
-                <div className="mr-2">연동</div>
+                <div className="mr-2 font-nanumgothic_regular">연동</div>
                 <input
                   type="checkbox"
                   checked={newConnect}
@@ -309,7 +327,7 @@ const MemoModal = () => {
                   </div>
                 )}
                 <div>
-                  <div className="flex items-center">
+                  <div className="flex flex-wrap items-center gap-2">
                     <div className="mr-4">새로 연동할 Todo의 날짜 선택 :</div>
                     <select
                       value={newSelectedMonth}
@@ -332,7 +350,7 @@ const MemoModal = () => {
                       <option value="2025-12">2025년 12월</option>
                     </select>
                     <Button
-                      className="rounded-lg py-2 px-4 bg-secondary text-white"
+                      className="rounded-lg py-2 px-4 bg-secondary text-white mb-2"
                       type="button"
                       onClick={NewMonthNull}
                     >
@@ -358,7 +376,7 @@ const MemoModal = () => {
         )}
         {editMemo && newSelectedMonth && (
           <div>
-            <div className="text-base w-fit gap-4 mx-auto grid grid-cols-4">
+            <div className="text-base grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
               {newMonthTodolist.map((todo: Todo) => (
                 <MonthTodoBox
                   todoFetch={() => TodoIDTask(todo.id, todo.task)}

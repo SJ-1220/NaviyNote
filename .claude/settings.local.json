@@ -1,5 +1,13 @@
 {
   "permissions": {
-    "allow": ["Bash(xargs grep *)", "Bash(npm run *)"]
+    "allow": [
+      "Bash(xargs grep *)",
+      "Bash(npm run *)",
+      "Bash(git stash *)",
+      "Bash(claude auth *)",
+      "Bash(where claude *)",
+      "Bash(claude login *)",
+      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")"
+    ]
   }
 }

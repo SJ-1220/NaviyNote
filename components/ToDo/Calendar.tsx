@@ -1,13 +1,12 @@
 'use client'
-import FullCalendar from '@fullcalendar/react'
+import { DayCellMountArg, EventChangeArg, EventInput } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { EventChangeArg, EventInput } from '@fullcalendar/core'
-import { useEffect, useState, useRef } from 'react'
-import { Todo, updateTodo } from './todosServer'
+import FullCalendar from '@fullcalendar/react'
 import { useSession } from 'next-auth/react'
+import { useEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { DayCellMountArg } from '@fullcalendar/core'
+import { Todo, updateTodo } from './todosServer'
 
 interface CalendarProps {
   todos: Todo[]
@@ -136,13 +135,17 @@ export default function Calendar({
   }, [])
 
   return (
-    <div ref={calendarDropRef}>
+    <div
+      ref={calendarDropRef}
+      className="min-w-0 overflow-x-auto h-[500px] sm:h-[750px]"
+    >
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={events}
         editable={true}
         droppable={true}
+        height="100%"
         eventDrop={handleEventDrop}
         dayCellDidMount={handleDayCellDidMount}
         dateClick={(info) => {

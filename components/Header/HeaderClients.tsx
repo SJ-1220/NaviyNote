@@ -1,9 +1,8 @@
 'use client'
 
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import Header from './Header'
-import React from 'react'
-import { useSession, signIn, signOut } from 'next-auth/react'
 
 export const HeaderWrapper = () => {
   const router = usePathname()
@@ -13,8 +12,8 @@ export const HeaderWrapper = () => {
   const isStatsPage = router.startsWith('/stats')
   const isFriendPage = router.startsWith('/friend')
   return (
-    <header className="flex justify-center sm:flex-col bg-white border-b border-gray-200">
-      <div className="w-content h-header flex sm:flex-col justify-between items-center sm:w-full sm:h-header-sm">
+    <header className="flex flex-col justify-center bg-white border-b border-gray-200 overflow-x-hidden sm:flex-row">
+      <div className="w-full flex flex-col justify-between items-center px-4 py-3 sm:w-content sm:h-header sm:flex-row sm:px-8 sm:py-0">
         <Header
           isMainPage={isMainPage}
           isMemoPage={isMemoPage}
@@ -22,15 +21,7 @@ export const HeaderWrapper = () => {
           isStatsPage={isStatsPage}
           isFriendPage={isFriendPage}
         />
-        <div className="flex sm:flex-col gap-4">
-          <HeaderNaverAuth />
-          <button
-            className="font-nanumgothic_regular text-ui-md text-gray-600 hover:text-primary"
-            type="button"
-          >
-            Dark
-          </button>
-        </div>
+        <HeaderNaverAuth />
       </div>
     </header>
   )
@@ -46,17 +37,17 @@ export const HeaderNaverAuth = () => {
     signOut().catch((error) => console.error('로그아웃 실패:', error))
   }
   return (
-    <div className="sm:flex-col">
+    <div className="mt-3 sm:mt-0">
       {session ? (
         <button
-          className="font-nanumgothic_regular text-ui-md text-gray-600 hover:text-primary"
+          className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm text-gray-600 hover:text-primary"
           onClick={handleSignOut}
         >
           로그아웃
         </button>
       ) : (
         <button
-          className="font-nanumgothic_regular text-ui-md text-gray-600 hover:text-primary"
+          className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm text-gray-600 hover:text-primary"
           onClick={handleSignIn}
         >
           로그인

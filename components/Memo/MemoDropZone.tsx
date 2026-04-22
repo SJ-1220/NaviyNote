@@ -26,7 +26,7 @@ const MemoDropZone = ({
   })
   drop(memoDropRef)
   return (
-    <div ref={memoDropRef} className={`${isOver ? 'opacity-60' : ''}`}>
+    <div ref={memoDropRef} className={`h-full ${isOver ? 'opacity-60' : ''}`}>
       {children}
     </div>
   )

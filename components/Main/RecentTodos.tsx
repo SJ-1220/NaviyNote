@@ -67,61 +67,75 @@ export default function RecentTodos() {
 
   return (
     <div>
-      <div className="flex justify-center text-ui-md text-primary font-bold">
+      <div className="flex justify-center text-ui-md text-primary font-nanumgothic_bold mb-4">
         최근 10일의 Todo
       </div>
-      <div className="text-ui-sm ml-8 text-gray-500 mt-4">오늘</div>
-      {todayTodos.length > 0 ? (
-        <div className="m-4 p-4 border border-gray-200 bg-gray-50 rounded-xl w-fit gap-4 mx-auto grid grid-cols-3">
-          {todayTodos.map((todo: MainTodo) => (
-            <MainTodoBox
-              title={todo.task}
-              key={todo.id}
-              important={todo.important}
-              date={todo.date}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="text-gray-400 text-center text-ui-sm">
-          오늘의 Todo가 없습니다
-        </div>
-      )}
 
-      <div className="text-ui-sm mt-8 ml-8 text-gray-500">1~5일 후</div>
-      {nextTodos.length > 0 ? (
-        <div className="m-4 p-4 border border-gray-200 bg-gray-50 rounded-xl w-fit gap-4 mx-auto grid grid-cols-3">
-          {nextTodos.map((todo: MainTodo) => (
-            <MainTodoBox
-              title={todo.task}
-              key={todo.id}
-              important={todo.important}
-              date={todo.date}
-            />
-          ))}
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+        <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+          📅 오늘
         </div>
-      ) : (
-        <div className="text-gray-400 text-center text-ui-sm">
-          이후의 Todo가 없습니다
+        {todayTodos.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {todayTodos.map((todo: MainTodo) => (
+              <MainTodoBox
+                title={todo.task}
+                key={todo.id}
+                important={todo.important}
+                date={todo.date}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-gray-400 text-center text-base py-1">
+            오늘의 Todo가 없습니다
+          </div>
+        )}
+      </div>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+        <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+          ⏭ 1~5일 후
         </div>
-      )}
-      <div className="text-ui-sm mt-8 ml-8 text-gray-500">1~5일 전</div>
-      {prevTodos.length > 0 ? (
-        <div className="m-4 p-4 border border-gray-200 bg-gray-50 rounded-xl w-fit gap-4 mx-auto grid grid-cols-3">
-          {prevTodos.map((todo: MainTodo) => (
-            <MainTodoBox
-              title={todo.task}
-              key={todo.id}
-              important={todo.important}
-              date={todo.date}
-            />
-          ))}
+        {nextTodos.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {nextTodos.map((todo: MainTodo) => (
+              <MainTodoBox
+                title={todo.task}
+                key={todo.id}
+                important={todo.important}
+                date={todo.date}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-gray-400 text-center text-base py-1">
+            이후의 Todo가 없습니다
+          </div>
+        )}
+      </div>
+
+      <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
+        <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+          ⏮ 1~5일 전
         </div>
-      ) : (
-        <div className="text-gray-400 text-center text-ui-sm">
-          이전의 Todo가 없습니다
-        </div>
-      )}
+        {prevTodos.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            {prevTodos.map((todo: MainTodo) => (
+              <MainTodoBox
+                title={todo.task}
+                key={todo.id}
+                important={todo.important}
+                date={todo.date}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-gray-400 text-center text-base py-1">
+            이전의 Todo가 없습니다
+          </div>
+        )}
+      </div>
     </div>
   )
 }

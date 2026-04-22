@@ -19,10 +19,10 @@ export default function Header({
   isFriendPage,
 }: HeaderProps) {
   return (
-    <div className="sm:flex-col flex items-center">
+    <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-0">
       {/* Logo, Title */}
-      <div className="sm:mt-4 sm:flex-col flex items-center">
-        <div className="relative size-24">
+      <div className="flex flex-row items-center">
+        <div className="relative size-16 sm:size-24">
           <Image
             src={LogoImage}
             alt="LogoImage"
@@ -30,7 +30,7 @@ export default function Header({
             style={{ objectFit: 'contain' }}
           />
         </div>
-        <div className="sm:mt-4 ml-4 relative w-logo-title h-logo-title sm:ml-0">
+        <div className="ml-2 sm:ml-4 relative w-logo-title h-logo-title">
           <Image
             src={TitleImage}
             alt="TitleImage"
@@ -40,39 +40,48 @@ export default function Header({
         </div>
       </div>
       {/* Nav */}
-      <nav className="sm:mt-4 sm:flex-col ml-14 flex items-center gap-2 sm:ml-0 sm:gap-0">
+      <nav className="flex flex-row flex-wrap justify-center gap-1 sm:ml-6 sm:gap-2">
         <div
-          className={`flex justify-center items-center px-4 h-nav-item rounded-xl ${isMainPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 ${isMainPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link className="font-nanumgothic_regular text-ui-md" href="/main">
+          <Link
+            className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
+            href="/main"
+          >
             홈
           </Link>
         </div>
         <div
-          className={`flex justify-center items-center px-4 h-nav-item rounded-xl ${isMemoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 ${isMemoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link className="font-nanumgothic_regular text-ui-md" href="/memo">
+          <Link
+            className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
+            href="/memo"
+          >
             메모
           </Link>
         </div>
         <div
-          className={`flex justify-center items-center px-4 h-nav-item rounded-xl ${isToDoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 ${isToDoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link className="font-nanumgothic_regular text-ui-md" href="/todo">
+          <Link
+            className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
+            href="/todo"
+          >
             ToDo
           </Link>
         </div>
         <div
-          className={`flex justify-center items-center px-4 h-nav-item rounded-xl ${isStatsPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl ${isStatsPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link className="font-nanumgothic_regular text-ui-md" href="/stats">
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/stats">
             통계
           </Link>
         </div>
         <div
-          className={`flex justify-center items-center px-4 h-nav-item rounded-xl ${isFriendPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl ${isFriendPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link className="font-nanumgothic_regular text-ui-md" href="/friend">
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/friend">
             친구
           </Link>
         </div>

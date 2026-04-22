@@ -7,7 +7,7 @@ export default {
   ],
   theme: {
     screens: {
-      sm: { max: '1104px' },
+      sm: '768px',
     },
     extend: {
       colors: {
@@ -39,6 +39,9 @@ export default {
         'ui-xl': ['3.2rem', { lineHeight: '4rem' }], // hero / landing headings
         'ui-mega': ['10rem', { lineHeight: '1' }], // loading spinner glyph
       },
+      textUnderlineOffset: {
+        title: '1rem', // greeting underline in Main
+      },
       width: {
         content: '100rem', // main page container
         'logo-title': '14.4rem', // header title SVG
@@ -49,6 +52,7 @@ export default {
         'form-xl': '49rem', // wide modal input
         'form-2xl': '64rem', // full-width modal input
         calendar: '50rem', // FullCalendar container
+        soon: '40rem', // coming-soon image width
       },
       height: {
         header: '8.6rem', // top header bar
@@ -62,10 +66,14 @@ export default {
         'not-found': '40rem', // 404 page height
         'page-loading': '20rem', // loading spinner area
         calendar: '50rem', // FullCalendar container
+        soon: '30rem', // coming-soon image height
       },
       minHeight: {
-        zone: '30rem', // memo drag-and-drop zone
+        zone: '16rem', // memo drag-and-drop zone
         'memo-panel': '59rem', // recent memos side panel
+      },
+      maxWidth: {
+        content: '100rem', // main page container cap
       },
     },
   },
