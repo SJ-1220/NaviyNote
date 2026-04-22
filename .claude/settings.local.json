@@ -1,7 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(xargs grep *)"
-    ]
+    "allow": ["Bash(xargs grep *)", "Bash(npm run *)"]
   }
 }

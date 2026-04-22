@@ -29,11 +29,13 @@ export default function MainImportant() {
   if (error) return <div>{error}</div>
 
   return (
-    <div className="mt-[4rem]">
-      <div className="flex justify-center text-[2rem]">🌟중요한 Todo🌟</div>
-      <div className="rounded-lg mb-[2rem]">
+    <div className="mt-16">
+      <div className="flex justify-center text-ui-md text-primary font-bold">
+        🌟중요한 Todo🌟
+      </div>
+      <div className="rounded-xl mb-8">
         {importantTodos.length > 0 ? (
-          <div className="m-[1rem] p-[1rem] outline-dashed bg-lightnavy rounded-lg w-fit gap-[1rem] mx-auto grid grid-cols-3 text-[1rem]">
+          <div className="m-4 p-4 border border-gray-200 bg-gray-50 rounded-xl w-fit gap-4 mx-auto grid grid-cols-3">
             {importantTodos.map((todo: MainTodo) => (
               <MainTodoBox
                 title={todo.task}
@@ -44,7 +46,9 @@ export default function MainImportant() {
             ))}
           </div>
         ) : (
-          <div>중요한 Todo가 없습니다</div>
+          <div className="text-gray-400 text-center text-ui-sm">
+            중요한 Todo가 없습니다
+          </div>
         )}
       </div>
     </div>

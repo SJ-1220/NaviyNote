@@ -49,11 +49,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <HeaderWrapper />
         </SessionWrapper>
         <SessionWrapper session={session}>
-          <div className="flex justify-center bg-navy text-white">
-            {/* 테스트용 */}
-            {/* <div className="bg-slate-300 w-[100rem]">{children}</div> */}
-            {/* 확인용 */}
-            <div className="w-[100rem]">{children}</div>
+          <div className="flex justify-center bg-gray-50">
+            <div className="w-content">{children}</div>
           </div>
         </SessionWrapper>
         <Footer />

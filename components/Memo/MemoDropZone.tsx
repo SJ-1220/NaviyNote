@@ -26,10 +26,7 @@ const MemoDropZone = ({
   })
   drop(memoDropRef)
   return (
-    <div
-      ref={memoDropRef}
-      className={`${isOver ? 'text-gray-400' : 'text-white'}`}
-    >
+    <div ref={memoDropRef} className={`${isOver ? 'opacity-60' : ''}`}>
       {children}
     </div>
   )

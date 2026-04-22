@@ -85,7 +85,6 @@ const Memos = () => {
         if (result) {
           const { newMemo, memosUpdate } = result
           setMemosStore((prev) => {
-            // 기존 항목 수정
             let updated = prev.map((m) =>
               m.id === newMemo.id
                 ? newMemo
@@ -93,7 +92,6 @@ const Memos = () => {
                   ? memosUpdate
                   : m
             )
-            // 새 항목 추가
             if (!prev.some((m) => m.id === newMemo.id)) {
               updated = [...updated, newMemo]
             }
@@ -166,43 +164,45 @@ const Memos = () => {
   if (error) return <div>{error}</div>
   return (
     <div>
-      {/* 메모 추가 + 연결된 메모 */}
+      {/* 메모 추가 + 안내 */}
       <div className="flex justify-between">
         {/* 메모 추가 */}
-        <div className="my-[2rem] text-[1.5rem] outline-[0.2rem] outline-dashed rounded-sm">
-          <div className="p-[1rem]">
-            <div className="text-[2rem]">메모를 추가하세요</div>
+        <div className="my-8 text-ui-sm border border-gray-200 rounded-xl bg-white shadow-sm">
+          <div className="p-4">
+            <div className="text-ui-md font-bold text-primary mb-4">
+              메모를 추가하세요
+            </div>
             <input
-              className="px-[0.5rem] rounded-lg w-[30rem] text-black mb-[1rem]"
+              className="px-2 rounded-lg w-form-sm text-gray-800 mb-4 border border-gray-300"
               type="text"
               value={newContent}
               placeholder="새로운 Memo를 추가하세요"
               onChange={(e) => setNewContent(e.target.value)}
             />
-            <div className="mb-[1rem]">
-              <label className="mr-[2rem]">
+            <div className="mb-4">
+              <label className="mr-8">
                 중요도
                 <input
                   type="checkbox"
-                  className="self-center ml-[0.5rem] size-[1.5rem]"
+                  className="self-center ml-2 size-6"
                   checked={newImportant}
                   onChange={(e) => setNewImportant(e.target.checked)}
                 />
               </label>
-              <label className="mr-[2rem]">
+              <label className="mr-8">
                 활성화
                 <input
                   type="checkbox"
-                  className="self-center ml-[0.5rem] size-[1.5rem]"
+                  className="self-center ml-2 size-6"
                   checked={newActive}
                   onChange={(e) => setNewActive(e.target.checked)}
                 />
               </label>
-              <label className="mr-[2rem]">
+              <label className="mr-8">
                 연동가능
                 <input
                   type="checkbox"
-                  className="self-center ml-[0.5rem] size-[1.5rem]"
+                  className="self-center ml-2 size-6"
                   checked={newConnect}
                   onChange={(e) => setNewConnect(e.target.checked)}
                 />
@@ -210,14 +210,14 @@ const Memos = () => {
             </div>
             {newConnect && (
               <div>
-                <div className="text-[1.5rem] mb-[1rem]">연결할 날짜 선택</div>
-                <div className="items-center flex mb-[1rem]">
-                  <div className="mr-[1rem]">▶</div>
+                <div className="text-ui-sm mb-4">연결할 날짜 선택</div>
+                <div className="items-center flex mb-4">
+                  <div className="mr-4">▶</div>
                   <select
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(e.target.value)}
                     title="month"
-                    className="text-[1.5rem] text-black"
+                    className="text-ui-sm text-gray-800 border border-gray-300 rounded px-2"
                   >
                     <option value="">월 선택</option>
                     <option value="2025-01">2025년 1월</option>
@@ -234,7 +234,7 @@ const Memos = () => {
                     <option value="2025-12">2025년 12월</option>
                   </select>
                   <Button
-                    className="text-[1.5rem] ml-[2rem] p-[0.5rem] bg-navy2 rounded-lg"
+                    className="text-ui-sm ml-8 py-2 px-4 bg-secondary text-white rounded-lg"
                     type="button"
                     onClick={MonthNull}
                   >
@@ -246,30 +246,33 @@ const Memos = () => {
             )}
             <Button
               type="button"
-              className="my-[1rem] py-[0.5rem] w-[30rem] bg-navy2 rounded-lg"
+              className="my-4 py-2 w-form-sm bg-secondary text-white rounded-lg"
               onClick={handleAddMemo}
             >
               추가
             </Button>
           </div>
         </div>
-        <div className="self-center text-end text-[2rem]">
+        <div className="self-center text-end text-ui-sm text-gray-600">
           메모는 네 구역(활성/비활성 + 중요/안중요)으로 분류되어 표시됩니다.
           <br />
           메모를 드래그하여 구역을 옮기면
-          <span className="font-bold">활성/중요 여부</span>가 자동으로
-          변경됩니다.
+          <span className="font-bold text-gray-800">활성/중요 여부</span>가
+          자동으로 변경됩니다.
           <br />
-          메모를 클릭하면 <span className="font-bold">수정/삭제</span>할 수 있는
+          메모를 클릭하면{' '}
+          <span className="font-bold text-gray-800">수정/삭제</span>할 수 있는
           상세 화면으로 이동합니다.
         </div>
-        {/* 연결된 메모 */}
       </div>
+
       {newConnect && selectedMonth && (
-        <div className="text-[2rem] my-[2rem] outline-[0.1rem] outline rounded-lg">
-          <div className="p-[1rem]">
-            <div>선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.</div>
-            <div className="w-fit gap-[1rem] mx-auto grid grid-cols-7 text-[1rem]">
+        <div className="text-ui-md my-8 border border-gray-200 rounded-xl bg-white">
+          <div className="p-4">
+            <div className="text-gray-700 mb-4">
+              선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
+            </div>
+            <div className="w-fit gap-4 mx-auto grid grid-cols-7 text-base">
               {monthTodolist.map((todo: Todo) => (
                 <MonthTodoBox
                   todoFetch={() => TodoIDTask(todo.id, todo.task)}
@@ -282,19 +285,19 @@ const Memos = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-[1rem]">
+      <div className="grid grid-cols-2 gap-4">
         {/* 안중요+활성 메모 */}
         <MemoDropZone
           zoneIsActive={true}
           zoneIsImportant={false}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] bg-lightnavy my-[2rem] mr-[2rem] outline-[0.2rem] outline-dashed rounded-lg">
-            <div className="p-[1rem]">
-              <div className="text-navy text-center text-[2rem] mb-[1rem]">
-                안중요+활성 메모
+          <div className="min-h-zone bg-white my-8 mr-8 border-2 border-dashed border-gray-200 rounded-xl">
+            <div className="p-4">
+              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+                안중요 + 활성 메모
               </div>
-              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
                 {AcUnimMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -308,12 +311,12 @@ const Memos = () => {
           zoneIsImportant={true}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] ml-[2rem] my-[2rem] bg-lightnavy outline-[0.2rem] outline-dashed rounded-lg">
-            <div className="p-[1rem]">
-              <div className="text-navy text-center text-[2rem] mb-[1rem]">
-                중요+활성화 메모
+          <div className="min-h-zone ml-8 my-8 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+            <div className="p-4">
+              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+                중요 + 활성화 메모
               </div>
-              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
                 {AcImMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -327,12 +330,12 @@ const Memos = () => {
           zoneIsImportant={false}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] mr-[2rem] my-[2rem] bg-lightnavy outline-[0.2rem] outline-dashed rounded-lg">
-            <div className="p-[1rem]">
-              <div className="text-navy text-center text-[2rem] mb-[1rem]">
-                안중요+비활성 메모
+          <div className="min-h-zone mr-8 my-8 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+            <div className="p-4">
+              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+                안중요 + 비활성 메모
               </div>
-              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
                 {InacUnimMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -346,12 +349,12 @@ const Memos = () => {
           zoneIsImportant={true}
           MemoDrop={handleDropMemo}
         >
-          <div className="min-h-[30rem] ml-[2rem] my-[2rem] bg-lightnavy outline-[0.2rem] outline-dashed rounded-lg">
-            <div className="p-[1rem]">
-              <div className="text-navy text-center text-[2rem] mb-[1rem]">
-                중요+비활성 메모
+          <div className="min-h-zone ml-8 my-8 bg-white border-2 border-dashed border-gray-200 rounded-xl">
+            <div className="p-4">
+              <div className="text-primary text-center text-ui-md mb-4 font-bold">
+                중요 + 비활성 메모
               </div>
-              <div className="w-fit gap-[1rem] mx-auto grid grid-cols-3">
+              <div className="w-fit gap-4 mx-auto grid grid-cols-3">
                 {InacImMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
@@ -360,32 +363,35 @@ const Memos = () => {
           </div>
         </MemoDropZone>
       </div>
+
       {!memolistOpen && (
-        <div className="mb-[2rem] items-center text-center">
+        <div className="mb-8 items-center text-center">
           <Button
             type="button"
             onClick={MemoOpen}
-            className="px-[43rem] py-[1rem] text-[2rem] w-full items-center mt-[3.5rem] outline-[0.1rem] outline rounded-lg"
+            className="py-4 text-ui-md w-full text-center mt-14 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors text-primary"
           >
             전체 메모 보기
           </Button>
         </div>
       )}
       {memolistOpen && (
-        <div className="mb-[2rem] items-center mt-[3.5rem] outline-[0.1rem] outline rounded-lg">
-          <div className="p-[1rem]">
-            <div className="text-center mb-[2rem] text-[2rem]">전체 메모</div>
+        <div className="mb-8 items-center mt-14 border border-gray-200 rounded-xl bg-white">
+          <div className="p-4">
+            <div className="text-center mb-8 text-ui-md font-bold text-primary">
+              전체 메모
+            </div>
             <div>
-              <div className="grid grid-cols-7 gap-[1rem]">
+              <div className="grid grid-cols-7 gap-4">
                 {memolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
               </div>
-              <div className="text-[1.5rem] text-center items-center">
+              <div className="text-ui-sm text-center items-center">
                 <Button
                   onClick={MemoOpen}
                   type="button"
-                  className="p-[0.5rem] bg-navy2 rounded-lg"
+                  className="py-2 px-4 bg-secondary text-white rounded-lg"
                 >
                   전체 메모 숨김
                 </Button>

@@ -13,16 +13,15 @@ export default function MainTodoBox({
 
   return (
     <div
-      className={`flex-col w-[13rem] h-[5rem] rounded-lg flex justify-center items-center text-center mx-[1rem] bg-navy2 ${important ? 'outline outline-[0.2rem] outline-red' : ''}`}
+      className={`flex-col w-52 h-20 rounded-lg flex justify-center items-center text-center mx-4 bg-secondary text-white ${important ? 'outline outline-2 outline-danger' : ''}`}
     >
-      <div className="text-[1.5rem]">{title}</div>
+      <div className="text-ui-sm">{title}</div>
       {important && (
         <div className="flex">
-          <div className="mr-[1rem]">{newDate}</div>
+          <div className="mr-4">{newDate}</div>
         </div>
       )}
       {!important && <div>{newDate}</div>}
-      <div></div>
     </div>
   )
 }
