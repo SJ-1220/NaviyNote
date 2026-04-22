@@ -45,45 +45,50 @@ export const fetchTodoWithMemo = async (todoId: string, userEmail: string) => {
 export const addTodo = async (todo: Omit<Todo, 'id'>, userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')
 
-  const { data, error } = await supabase
-    .from('todo')
-    .insert([{ ...todo, user_email: userEmail }])
-    .select()
-  if (error) throw new Error(error.message)
-
-  // newTodo : 새로 생성한 todo
-  const newTodo = data[0]
   let todosUpdate: Todo | null = null
 
-  //newTodo의 memo_id가 있으면, memo table의 todo_id도 update
-  if (newTodo.memo_id) {
-    const { error: updateError } = await supabase
-      .from('memo')
-      .update({ todo_id: newTodo.id })
-      .eq('id', newTodo.memo_id)
-    if (updateError) throw new Error(updateError.message)
-
-    // newTodo의 memo_id가 있으면, 해당 memo_id를 이미 사용하고 있던 todo(prevTodo) 찾기
+  // 1. 새 todo와 연결할 Memo가 혹시 기존에 연결된 todo가 있나? : prevTodos
+  if (todo.memo_id) {
     const { data: prevTodos, error: findError } = await supabase
       .from('todo')
       .select('*')
-      .eq('memo_id', newTodo.memo_id)
-      .neq('id', newTodo.id)
+      .eq('memo_id', todo.memo_id)
       .eq('user_email', userEmail)
       .limit(1)
     if (findError) throw new Error(findError.message)
 
+    // 1-1. prevTodos 있다면 해당 Todo의 memo_id를 NULL로 update
     if (prevTodos && prevTodos.length > 0) {
       const prevTodo = prevTodos[0]
       const { error } = await supabase
         .from('todo')
         .update({ memo_id: null })
         .eq('id', prevTodo.id)
+        .eq('user_email', userEmail)
       if (error) throw new Error(error.message)
-
       todosUpdate = { ...prevTodo, memo_id: null }
     }
   }
+
+  // 2. 새 Todo Insert
+  const { data, error } = await supabase
+    .from('todo')
+    .insert([{ ...todo, user_email: userEmail }])
+    .select()
+  if (error) throw new Error(error.message)
+
+  const newTodo = data[0]
+
+  // 2-1. 새 Todo의 memo_id가 있다면, memo table의 todo_id도 update
+  if (newTodo.memo_id) {
+    const { error: updateError } = await supabase
+      .from('memo')
+      .update({ todo_id: newTodo.id })
+      .eq('id', newTodo.memo_id)
+      .eq('user_email', userEmail)
+    if (updateError) throw new Error(updateError.message)
+  }
+
   return { newTodo, todosUpdate }
 }
 
@@ -119,7 +124,7 @@ export const updateTodo = async (
 
     if (error) throw new Error(error.message)
 
-    // 2. todo를 찾아서 해당 todo의 memo_id를 null로 변경
+    // 2. todo를 찾아서 해당 todo의 memo_id를 NULL로 update
     if (prevTodos && prevTodos.length > 0) {
       const prevTodo = prevTodos[0]
 
@@ -144,13 +149,23 @@ export const updateTodo = async (
   const updatedTodo = nowTodo[0]
   todosUpdate.push(updatedTodo)
 
-  // 4. 현재 Todo에서 memo_id가 달라진 부분이 있다면, 메모 table에서 해당 memo의 todo_id를 update
+  // 4. 현재 Todo에서 memo_id가 달라진 부분이 있다면, memo table에서 현재 Todo를 todo_id로 갖고 있는 memo의 todo_id를 NULL로 update
   if (updatedTodo.memo_id) {
-    const { error } = await supabase
+    const { error: clearError } = await supabase
       .from('memo')
-      .update({ todo_id: updatedTodo.id })
+      .update({ todo_id: null })
+      .eq('todo_id', todoId)
+      .neq('id', updatedTodo.memo_id)
+      .eq('user_email', userEmail)
+    if (clearError) throw new Error(clearError.message)
+    
+    // 5. 현재 Todo에서 memo_id가 달라진 부분이 있다면, memo table에서 해당 memo의 todo_id를 update
+    const { error: linkError } = await supabase
+      .from('memo')
+      .update({ todo_id: todoId })
       .eq('id', updatedTodo.memo_id)
-    if (error) throw new Error(error.message)
+      .eq('user_email', userEmail)
+    if (linkError) throw new Error(linkError.message)
   }
   return todosUpdate
 }
