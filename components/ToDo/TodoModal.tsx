@@ -277,22 +277,22 @@ const TodoModal = () => {
                 onChange={(e) => setNewTask(e.target.value)}
               />
             </label>
-            <div className="flex mb-4">
-              <label className="flex mr-8">
-                <div className="mr-2 font-nanumgothic_regular">중요도</div>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
+              <label className="inline-flex items-center whitespace-nowrap gap-2">
+                <div className="font-nanumgothic_regular">중요도</div>
                 <input
                   type="checkbox"
                   checked={newImportant}
-                  className="self-center size-6"
+                  className="size-6"
                   onChange={(e) => setNewImportant(e.target.checked)}
                 />
               </label>
-              <label className="flex mr-8">
-                <div className="mr-2 font-nanumgothic_regular">완료</div>
+              <label className="inline-flex items-center whitespace-nowrap gap-2">
+                <div className="font-nanumgothic_regular">완료</div>
                 <input
                   type="checkbox"
                   checked={newCompleted}
-                  className="self-center size-6"
+                  className="size-6"
                   onChange={(e) => setNewCompleted(e.target.checked)}
                 />
               </label>
@@ -303,11 +303,11 @@ const TodoModal = () => {
                 {editTodo.date ? formatDate(new Date(editTodo.date)) : '없음'}
               </span>
             </div>
-            <div className="flex mb-4 items-center">
-              <label className="font-nanumgothic_regular">
+            <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center">
+              <label className="inline-flex items-center gap-2 whitespace-nowrap font-nanumgothic_regular">
                 새 날짜 :
                 <input
-                  className="h-9 px-2 rounded-lg ml-4 text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
+                  className="h-9 px-2 rounded-lg text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
                   type="date"
                   value={newDate || ''}
                   onChange={(e) => setNewDate(e.target.value || null)}
@@ -316,27 +316,29 @@ const TodoModal = () => {
               <Button
                 type="button"
                 onClick={handleClearDate}
-                className="ml-8 py-2 px-4 rounded-lg bg-secondary text-white"
+                className="py-2 px-4 rounded-lg bg-secondary text-white"
               >
                 날짜 미정
               </Button>
             </div>
-            <label className="items-center flex mb-4 font-nanumgothic_regular">
-              연결 메모 추가/수정
-              <input
-                type="checkbox"
-                checked={newConnect}
-                className="ml-2 self-center size-6"
-                onChange={(e) => setNewConnect(e.target.checked)}
-              />
+            <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center">
+              <label className="inline-flex items-center gap-2 whitespace-nowrap font-nanumgothic_regular">
+                연결 메모 추가/수정
+                <input
+                  type="checkbox"
+                  checked={newConnect}
+                  className="self-center size-6"
+                  onChange={(e) => setNewConnect(e.target.checked)}
+                />
+              </label>
               <Button
                 type="button"
-                className="ml-8 rounded-lg py-2 px-4 bg-secondary text-white"
+                className="rounded-lg py-2 px-4 bg-secondary text-white"
                 onClick={NewConnectNull}
               >
                 메모 연결 초기화
               </Button>
-            </label>
+            </div>
             <label>
               <div>
                 {todo.memo_id && todo.memo_id.trim() !== '' && (
@@ -353,21 +355,24 @@ const TodoModal = () => {
             {newConnect && (
               <div>
                 <div className="flex items-center mb-4">
-                  <div>새로 연동할 메모 선택를 선택하세요</div>
+                  <div>새로 연동할 메모를 선택하세요</div>
                 </div>
-                <div className="flex mb-4">
-                  <div className="mr-4">새로운 메모 :</div>
-                  {(!newConnectMemoContent ||
-                    newConnectMemoContent.trim() === '') &&
-                    !isMemoNull && <div>❔</div>}
-                  {newConnectMemoContent &&
-                    newConnectMemoContent.trim() !== '' && (
-                      <div>{newConnectMemoContent}</div>
-                    )}
-                  {isMemoNull &&
-                    (!newConnectMemoContent ||
-                      newConnectMemoContent.trim() === '') && <div>없음</div>}
-                </div>
+                {newConnectMemoContent &&
+                  newConnectMemoContent.trim() !== '' && (
+                    <div className="mb-4 text-secondary bg-secondary/5 border border-secondary/20 rounded-lg px-3 py-2">
+                      🔗 새로운 메모:{' '}
+                      <span className="font-nanumgothic_bold">
+                        {newConnectMemoContent}
+                      </span>
+                    </div>
+                  )}
+                {(!newConnectMemoContent ||
+                  newConnectMemoContent.trim() === '') && (
+                  <div className="mb-4 font-nanumgothic_regular text-gray-500">
+                    새로운 메모 :{' '}
+                    {isMemoNull ? <span>없음</span> : <span>❔</span>}
+                  </div>
+                )}
               </div>
             )}
           </div>

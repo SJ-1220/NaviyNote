@@ -248,10 +248,10 @@ export default function ToDos() {
           </div>
 
           {/* 모바일 전용: 오늘의 Todo 바로 아래 이용 안내 */}
-          <div className="mt-6 sm:hidden">{instructionBox}</div>
+          <div className="mt-8 sm:hidden">{instructionBox}</div>
 
           {/* 날짜없는 TodoList */}
-          <div className="mt-14 bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="p-6">
               <div className="text-ui-md text-center font-nanumgothic_bold text-primary">
                 날짜없는 Todo
@@ -275,7 +275,7 @@ export default function ToDos() {
           </div>
 
           {/* 선택 날짜 전후 3일 Todo */}
-          <div className="mt-14 bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="p-6">
               <div className="text-center text-ui-sm text-gray-500">
                 선택한 날짜의 전날, 당일, 다음날의 Todo
@@ -309,7 +309,7 @@ export default function ToDos() {
           </div>
 
           {/* Todo 추가 */}
-          <div className="mt-14 bg-white border border-gray-200 rounded-xl shadow-sm">
+          <div className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="p-6">
               <div className="text-ui-md text-center mb-6 font-nanumgothic_bold text-primary">
                 Todo를 추가하세요
@@ -341,10 +341,10 @@ export default function ToDos() {
                     />
                     <span>완료</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer w-full sm:w-auto">
                     <span className="text-gray-600 shrink-0">날짜</span>
                     <input
-                      className="h-9 px-3 rounded-lg text-gray-800 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
+                      className="h-9 px-3 rounded-lg text-gray-800 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular flex-1 min-w-0"
                       type="date"
                       value={newDate || ''}
                       onChange={(e) => setNewDate(e.target.value || null)}
@@ -356,7 +356,10 @@ export default function ToDos() {
                     type="checkbox"
                     checked={newConnect}
                     className="size-5 accent-secondary"
-                    onChange={(e) => setNewConnect(e.target.checked)}
+                    onChange={(e) => {
+                      setNewConnect(e.target.checked)
+                      if (!e.target.checked) setConnectMemoContent('')
+                    }}
                   />
                   <span>메모와 연결</span>
                 </label>
@@ -381,7 +384,7 @@ export default function ToDos() {
 
           {/* 모바일 전용: 메모 선택 섹션을 Todo 추가 바로 아래에 */}
           {newConnect && (
-            <div className="mt-6 sm:hidden bg-white border border-gray-200 rounded-xl">
+            <div className="mt-8 sm:hidden bg-white border border-gray-200 rounded-xl">
               <div className="p-6">
                 <div className="text-center text-ui-md font-nanumgothic_bold text-primary mb-4">
                   연결할 메모를 선택하세요
@@ -395,7 +398,7 @@ export default function ToDos() {
         {/* 오른쪽 열 */}
         <div className="sm:flex-1 sm:min-w-0">
           {/* 데스크탑 전용: 이용 안내 */}
-          <div className="hidden sm:block mt-4 sm:my-8">{instructionBox}</div>
+          <div className="hidden sm:block mt-8 mb-4">{instructionBox}</div>
 
           {/* 데스크탑 전용: 네이버 캘린더 추가 버튼 */}
           <div className="hidden sm:flex mb-8 justify-center">
@@ -415,7 +418,7 @@ export default function ToDos() {
 
       {/* 데스크탑 전용: 메모 선택 섹션 (양쪽 열 아래) */}
       {newConnect && (
-        <div className="hidden sm:block mt-14 border border-gray-200 rounded-xl bg-white">
+        <div className="hidden sm:block mt-8 border border-gray-200 rounded-xl bg-white">
           <div className="p-6">
             <div className="text-start text-ui-md font-nanumgothic_bold text-primary mb-4">
               연결할 메모를 선택하세요
@@ -426,7 +429,7 @@ export default function ToDos() {
       )}
 
       {!todolistOpen && (
-        <div className="my-8 border border-gray-200 rounded-xl bg-white shadow-sm">
+        <div className="mt-8 mb-4 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="px-6 py-4 flex items-center justify-between">
             <div className="text-ui-md font-nanumgothic_bold text-primary">
               전체 Todo
@@ -442,7 +445,7 @@ export default function ToDos() {
         </div>
       )}
       {todolistOpen && (
-        <div className="my-8 border border-gray-200 rounded-xl bg-white shadow-sm">
+        <div className="mt-8 mb-4 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
             <div className="text-ui-md font-nanumgothic_bold text-primary">
               전체 Todo
@@ -466,7 +469,7 @@ export default function ToDos() {
       )}
 
       {/* 모바일 전용: 네이버 캘린더 추가 버튼 (페이지 최하단) */}
-      <div className="sm:hidden mt-6 flex justify-center">
+      <div className="sm:hidden flex justify-center">
         <AddCalendar />
       </div>
 

@@ -6,6 +6,7 @@ import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
 import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
+import YearMonthPicker from '../YearMonthPicker'
 import MemoBox from './MemoBox'
 import MemoDropZone from './MemoDropZone'
 import { addMemo, fetchMemos, Memo, updateMemo } from './memosServer'
@@ -64,9 +65,9 @@ const Memos = () => {
   }, [session, selectedMonth])
 
   const MonthNull = () => {
-    if (selectedMonth) {
-      setSelectedMonth('')
-    }
+    setSelectedMonth('')
+    setConnectTodoTask(null)
+    setNewTodoId(null)
   }
 
   const handleAddMemo = async () => {
@@ -201,44 +202,44 @@ const Memos = () => {
   return (
     <div className="px-4 sm:px-6">
       {/* 메모 추가 + 안내 */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+      <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start">
         {/* 메모 추가 */}
-        <div className="my-4 sm:my-8 text-ui-sm border border-gray-200 rounded-xl bg-white shadow-sm">
+        <div className="my-4 sm:my-8 sm:flex-[3] sm:min-w-[300px] text-ui-sm border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="p-6">
             <div className="text-ui-md font-nanumgothic_bold text-primary mb-4">
               메모를 추가하세요
             </div>
             <input
-              className="h-10 px-3 rounded-lg w-full sm:w-form-sm text-gray-800 mb-4 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
+              className="h-10 px-3 rounded-lg w-full text-gray-800 mb-4 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
               type="text"
               value={newContent}
               placeholder="새로운 Memo를 추가하세요"
               onChange={(e) => setNewContent(e.target.value)}
             />
-            <div className="mb-4">
-              <label className="mr-8 font-nanumgothic_regular">
+            <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
+              <label className="inline-flex items-center whitespace-nowrap gap-2 font-nanumgothic_regular">
                 중요도
                 <input
                   type="checkbox"
-                  className="self-center ml-2 size-6"
+                  className="size-6"
                   checked={newImportant}
                   onChange={(e) => setNewImportant(e.target.checked)}
                 />
               </label>
-              <label className="mr-8 font-nanumgothic_regular">
+              <label className="inline-flex items-center whitespace-nowrap gap-2 font-nanumgothic_regular">
                 활성화
                 <input
                   type="checkbox"
-                  className="self-center ml-2 size-6"
+                  className="size-6"
                   checked={newActive}
                   onChange={(e) => setNewActive(e.target.checked)}
                 />
               </label>
-              <label className="mr-8 font-nanumgothic_regular">
+              <label className="inline-flex items-center whitespace-nowrap gap-2 font-nanumgothic_regular">
                 연동가능
                 <input
                   type="checkbox"
-                  className="self-center ml-2 size-6"
+                  className="size-6"
                   checked={newConnect}
                   onChange={(e) => setNewConnect(e.target.checked)}
                 />
@@ -246,50 +247,46 @@ const Memos = () => {
             </div>
             {newConnect && (
               <div>
-                <div className="text-ui-sm mb-4">연결할 날짜 선택</div>
-                <div className="items-center flex mb-4">
-                  <div className="mr-4">▶</div>
-                  <select
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
-                    title="month"
-                    className="h-9 text-ui-sm text-gray-800 border border-gray-300 rounded-lg px-2 focus:outline-none focus:border-secondary"
-                  >
-                    <option value="">월 선택</option>
-                    <option value="2025-01">2025년 1월</option>
-                    <option value="2025-02">2025년 2월</option>
-                    <option value="2025-03">2025년 3월</option>
-                    <option value="2025-04">2025년 4월</option>
-                    <option value="2025-05">2025년 5월</option>
-                    <option value="2025-06">2025년 6월</option>
-                    <option value="2025-07">2025년 7월</option>
-                    <option value="2025-08">2025년 8월</option>
-                    <option value="2025-09">2025년 9월</option>
-                    <option value="2025-10">2025년 10월</option>
-                    <option value="2025-11">2025년 11월</option>
-                    <option value="2025-12">2025년 12월</option>
-                  </select>
+                <div className="flex flex-col gap-2 mb-3 min-[586px]:flex-row min-[586px]:items-center min-[586px]:justify-between">
+                  <div className="text-ui-sm">연결할 날짜 선택</div>
                   <Button
-                    className="text-ui-sm ml-8 py-2 px-4 bg-secondary text-white rounded-lg"
+                    className="text-ui-sm py-2 px-4 bg-secondary text-white rounded-lg self-start"
                     type="button"
                     onClick={MonthNull}
                   >
                     연동 초기화
                   </Button>
                 </div>
-                <div>연결된 Todo : {connectTodoTask}</div>
+                <div className="mb-4 w-full max-w-full">
+                  <YearMonthPicker
+                    value={selectedMonth}
+                    onChange={setSelectedMonth}
+                  />
+                </div>
+                {connectTodoTask && connectTodoTask.trim() !== '' ? (
+                  <div className="text-secondary bg-secondary/5 border border-secondary/20 rounded-lg px-3 py-2">
+                    🔗 연결된 Todo:{' '}
+                    <span className="font-nanumgothic_bold">
+                      {connectTodoTask}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="font-nanumgothic_regular text-gray-500">
+                    연결된 Todo : ❔
+                  </div>
+                )}
               </div>
             )}
             <Button
               type="button"
-              className="my-4 py-2 w-full sm:w-form-sm bg-secondary text-white rounded-lg"
+              className="my-4 py-2 w-full bg-secondary text-white rounded-lg"
               onClick={handleAddMemo}
             >
               추가
             </Button>
           </div>
         </div>
-        <div className="sm:flex-1 sm:min-w-0 sm:self-start sm:my-8">
+        <div className="hidden sm:block sm:flex-[2] sm:min-w-[280px] sm:self-start sm:my-8">
           {instructionBox}
         </div>
       </div>
@@ -303,7 +300,7 @@ const Memos = () => {
             <div className="font-nanumgothic_regular text-gray-600 text-ui-sm mb-4 leading-relaxed">
               선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
             </div>
-            <div className="grid grid-cols-3 gap-2 sm:grid-cols-7 sm:gap-4">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
               {monthTodolist.map((todo: Todo) => (
                 <MonthTodoBox
                   todoFetch={() => TodoIDTask(todo.id, todo.task)}
@@ -315,6 +312,8 @@ const Memos = () => {
           </div>
         </div>
       )}
+
+      <div className="mb-8 sm:hidden">{instructionBox}</div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         {/* 안중요+활성 메모 */}
@@ -426,7 +425,7 @@ const Memos = () => {
             </Button>
           </div>
           <div className="p-6">
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
               {memolist.map((memo) => (
                 <MemoBox key={memo.id} memo={memo} isDraggable={false} />
               ))}

@@ -7,7 +7,8 @@
       "Bash(claude auth *)",
       "Bash(where claude *)",
       "Bash(claude login *)",
-      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")"
+      "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
+      "Bash(npx next *)"
     ]
   }
 }

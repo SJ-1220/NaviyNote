@@ -8,6 +8,7 @@ import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
 import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
+import YearMonthPicker from '../YearMonthPicker'
 import {
   deleteMemo,
   fetchMemos,
@@ -286,32 +287,32 @@ const MemoModal = () => {
                 onChange={(e) => setNewContent(e.target.value)}
               />
             </label>
-            <div className="flex mb-4">
-              <label className="flex mr-8">
-                <div className="mr-2 font-nanumgothic_regular">활성화</div>
+            <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
+              <label className="inline-flex items-center whitespace-nowrap gap-2">
+                <div className="font-nanumgothic_regular">활성화</div>
                 <input
                   type="checkbox"
                   checked={newActive}
                   onChange={(e) => setNewActive(e.target.checked)}
-                  className="self-center size-6"
+                  className="size-6"
                 />
               </label>
-              <label className="flex mr-8">
-                <div className="mr-2 font-nanumgothic_regular">중요</div>
+              <label className="inline-flex items-center whitespace-nowrap gap-2">
+                <div className="font-nanumgothic_regular">중요</div>
                 <input
                   type="checkbox"
                   checked={newImportant}
                   onChange={(e) => setNewImportant(e.target.checked)}
-                  className="self-center size-6"
+                  className="size-6"
                 />
               </label>
-              <label className="flex">
-                <div className="mr-2 font-nanumgothic_regular">연동</div>
+              <label className="inline-flex items-center whitespace-nowrap gap-2">
+                <div className="font-nanumgothic_regular">연동</div>
                 <input
                   type="checkbox"
                   checked={newConnect}
                   onChange={(e) => setNewConnect(e.target.checked)}
-                  className="self-center size-6"
+                  className="size-6"
                 />
               </label>
             </div>
@@ -327,48 +328,35 @@ const MemoModal = () => {
                   </div>
                 )}
                 <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <div className="mr-4">새로 연동할 Todo의 날짜 선택 :</div>
-                    <select
+                  <div className="mb-3 font-nanumgothic_regular">
+                    새로 연동할 Todo의 날짜 선택
+                  </div>
+                  <div className="flex flex-col gap-3 mb-2">
+                    <YearMonthPicker
                       value={newSelectedMonth}
-                      onChange={(e) => setNewSelectedMonth(e.target.value)}
-                      title="month"
-                      className="text-gray-800 mr-4 border border-gray-300 rounded px-2"
-                    >
-                      <option value="">월 선택</option>
-                      <option value="2025-01">2025년 1월</option>
-                      <option value="2025-02">2025년 2월</option>
-                      <option value="2025-03">2025년 3월</option>
-                      <option value="2025-04">2025년 4월</option>
-                      <option value="2025-05">2025년 5월</option>
-                      <option value="2025-06">2025년 6월</option>
-                      <option value="2025-07">2025년 7월</option>
-                      <option value="2025-08">2025년 8월</option>
-                      <option value="2025-09">2025년 9월</option>
-                      <option value="2025-10">2025년 10월</option>
-                      <option value="2025-11">2025년 11월</option>
-                      <option value="2025-12">2025년 12월</option>
-                    </select>
+                      onChange={setNewSelectedMonth}
+                    />
                     <Button
-                      className="rounded-lg py-2 px-4 bg-secondary text-white mb-2"
+                      className="w-full rounded-lg py-2 px-4 bg-secondary text-white"
                       type="button"
                       onClick={NewMonthNull}
                     >
                       Todo 연결 초기화
                     </Button>
                   </div>
-                  <div className="flex mt-2">
-                    <div className="mr-4">새로운 Todo :</div>
-                    {(!newConnectTodoTask ||
-                      newConnectTodoTask.trim() === '') &&
-                      !isTodoNull && <div>❔</div>}
-                    {newConnectTodoTask && newConnectTodoTask.trim() !== '' && (
-                      <div>{newConnectTodoTask}</div>
-                    )}
-                    {isTodoNull &&
-                      (!newConnectTodoTask ||
-                        newConnectTodoTask.trim() === '') && <div>없음</div>}
-                  </div>
+                  {newConnectTodoTask && newConnectTodoTask.trim() !== '' ? (
+                    <div className="mt-2 text-secondary bg-secondary/5 border border-secondary/20 rounded-lg px-3 py-2">
+                      🔗 새로운 Todo:{' '}
+                      <span className="font-nanumgothic_bold">
+                        {newConnectTodoTask}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="mt-2 font-nanumgothic_regular text-gray-500">
+                      새로운 Todo :{' '}
+                      {isTodoNull ? <span>없음</span> : <span>❔</span>}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
