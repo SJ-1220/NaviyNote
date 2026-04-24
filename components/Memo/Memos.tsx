@@ -200,7 +200,7 @@ const Memos = () => {
   )
 
   return (
-    <div className="px-4 sm:px-6">
+    <div>
       {/* 메모 추가 + 안내 */}
       <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start">
         {/* 메모 추가 */}
@@ -210,7 +210,7 @@ const Memos = () => {
               메모를 추가하세요
             </div>
             <input
-              className="h-10 px-3 rounded-lg w-full text-gray-800 mb-4 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
+              className="h-12 px-4 rounded-xl w-full text-gray-800 mb-4 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
               type="text"
               value={newContent}
               placeholder="새로운 Memo를 추가하세요"
@@ -250,7 +250,7 @@ const Memos = () => {
                 <div className="flex flex-col gap-2 mb-3 min-[586px]:flex-row min-[586px]:items-center min-[586px]:justify-between">
                   <div className="text-ui-sm">연결할 날짜 선택</div>
                   <Button
-                    className="text-ui-sm py-2 px-4 bg-secondary text-white rounded-lg self-start"
+                    className="text-ui-sm py-2 px-4 bg-secondary text-white rounded-xl self-start hover:bg-primary transition-colors"
                     type="button"
                     onClick={MonthNull}
                   >
@@ -279,10 +279,10 @@ const Memos = () => {
             )}
             <Button
               type="button"
-              className="my-4 py-2 w-full bg-secondary text-white rounded-lg"
+              className="my-4 py-3 w-full bg-secondary text-white rounded-xl font-nanumgothic_bold shadow-sm hover:bg-primary transition-colors"
               onClick={handleAddMemo}
             >
-              추가
+              + 메모 추가
             </Button>
           </div>
         </div>
@@ -403,7 +403,7 @@ const Memos = () => {
             <Button
               type="button"
               onClick={MemoOpen}
-              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors"
+              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
               보기
             </Button>
@@ -419,7 +419,7 @@ const Memos = () => {
             <Button
               type="button"
               onClick={MemoOpen}
-              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors"
+              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
               숨기기
             </Button>

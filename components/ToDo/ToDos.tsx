@@ -223,7 +223,7 @@ export default function ToDos() {
   )
 
   return (
-    <div className="px-4 sm:px-8">
+    <div>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
         {/* 왼쪽 열 */}
         <div className="sm:flex-1 sm:min-w-0">
@@ -277,20 +277,23 @@ export default function ToDos() {
           {/* 선택 날짜 전후 3일 Todo */}
           <div className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="p-6">
-              <div className="text-center text-ui-sm text-gray-500">
-                선택한 날짜의 전날, 당일, 다음날의 Todo
-              </div>
               {(!selectedDate || !session?.user?.email) && (
                 <div>
                   <div className="text-ui-md text-center font-nanumgothic_bold text-primary">
                     캘린더에서 날짜를 선택하세요
                   </div>
+                  <div className="text-center text-ui-sm text-gray-500 mt-1">
+                    선택한 날짜의 전날, 당일, 다음날의 Todo
+                  </div>
                 </div>
               )}
               {selectedDate && session?.user?.email && (
                 <div>
-                  <div className="text-center text-ui-md mb-4 font-nanumgothic_bold text-primary">
+                  <div className="text-center text-ui-md font-nanumgothic_bold text-primary">
                     {selectedPrevDate} ~ {selectedNextDate}의 Todo
+                  </div>
+                  <div className="text-center text-ui-sm text-gray-500 mt-1 mb-4">
+                    선택한 날짜의 전날, 당일, 다음날의 Todo
                   </div>
                   {threeDaysTodos.length === 0 ? (
                     <div className="text-ui-sm text-center text-gray-500">
@@ -344,7 +347,7 @@ export default function ToDos() {
                   <label className="flex items-center gap-2 cursor-pointer w-full sm:w-auto">
                     <span className="text-gray-600 shrink-0">날짜</span>
                     <input
-                      className="h-9 px-3 rounded-lg text-gray-800 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular flex-1 min-w-0"
+                      className="h-9 px-3 rounded-xl text-gray-800 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular flex-1 min-w-0"
                       type="date"
                       value={newDate || ''}
                       onChange={(e) => setNewDate(e.target.value || null)}
@@ -437,7 +440,7 @@ export default function ToDos() {
             <Button
               onClick={TodoOpen}
               type="button"
-              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors"
+              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
               보기
             </Button>
@@ -453,7 +456,7 @@ export default function ToDos() {
             <Button
               onClick={TodoOpen}
               type="button"
-              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-lg hover:bg-secondary/20 transition-colors"
+              className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
               숨기기
             </Button>

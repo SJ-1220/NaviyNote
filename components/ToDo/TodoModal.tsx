@@ -194,15 +194,15 @@ const TodoModal = () => {
       >
         <div className="mb-4 flex justify-between gap-4">
           <Button
-            className="rounded-lg py-2 px-4 bg-secondary text-white"
+            className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
             type="button"
             onClick={onClose}
           >
-            모달닫기
+            모달 닫기
           </Button>
           {editTodo ? (
             <Button
-              className="rounded-lg py-2 px-4 bg-secondary text-white"
+              className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
               type="button"
               onClick={updateTodoInput}
             >
@@ -210,7 +210,7 @@ const TodoModal = () => {
             </Button>
           ) : (
             <Button
-              className="rounded-lg py-2 px-4 bg-secondary text-white"
+              className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
               type="button"
               onClick={() => {
                 handleEditTodo(todo)
@@ -220,7 +220,7 @@ const TodoModal = () => {
             </Button>
           )}
           <Button
-            className="rounded-lg py-2 px-4 bg-danger text-white"
+            className="rounded-xl py-2 px-4 bg-danger text-white hover:opacity-80 transition-opacity"
             type="button"
             onClick={() => handleDeleteTodo(todo.id)}
           >
@@ -234,12 +234,12 @@ const TodoModal = () => {
           <div className="space-y-3 font-nanumgothic_regular">
             <div className="flex gap-2 flex-wrap">
               <span
-                className={`text-md px-2 py-1 rounded-full font-nanumgothic_bold ${todo.completed ? 'bg-secondary/10 text-secondary' : 'bg-gray-100 text-gray-400'}`}
+                className={`text-md px-2.5 py-1 rounded-full font-nanumgothic_bold ${todo.completed ? 'bg-secondary/10 text-secondary' : 'bg-gray-100 text-gray-400'}`}
               >
                 {todo.completed ? '완료' : '미완'}
               </span>
               <span
-                className={`text-md px-2 py-1 rounded-full font-nanumgothic_bold ${todo.important ? 'bg-danger/10 text-danger' : 'bg-gray-100 text-gray-400'}`}
+                className={`text-md px-2.5 py-1 rounded-full font-nanumgothic_bold ${todo.important ? 'bg-danger/10 text-danger' : 'bg-gray-100 text-gray-400'}`}
               >
                 {todo.important ? '중요' : '안중요'}
               </span>
@@ -271,7 +271,7 @@ const TodoModal = () => {
                 Todo
               </span>
               <input
-                className="h-10 px-3 w-full rounded-lg text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
+                className="h-10 px-3 w-full rounded-xl text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
                 type="text"
                 value={newTask}
                 onChange={(e) => setNewTask(e.target.value)}
@@ -307,7 +307,7 @@ const TodoModal = () => {
               <label className="inline-flex items-center gap-2 whitespace-nowrap font-nanumgothic_regular">
                 새 날짜 :
                 <input
-                  className="h-9 px-2 rounded-lg text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
+                  className="h-9 px-2 rounded-xl text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
                   type="date"
                   value={newDate || ''}
                   onChange={(e) => setNewDate(e.target.value || null)}
@@ -316,7 +316,7 @@ const TodoModal = () => {
               <Button
                 type="button"
                 onClick={handleClearDate}
-                className="py-2 px-4 rounded-lg bg-secondary text-white"
+                className="py-2 px-4 rounded-xl bg-secondary text-white hover:bg-primary transition-colors"
               >
                 날짜 미정
               </Button>
@@ -333,7 +333,7 @@ const TodoModal = () => {
               </label>
               <Button
                 type="button"
-                className="rounded-lg py-2 px-4 bg-secondary text-white"
+                className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
                 onClick={NewConnectNull}
               >
                 메모 연결 초기화
@@ -378,7 +378,7 @@ const TodoModal = () => {
           </div>
         )}
         {editTodo && newConnect && (
-          <div className="text-base grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
             {connectMemos.map((memo: Memo) => (
               <ConnectMemoBox
                 memoFetch={() => MemoIDContent(memo.id, memo.content)}

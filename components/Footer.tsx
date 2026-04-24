@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="order-2 sm:order-1 flex flex-row items-center justify-center gap-4 sm:gap-0">
             <div className="bg-primary text-white rounded-xl flex justify-center items-center px-4 h-nav-item">
               <Link
-                className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
+                className="font-nanumgothic_regular text-ui-sm"
                 href="https://github.com/SJ-1220/NaviyNote"
                 target="_blank"
                 passHref
@@ -32,7 +32,7 @@ export default function Footer() {
           </div>
 
           {/* Mobile order-1 (above Github+Logo); sm+ order-2 (after Github) */}
-          <div className="order-1 sm:order-2 text-center text-ui-sm sm:text-[18px] sm:ml-8 font-nanumgothic_regular text-gray-600">
+          <div className="order-1 sm:order-2 text-center text-ui-sm sm:text-ui-caption sm:ml-8 font-nanumgothic_regular text-gray-600">
             NaviyNote는 SJ-1220가 만든 캘린더 프로젝트입니다
           </div>
         </div>

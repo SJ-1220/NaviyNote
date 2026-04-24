@@ -1,7 +1,8 @@
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { fetchMainImportantTodos, MainTodo } from './mainServer'
 import LoadingPage from '../Loading'
+import { fetchMainImportantTodos, MainTodo } from './mainServer'
 import MainTodoBox from './MainTodoBox'
 
 export default function MainImportant() {
@@ -30,8 +31,16 @@ export default function MainImportant() {
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
-      <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
-        🌟 중요한 Todo
+      <div className="flex flex-wrap gap-y-2 items-center mb-2">
+        <span className="text-ui-sm font-nanumgothic_bold text-gray-600">
+          🌟 중요한 Todo
+        </span>
+        <Link
+          href="/todo"
+          className="ml-auto text-sm font-nanumgothic_bold text-navy3 hover:text-navy hover:underline transition-colors"
+        >
+          Todo 전체보기 →
+        </Link>
       </div>
       {importantTodos.length > 0 ? (
         <div className="flex flex-col gap-2">
@@ -45,7 +54,7 @@ export default function MainImportant() {
           ))}
         </div>
       ) : (
-        <div className="text-gray-400 text-center text-base py-1">
+        <div className="text-gray-400 text-center text-ui-sm py-1">
           중요한 Todo가 없습니다
         </div>
       )}

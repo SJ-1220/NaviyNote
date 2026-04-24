@@ -45,7 +45,7 @@ export default function YearMonthPicker({
             key={year}
             type="button"
             onClick={() => setDisplayYear(year)}
-            className={`px-3 py-1.5 max-[400px]:px-2 rounded-lg text-ui-sm font-nanumgothic_bold transition-colors ${
+            className={`px-3 py-1.5 max-[400px]:px-2 rounded-xl text-ui-sm font-nanumgothic_bold transition-colors ${
               displayYear === year
                 ? 'bg-secondary text-white'
                 : 'bg-gray-100 text-gray-500 hover:bg-secondary/10 hover:text-secondary'
@@ -64,7 +64,7 @@ export default function YearMonthPicker({
               key={month}
               type="button"
               onClick={() => handleMonthSelect(month)}
-              className={`p-2 max-[400px]:p-1 rounded-lg text-ui-sm max-[400px]:text-xs font-nanumgothic_regular transition-colors ${
+              className={`p-2 max-[400px]:p-1 rounded-xl text-ui-sm max-[400px]:text-xs font-nanumgothic_regular transition-colors ${
                 isSelected
                   ? 'bg-secondary text-white font-nanumgothic_bold'
                   : 'bg-gray-50 text-gray-700 hover:bg-secondary/10 hover:text-secondary'

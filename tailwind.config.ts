@@ -33,6 +33,7 @@ export default {
         ],
       },
       fontSize: {
+        'ui-caption': ['1rem', { lineHeight: '1.5rem' }], // fine print, footer text
         'ui-sm': ['1.5rem', { lineHeight: '2rem' }], // labels, captions
         'ui-md': ['2rem', { lineHeight: '2.5rem' }], // section headings, nav text
         'ui-lg': ['2.3rem', { lineHeight: '3rem' }], // feature / landing body

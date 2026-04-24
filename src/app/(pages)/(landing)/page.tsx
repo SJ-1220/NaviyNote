@@ -1,9 +1,9 @@
 'use client'
+import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import React from 'react'
 import LogoImage from '../../../../public/images/logo-image.svg'
 import TitleWhiteImage from '../../../../public/images/title-white-image.svg'
-import { signIn } from 'next-auth/react'
 
 const features = [
   {
@@ -73,7 +73,7 @@ export default function LandingPage() {
         <div className="py-16 px-8 sm:py-24 sm:px-16 flex flex-col items-center text-center">
           {/* Brand mark */}
           <div className="flex flex-col items-center gap-4 mb-8 sm:flex-row sm:gap-6 sm:mb-16">
-            <div className="relative size-32">
+            <div className="relative size-32 mb-4">
               <Image
                 src={LogoImage}
                 alt="NaviyNote 로고"
@@ -81,7 +81,7 @@ export default function LandingPage() {
                 style={{ objectFit: 'contain' }}
               />
             </div>
-            <div className="relative w-96 h-20">
+            <div className="relative w-[95%] aspect-[24/5] sm:w-96 sm:h-20 sm:aspect-auto">
               <Image
                 src={TitleWhiteImage}
                 alt="NaviyNote"
@@ -97,20 +97,18 @@ export default function LandingPage() {
             <span className="text-surface">스마트하게</span>
             {' 관리하세요'}
           </h1>
-          <p className="text-ui-md mb-4 max-w-4xl" style={{ opacity: 0.9 }}>
+          <p className="text-ui-md mb-4 max-w-4xl opacity-90">
             메모와 Todo를 1:1로 연결해 생각의 맥락을 잃지 않는 일정 관리
           </p>
-          <p className="text-ui-sm mb-12" style={{ opacity: 0.6 }}>
+          <p className="text-ui-sm mb-12 opacity-60">
             네이버 캘린더와 연동하여 모든 일정을 통합 관리하세요
           </p>
 
           <SignInButton />
 
-          <p className="mt-8 text-base" style={{ opacity: 0.5 }}>
+          <p className="mt-8 text-ui-caption opacity-50">
             ⚠️ 로그인 시{' '}
-            <span className="font-nanumgothic_bold" style={{ opacity: 1 }}>
-              캘린더 일정담기 권한
-            </span>
+            <span className="font-nanumgothic_bold">캘린더 일정담기 권한</span>
             을 허용해 주세요
           </p>
         </div>
@@ -125,13 +123,13 @@ export default function LandingPage() {
           {features.map((feature) => (
             <div
               key={feature.title}
-              className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm hover:shadow-md hover:border-secondary transition-all"
+              className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm hover:shadow-md hover:border-secondary transition-all"
             >
               <div className="text-5xl mb-4">{feature.icon}</div>
               <h3 className="text-ui-sm font-nanumgothic_bold text-primary mb-2">
                 {feature.title}
               </h3>
-              <p className="text-base text-gray-600 leading-relaxed">
+              <p className="text-ui-caption text-gray-600 leading-relaxed">
                 {feature.description}
               </p>
             </div>
@@ -154,7 +152,9 @@ export default function LandingPage() {
                 <h3 className="text-ui-sm font-nanumgothic_bold text-primary mb-2">
                   {step.title}
                 </h3>
-                <p className="text-base text-gray-600">{step.description}</p>
+                <p className="text-ui-caption text-gray-600">
+                  {step.description}
+                </p>
               </div>
               {index < steps.length - 1 && (
                 <div className="hidden sm:block text-secondary text-ui-xl self-center shrink-0">
@@ -171,7 +171,7 @@ export default function LandingPage() {
         <h2 className="text-ui-lg font-nanumgothic_bold mb-4">
           지금 바로 시작해 보세요
         </h2>
-        <p className="text-ui-sm mb-12" style={{ opacity: 0.7 }}>
+        <p className="text-ui-sm mb-12 opacity-70">
           NaviyNote는 무료로 사용할 수 있습니다
         </p>
         <SignInButton />

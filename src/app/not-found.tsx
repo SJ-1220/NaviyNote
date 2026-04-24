@@ -14,7 +14,7 @@ export default function NotFound() {
       <div className="text-ui-sm font-nanumgothic_bold mb-2 text-primary">
         페이지를 찾을 수 없습니다
       </div>
-      <div className="text-base mb-10 text-gray-500">
+      <div className="text-ui-caption mb-10 text-gray-500">
         요청하신 페이지가 사라졌거나, 잘못된 경로를 이용하셨어요
       </div>
       <Button

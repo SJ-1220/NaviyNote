@@ -34,7 +34,7 @@ export default function MonthTodoBox({ todo, todoFetch }: MonthTodoBoxProps) {
           {todo.important ? '중요' : '일반'}
         </span>
       </div>
-      <div className="text-md text-gray-500">{formattedDate}</div>
+      <div className="text-sm text-gray-500">{formattedDate}</div>
     </Button>
   )
 }

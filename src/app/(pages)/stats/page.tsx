@@ -4,7 +4,7 @@ import SoonImage from '../../../../public/images/coming-soon-image.png'
 export default function StatsPage() {
   return (
     <div className="flex flex-col items-center justify-center h-coming-soon text-gray-800">
-      <div className="relative w-[40rem] h-[30rem]">
+      <div className="relative w-[95%] h-[20rem] sm:w-[40rem] sm:h-[30rem] mx-auto">
         <Image
           src={SoonImage}
           alt="ComingSoonImage"

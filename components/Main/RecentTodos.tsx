@@ -72,7 +72,7 @@ export default function RecentTodos() {
       </div>
 
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
-        <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+        <div className="text-ui-sm font-nanumgothic_bold text-gray-600 mb-2">
           📅 오늘
         </div>
         {todayTodos.length > 0 ? (
@@ -87,14 +87,14 @@ export default function RecentTodos() {
             ))}
           </div>
         ) : (
-          <div className="text-gray-400 text-center text-base py-1">
+          <div className="text-gray-400 text-center text-ui-sm py-1">
             오늘의 Todo가 없습니다
           </div>
         )}
       </div>
 
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
-        <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+        <div className="text-ui-sm font-nanumgothic_bold text-gray-600 mb-2">
           ⏭ 1~5일 후
         </div>
         {nextTodos.length > 0 ? (
@@ -109,14 +109,14 @@ export default function RecentTodos() {
             ))}
           </div>
         ) : (
-          <div className="text-gray-400 text-center text-base py-1">
+          <div className="text-gray-400 text-center text-ui-sm py-1">
             이후의 Todo가 없습니다
           </div>
         )}
       </div>
 
       <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">
-        <div className="text-base font-nanumgothic_bold text-gray-600 mb-2">
+        <div className="text-ui-sm font-nanumgothic_bold text-gray-600 mb-2">
           ⏮ 1~5일 전
         </div>
         {prevTodos.length > 0 ? (
@@ -131,7 +131,7 @@ export default function RecentTodos() {
             ))}
           </div>
         ) : (
-          <div className="text-gray-400 text-center text-base py-1">
+          <div className="text-gray-400 text-center text-ui-sm py-1">
             이전의 Todo가 없습니다
           </div>
         )}

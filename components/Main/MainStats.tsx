@@ -7,7 +7,7 @@ export default function MainStats() {
         <div className="text-ui-sm mb-4 font-bold font-nanumgothic_bold text-primary text-center">
           이번달에 할일이 가장 많은 요일은?
         </div>
-        <div className="text-base mb-4 text-gray-500 text-center font-nanumgothic_regular">
+        <div className="text-ui-sm mb-4 text-gray-500 text-center font-nanumgothic_regular">
           서비스 준비중입니다. 예시 화면
         </div>
         <div className="w-full">
@@ -18,7 +18,7 @@ export default function MainStats() {
         <div className="text-ui-sm mb-4 font-bold font-nanumgothic_bold text-primary text-center">
           최근 일주일 중 가장 할일이 많았던 날은?
         </div>
-        <div className="text-base mb-4 text-gray-500 text-center font-nanumgothic_regular">
+        <div className="text-ui-sm mb-4 text-gray-500 text-center font-nanumgothic_regular">
           서비스 준비중입니다. 예시 화면
         </div>
         <div className="text-ui-sm text-gray-700 flex flex-col items-center text-center">

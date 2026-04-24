@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession()
   return (
     <html
-      lang="kr"
+      lang="ko"
       className={`${NanumGothicRegular.variable} ${NanumGothicBold.variable} ${NanumGothicExtraBold.variable}`}
     >
       <body>

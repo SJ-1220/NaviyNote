@@ -40,14 +40,14 @@ export const HeaderNaverAuth = () => {
     <div className="mt-3 sm:mt-0">
       {session ? (
         <button
-          className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm text-gray-600 hover:text-primary"
+          className="font-nanumgothic_regular text-ui-sm text-gray-600 hover:text-primary transition-colors duration-150"
           onClick={handleSignOut}
         >
           로그아웃
         </button>
       ) : (
         <button
-          className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm text-gray-600 hover:text-primary"
+          className="font-nanumgothic_regular text-ui-sm text-gray-600 hover:text-primary transition-colors duration-150"
           onClick={handleSignIn}
         >
           로그인

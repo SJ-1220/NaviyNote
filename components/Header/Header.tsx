@@ -42,44 +42,35 @@ export default function Header({
       {/* Nav */}
       <nav className="flex flex-row flex-wrap justify-center gap-1 sm:ml-6 sm:gap-2">
         <div
-          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 ${isMainPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 transition-colors duration-150 ${isMainPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
-            href="/main"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/main">
             홈
           </Link>
         </div>
         <div
-          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 ${isMemoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 transition-colors duration-150 ${isMemoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
-            href="/memo"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/memo">
             메모
           </Link>
         </div>
         <div
-          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 ${isToDoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 transition-colors duration-150 ${isToDoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className="font-nanumgothic_regular text-ui-sm sm:text-ui-sm"
-            href="/todo"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/todo">
             ToDo
           </Link>
         </div>
         <div
-          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl ${isStatsPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl transition-colors duration-150 ${isStatsPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
           <Link className="font-nanumgothic_regular text-ui-sm" href="/stats">
             통계
           </Link>
         </div>
         <div
-          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl ${isFriendPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
+          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl transition-colors duration-150 ${isFriendPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
           <Link className="font-nanumgothic_regular text-ui-sm" href="/friend">
             친구

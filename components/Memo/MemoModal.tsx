@@ -205,7 +205,7 @@ const MemoModal = () => {
       >
         <div className="mb-4 flex justify-between gap-4">
           <Button
-            className="rounded-lg bg-secondary text-white py-2 px-4"
+            className="rounded-xl bg-secondary text-white py-2 px-4 hover:bg-primary transition-colors"
             type="button"
             onClick={onClose}
           >
@@ -213,7 +213,7 @@ const MemoModal = () => {
           </Button>
           {editMemo ? (
             <Button
-              className="rounded-lg py-2 px-4 bg-secondary text-white"
+              className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
               type="button"
               onClick={updateMemoInput}
             >
@@ -221,7 +221,7 @@ const MemoModal = () => {
             </Button>
           ) : (
             <Button
-              className="rounded-lg py-2 px-4 bg-secondary text-white"
+              className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
               type="button"
               onClick={() => {
                 handleEditMemo(memo)
@@ -231,7 +231,7 @@ const MemoModal = () => {
             </Button>
           )}
           <Button
-            className="rounded-lg py-2 px-4 bg-danger text-white"
+            className="rounded-xl py-2 px-4 bg-danger text-white hover:opacity-80 transition-opacity"
             type="button"
             onClick={() => handleDeleteMemo(memo.id)}
           >
@@ -281,7 +281,7 @@ const MemoModal = () => {
                 메모 내용
               </span>
               <input
-                className="h-10 px-3 rounded-lg w-full text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary font-nanumgothic_regular"
+                className="h-10 px-3 rounded-xl w-full text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
                 type="text"
                 value={newContent}
                 onChange={(e) => setNewContent(e.target.value)}
@@ -337,7 +337,7 @@ const MemoModal = () => {
                       onChange={setNewSelectedMonth}
                     />
                     <Button
-                      className="w-full rounded-lg py-2 px-4 bg-secondary text-white"
+                      className="w-full rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
                       type="button"
                       onClick={NewMonthNull}
                     >
@@ -364,7 +364,7 @@ const MemoModal = () => {
         )}
         {editMemo && newSelectedMonth && (
           <div>
-            <div className="text-base grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
               {newMonthTodolist.map((todo: Todo) => (
                 <MonthTodoBox
                   todoFetch={() => TodoIDTask(todo.id, todo.task)}
