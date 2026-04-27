@@ -73,7 +73,7 @@ export default function LandingPage() {
         <div className="py-16 px-8 sm:py-24 sm:px-16 flex flex-col items-center text-center">
           {/* Brand mark */}
           <div className="flex flex-col items-center gap-4 mb-8 sm:flex-row sm:gap-6 sm:mb-16">
-            <div className="relative size-32 mb-4">
+            <div className="relative size-32">
               <Image
                 src={LogoImage}
                 alt="NaviyNote 로고"

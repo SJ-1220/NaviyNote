@@ -137,7 +137,7 @@ export default function Calendar({
   return (
     <div
       ref={calendarDropRef}
-      className="min-w-0 overflow-x-auto h-[500px] sm:h-[750px]"
+      className="min-w-0 overflow-x-auto h-[500px] sm:h-calendar"
     >
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
