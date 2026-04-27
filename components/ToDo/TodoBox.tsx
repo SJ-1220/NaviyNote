@@ -1,8 +1,7 @@
 'use client'
-import React from 'react'
-import { Todo } from './todosServer'
-import { formatDate } from './TodayDateFormat'
 import Link from 'next/link'
+import { formatDate } from './TodayDateFormat'
+import { Todo } from './todosServer'
 
 interface TodoBoxProps {
   todo: Todo
@@ -17,19 +16,33 @@ export default function TodoBox({ todo, isDragging }: TodoBoxProps) {
       passHref
       key={todoId}
       href={`/todo/todoItem/${todoId}`}
-      className={`flex-col size-[10rem] rounded-lg flex justify-center items-center text-center mb-[1.5rem] mx-[1.5rem] bg-navy2 ${isDragging ? 'text-gray-400' : 'text-white'}`}
+      className={`size-36 sm:size-40 rounded-xl flex flex-col justify-center items-center text-center bg-white border border-gray-200 shadow-sm hover:border-secondary hover:shadow-md transition-all gap-1 sm:gap-2 p-2 sm:p-3 ${isDragging ? 'opacity-50' : ''}`}
     >
-      <div>
-        <div className="text-[1.5rem]">{todo.task}</div>
-        <div className="flex justify-center text-center">
-          <div className="mr-[0.5rem]">
-            {todo.completed ? '완료✅' : '미완❌'}
-          </div>
-          <div>{todo.important ? '중요⭐' : '안중요❌'}</div>
-        </div>
-        <div> {todo.memo_id ? `메모연결✅` : '메모연결❌'}</div>
-        <div>{`${formattedDate}`}</div>
+      <div
+        className={`text-ui-sm line-clamp-3 leading-snug ${isDragging ? 'text-gray-400' : 'text-gray-800'}`}
+      >
+        {todo.task}
       </div>
+      <div className="flex gap-1 flex-wrap justify-center">
+        <span
+          className={`text-sm px-1.5 py-0.5 rounded-full font-nanumgothic_bold ${todo.completed ? 'bg-secondary/10 text-secondary' : 'bg-gray-100 text-gray-400'}`}
+        >
+          {todo.completed ? '완료' : '미완'}
+        </span>
+        <span
+          className={`text-sm px-1.5 py-0.5 rounded-full font-nanumgothic_bold ${todo.important ? 'bg-danger/10 text-danger' : 'bg-gray-100 text-gray-400'}`}
+        >
+          {todo.important ? '중요' : '일반'}
+        </span>
+      </div>
+      <div
+        className={`text-sm ${isDragging ? 'text-gray-300' : 'text-gray-500'}`}
+      >
+        {formattedDate}
+      </div>
+      {todo.memo_id && (
+        <div className="text-sm text-secondary">🔗 메모연결</div>
+      )}
     </Link>
   )
 }

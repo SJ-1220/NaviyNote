@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     try {
       const data = JSON.parse(rawRes)
       return NextResponse.json(data, { status: res.status })
-    } catch (e) {
+    } catch {
       return NextResponse.json(
         { error: 'Invalid JSON', raw: rawRes },
         { status: res.status }

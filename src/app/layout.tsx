@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import { getServerSession } from 'next-auth'
 import Footer from '@/components/Footer'
-import localFont from 'next/font/local'
 import { HeaderWrapper } from '@/components/Header/HeaderClients'
-import SessionWrapper from './api/auth/[...nextauth]/SessionWrapper'
 import GoogleAnalytics from '@/lib/GoogleAnalytics'
+import type { Metadata } from 'next'
+import { getServerSession } from 'next-auth'
+import localFont from 'next/font/local'
+import SessionWrapper from './api/auth/[...nextauth]/SessionWrapper'
+import './globals.css'
 
 const NanumGothicRegular = localFont({
   src: '../../public/fonts/NanumGothic-Regular.ttf',
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession()
   return (
     <html
-      lang="kr"
+      lang="ko"
       className={`${NanumGothicRegular.variable} ${NanumGothicBold.variable} ${NanumGothicExtraBold.variable}`}
     >
       <body>
@@ -49,11 +49,8 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <HeaderWrapper />
         </SessionWrapper>
         <SessionWrapper session={session}>
-          <div className="flex justify-center bg-navy text-white">
-            {/* 테스트용 */}
-            {/* <div className="bg-slate-300 w-[100rem]">{children}</div> */}
-            {/* 확인용 */}
-            <div className="w-[100rem]">{children}</div>
+          <div className="flex justify-center bg-gray-50 overflow-x-hidden">
+            <div className="w-full max-w-content px-4 sm:px-8">{children}</div>
           </div>
         </SessionWrapper>
         <Footer />

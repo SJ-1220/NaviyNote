@@ -15,8 +15,8 @@ const MainFirstChart = () => {
           {
             label: 'Todo의 합',
             data: [12, 19, 3, 5, 2, 3, 7],
-            backgroundColor: 'rgba(255, 99, 132, 1)',
-            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 71, 1)',
+            borderColor: 'rgba(255, 99, 71, 1)',
             borderWidth: 1,
           },
         ],
@@ -26,7 +26,8 @@ const MainFirstChart = () => {
         data: data,
         options: {
           animation: false,
-          responsive: false,
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: {
             legend: {
               labels: {
@@ -73,8 +74,8 @@ const MainFirstChart = () => {
     }
   })
   return (
-    <div>
-      <canvas height="300" ref={canvasElement} />
+    <div className="relative w-full h-[300px]">
+      <canvas ref={canvasElement} />
     </div>
   )
 }

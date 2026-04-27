@@ -5,7 +5,7 @@ interface TodoStore {
   setTodosStore: (updater: Todo[] | ((prev: Todo[]) => Todo[])) => void
   clearTodosStore: () => void
 }
-const useTodoStore = create<TodoStore>((set, get) => ({
+const useTodoStore = create<TodoStore>((set) => ({
   todolist: [],
   setTodosStore: (updater) => {
     set((state) => {

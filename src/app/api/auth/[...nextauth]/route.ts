@@ -18,7 +18,7 @@ const handler = NextAuth({
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async redirect({ url, baseUrl }) {
+    async redirect({ baseUrl }) {
       return baseUrl + '/main'
     },
     async jwt({ token, account }) {

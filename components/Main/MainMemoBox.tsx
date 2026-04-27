@@ -1,4 +1,3 @@
-import React from 'react'
 interface MainMemoBoxProps {
   title: string
   important: boolean
@@ -6,9 +5,13 @@ interface MainMemoBoxProps {
 export default function MainMemoBox({ title, important }: MainMemoBoxProps) {
   return (
     <div
-      className={`flex-col w-[12rem] h-[5rem] rounded-lg flex justify-center items-center text-center bg-navy2 mb-[1rem] ${important ? 'outline outline-[0.2rem] outline-red' : ''}`}
+      className={`w-full rounded-xl p-3 bg-white border text-gray-800 text-ui-sm ${
+        important
+          ? 'border-l-4 border-gray-200 border-l-danger'
+          : 'border-gray-200'
+      }`}
     >
-      <div className="text-[1.5rem]">{title}</div>
+      <div className="line-clamp-2 leading-snug">{title}</div>
     </div>
   )
 }

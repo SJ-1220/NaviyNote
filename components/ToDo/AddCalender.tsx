@@ -79,7 +79,7 @@ export default function AddCalendar() {
     <Button
       type="button"
       onClick={handleAddCalendar}
-      className={`text-[1.5rem] my-[1rem] ml-[3rem] py-[1rem] w-[47rem] outline-dashed outline-[0.2rem] rounded-lg ${session?.accessToken ? 'bg-navy2' : 'bg-gray-400'}`}
+      className={`text-ui-sm my-4 py-4 w-full border border-gray-200 rounded-xl transition-colors ${session?.accessToken ? 'bg-secondary text-white hover:opacity-90' : 'bg-gray-200 text-gray-500'}`}
       disabled={!session?.accessToken}
     >
       내 네이버캘린더에 배포일 일정 추가

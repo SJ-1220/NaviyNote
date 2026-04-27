@@ -9,16 +9,16 @@ export default function NotFound() {
     router.push('/')
   }
   return (
-    <div className="h-[40rem] flex flex-col items-center justify-center text-center">
-      <div className="mb-[3rem] text-[10rem]">4️⃣0️⃣4️⃣</div>
-      <div className="text-[1.5rem] mb-[1rem]">
-        😥찾을 수 없는 페이지입니다😥
+    <div className="h-not-found flex flex-col items-center justify-center text-center text-gray-800">
+      <div className="mb-8 text-ui-mega">4️⃣0️⃣4️⃣</div>
+      <div className="text-ui-sm font-nanumgothic_bold mb-2 text-primary">
+        페이지를 찾을 수 없습니다
       </div>
-      <div className="text-[1.5rem] mb-[2rem]">
+      <div className="text-ui-caption mb-10 text-gray-500">
         요청하신 페이지가 사라졌거나, 잘못된 경로를 이용하셨어요
       </div>
       <Button
-        className="text-[1.5rem] p-[0.5rem] bg-navy2 rounded-lg"
+        className="text-ui-sm py-3 px-10 bg-secondary text-white rounded-full shadow-md hover:shadow-lg hover:scale-105 transition-all"
         type="button"
         onClick={handleHome}
       >

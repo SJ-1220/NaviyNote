@@ -11,7 +11,6 @@ interface HeaderProps {
   isFriendPage: boolean
 }
 
-//Logo, Title, 홈/메모/ToDo/통계/친구
 export default function Header({
   isMainPage,
   isMemoPage,
@@ -20,10 +19,10 @@ export default function Header({
   isFriendPage,
 }: HeaderProps) {
   return (
-    <div className="sm:flex-col flex items-center">
+    <div className="flex flex-col items-center gap-3 sm:flex-row sm:gap-0">
       {/* Logo, Title */}
-      <div className="sm:mt-[1rem] sm:flex-col flex items-center">
-        <div className="relative size-[6rem]">
+      <div className="flex flex-row items-center">
+        <div className="relative size-16 sm:size-24">
           <Image
             src={LogoImage}
             alt="LogoImage"
@@ -31,7 +30,7 @@ export default function Header({
             style={{ objectFit: 'contain' }}
           />
         </div>
-        <div className="sm:mt-[1rem] ml-[1rem] relative w-[14.4rem] h-[3.2rem] sm:ml-0">
+        <div className="ml-2 sm:ml-4 relative w-logo-title h-logo-title">
           <Image
             src={TitleImage}
             alt="TitleImage"
@@ -40,59 +39,44 @@ export default function Header({
           />
         </div>
       </div>
-      {/* 홈/메모/ToDo/통계/친구 */}
-      <div className="sm:mt-[1rem] sm:flex-col ml-[3.5rem] flex items-center sm:ml-0">
+      {/* Nav */}
+      <nav className="flex flex-row flex-wrap justify-center gap-1 sm:ml-6 sm:gap-2">
         <div
-          className={`sm:flex-col flex justify-center items-center w-[3.3rem] h-[3.4rem]  ${isMainPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 transition-colors duration-150 ${isMainPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className={`font-nanumgothic_regular text-[2rem] `}
-            href="/main"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/main">
             홈
           </Link>
         </div>
         <div
-          className={`sm:flex-col flex justify-center items-center ml-[1rem] w-[5.2rem] h-[3.4rem]   sm:ml-0 ${isMemoPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 transition-colors duration-150 ${isMemoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className={`font-nanumgothic_regular text-[2rem] `}
-            href="/memo"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/memo">
             메모
           </Link>
         </div>
         <div
-          className={`sm:ml-0 sm:flex-col flex ml-[1rem] justify-center items-center w-[6.4rem] h-[3.4rem]  ${isToDoPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+          className={`flex justify-center items-center px-3 h-nav-item rounded-xl sm:px-4 transition-colors duration-150 ${isToDoPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className={`font-nanumgothic_regular text-[2rem] `}
-            href="/todo"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/todo">
             ToDo
           </Link>
         </div>
         <div
-          className={`sm:ml-0 sm:flex-col flex ml-[1rem] justify-center items-center w-[5.2rem] h-[3.4rem]  ${isStatsPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl transition-colors duration-150 ${isStatsPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className={`font-nanumgothic_regular text-[2rem] `}
-            href="/stats"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/stats">
             통계
           </Link>
         </div>
         <div
-          className={`sm:ml-0 sm:flex-col flex ml-[1rem] justify-center items-center w-[5.2rem] h-[3.4rem]  ${isFriendPage ? 'bg-navy text-white rounded-xl' : 'bg-white text-black'}`}
+          className={`sm:hidden flex justify-center items-center px-3 h-nav-item rounded-xl transition-colors duration-150 ${isFriendPage ? 'bg-primary text-white' : 'text-gray-600 hover:text-primary'}`}
         >
-          <Link
-            className={`font-nanumgothic_regular text-[2rem] `}
-            href="/friend"
-          >
+          <Link className="font-nanumgothic_regular text-ui-sm" href="/friend">
             친구
           </Link>
         </div>
-      </div>
+      </nav>
     </div>
   )
 }

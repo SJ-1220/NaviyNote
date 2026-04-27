@@ -1,9 +1,9 @@
-// 최근에 수정/추가한 Memos를 보여주는 컴포넌트
 import { useSession } from 'next-auth/react'
-import React, { useEffect, useState } from 'react'
-import { fetchMainMemos, MainMemo } from './mainServer'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import LoadingPage from '../Loading'
 import MainMemoBox from './MainMemoBox'
+import { fetchMainMemos, MainMemo } from './mainServer'
 
 export default function RecentMemos() {
   const { data: session } = useSession()
@@ -31,24 +31,31 @@ export default function RecentMemos() {
 
   return (
     <div>
-      <div className="flex justify-center text-[2rem] mb-[2rem]">최근 메모</div>
-      <div className="bg-lightnavy w-[14rem] min-h-[59rem] outline-[0.2rem] p-[1rem] outline-dashed rounded-lg mb-[2rem]">
+      <div className="flex flex-wrap gap-y-2 items-center mb-4">
+        <span className="text-ui-md text-primary font-nanumgothic_bold">
+          최근 메모
+        </span>
+        <Link
+          href="/memo"
+          className="ml-auto text-sm font-nanumgothic_bold text-navy3 hover:text-navy hover:underline transition-colors"
+        >
+          메모 전체보기 →
+        </Link>
+      </div>
+      <div className="bg-gray-50 border border-gray-200 w-full min-h-[6rem] sm:min-h-memo-panel p-4 rounded-xl mb-8 flex flex-col gap-3">
         {recentMemos.length > 0 ? (
-          <div>
-            {recentMemos.map((memo: MainMemo) => (
-              <MainMemoBox
-                title={memo.content}
-                key={memo.id}
-                important={memo.important}
-              />
-            ))}
-          </div>
+          recentMemos.map((memo: MainMemo) => (
+            <MainMemoBox
+              title={memo.content}
+              key={memo.id}
+              important={memo.important}
+            />
+          ))
         ) : (
-          <div className="text-[1.5rem] text-navy py-[20rem] justify-items-center">
-            <div className="mb-[2rem]">최근</div>
-            <div className="mb-[2rem]">수정/추가된</div>
-            <div className="mb-[2rem]">메모가</div>
-            <div>없습니다</div>
+          <div className="flex-1 flex items-center justify-center text-ui-sm text-gray-400 text-center">
+            최근 수정/추가된
+            <br />
+            메모가 없습니다
           </div>
         )}
       </div>

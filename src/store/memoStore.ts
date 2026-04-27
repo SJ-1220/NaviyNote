@@ -6,7 +6,7 @@ interface MemoStore {
   clearMemosStore: () => void
 }
 
-const useMemoStore = create<MemoStore>((set, get) => ({
+const useMemoStore = create<MemoStore>((set) => ({
   memolist: [],
   setMemosStore: (updater) => {
     set((state) => {

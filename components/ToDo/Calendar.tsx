@@ -1,13 +1,12 @@
 'use client'
-import FullCalendar from '@fullcalendar/react'
+import { DayCellMountArg, EventChangeArg, EventInput } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { EventChangeArg, EventInput } from '@fullcalendar/core'
-import { useEffect, useState, useRef } from 'react'
-import { Todo, updateTodo } from './todosServer'
+import FullCalendar from '@fullcalendar/react'
 import { useSession } from 'next-auth/react'
+import { useEffect, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
-import { DayCellMountArg } from '@fullcalendar/core'
+import { Todo, updateTodo } from './todosServer'
 
 interface CalendarProps {
   todos: Todo[]
@@ -52,7 +51,7 @@ export default function Calendar({
   }
 
   // todo가 캘린더에 드롭된 좌표를 통해 날짜를 찾는 함수
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [, drop] = useDrop(() => ({
     accept: 'TODO',
     drop: (item: { id: string }, monitor) => {
       // calendarDropDayInfo : 캘린더에 드롭된 좌표 반환
@@ -136,13 +135,17 @@ export default function Calendar({
   }, [])
 
   return (
-    <div ref={calendarDropRef}>
+    <div
+      ref={calendarDropRef}
+      className="min-w-0 overflow-x-auto h-[500px] sm:h-calendar"
+    >
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={events}
         editable={true}
         droppable={true}
+        height="100%"
         eventDrop={handleEventDrop}
         dayCellDidMount={handleDayCellDidMount}
         dateClick={(info) => {
