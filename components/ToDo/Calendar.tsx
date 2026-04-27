@@ -147,6 +147,7 @@ export default function Calendar({
         droppable={true}
         height="100%"
         eventDrop={handleEventDrop}
+        displayEventTime={false}
         dayCellDidMount={handleDayCellDidMount}
         dateClick={(info) => {
           const clickedDate = info.dateStr
