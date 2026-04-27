@@ -51,7 +51,7 @@ export default function Calendar({
   }
 
   // todo가 캘린더에 드롭된 좌표를 통해 날짜를 찾는 함수
-  const [{ isOver }, drop] = useDrop(() => ({
+  const [, drop] = useDrop(() => ({
     accept: 'TODO',
     drop: (item: { id: string }, monitor) => {
       // calendarDropDayInfo : 캘린더에 드롭된 좌표 반환
