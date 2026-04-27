@@ -136,6 +136,10 @@ npm run dev
 
 ## (8) 수행 결과
 
+프로젝트 수행 결과(데모)는 페이지 최하단의 [데모 영상 보기](#8-demo) 섹션에서 확인하실 수 있습니다.
+
+
+
 </details>
 
 ---
@@ -377,3 +381,6 @@ Pre-commit hooks run automatically via **Husky + lint-staged**: ESLint `--fix` o
 ---
 
 ## (8) Demo
+
+https://github.com/user-attachments/assets/867e0e72-7616-4975-8436-04b97b8e3978
+
