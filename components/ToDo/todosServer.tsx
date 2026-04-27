@@ -158,7 +158,7 @@ export const updateTodo = async (
       .neq('id', updatedTodo.memo_id)
       .eq('user_email', userEmail)
     if (clearError) throw new Error(clearError.message)
-    
+
     // 5. 현재 Todo에서 memo_id가 달라진 부분이 있다면, memo table에서 해당 memo의 todo_id를 update
     const { error: linkError } = await supabase
       .from('memo')

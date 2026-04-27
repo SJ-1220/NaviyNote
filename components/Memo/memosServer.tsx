@@ -67,7 +67,7 @@ export const addMemo = async (memo: Omit<Memo, 'id'>, userEmail: string) => {
       .eq('user_email', userEmail)
       .limit(1)
     if (findError) throw new Error(findError.message)
-    
+
     // 1-1. prevMemos가 있다면 해당 메모의 todo_id를 NULL로 update
     if (prevMemos && prevMemos.length > 0) {
       const prevMemo = prevMemos[0]
@@ -168,8 +168,8 @@ export const updateMemo = async (
       .neq('id', updatedMemo.todo_id)
       .eq('user_email', userEmail)
     if (clearError) throw new Error(clearError.message)
-    
-  // 5. 현재 메모에서 todo_id가 달라진 부분이 있다면, todo table에서 해당 todo의 memo_id를 update
+
+    // 5. 현재 메모에서 todo_id가 달라진 부분이 있다면, todo table에서 해당 todo의 memo_id를 update
     const { error: linkError } = await supabase
       .from('todo')
       .update({ memo_id: memoId })
