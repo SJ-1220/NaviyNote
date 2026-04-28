@@ -2,7 +2,7 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { toast } from 'sonner'
 import Header from './Header'
 
 export const HeaderWrapper = () => {
@@ -30,27 +30,19 @@ export const HeaderWrapper = () => {
 
 export const HeaderNaverAuth = () => {
   const { data: session } = useSession()
-  const [authError, setAuthError] = useState<string | null>(null)
 
   const handleSignIn = () => {
-    setAuthError(null)
     signIn('naver').catch(() =>
-      setAuthError('로그인에 실패했습니다. 다시 시도해 주세요.')
+      toast.error('로그인에 실패했습니다. 다시 시도해 주세요.')
     )
   }
   const handleSignOut = () => {
-    setAuthError(null)
     signOut().catch(() =>
-      setAuthError('로그아웃에 실패했습니다. 다시 시도해 주세요.')
+      toast.error('로그아웃에 실패했습니다. 다시 시도해 주세요.')
     )
   }
   return (
-    <div className="mt-3 sm:mt-0 flex flex-col items-center gap-1">
-      {authError && (
-        <p className="text-red font-nanumgothic_regular text-ui-caption">
-          {authError}
-        </p>
-      )}
+    <div className="mt-3 sm:mt-0">
       {session ? (
         <button
           className="font-nanumgothic_regular text-ui-sm text-gray-600 hover:text-primary transition-colors duration-150"

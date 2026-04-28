@@ -1,13 +1,13 @@
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import LoadingPage from '../Loading'
 import { fetchMainImportantTodos, MainTodo } from './mainServer'
 import MainTodoBox from './MainTodoBox'
 
 export default function MainImportant() {
   const { data: session } = useSession()
-  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [importantTodos, setImportantTodos] = useState<MainTodo[]>([])
 
@@ -17,8 +17,14 @@ export default function MainImportant() {
         try {
           const todos = await fetchMainImportantTodos(session.user.email)
           setImportantTodos(todos)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch (err) {
+          if (err instanceof TypeError) {
+            toast.error(
+              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+            )
+          } else {
+            toast.error('할일 목록을 불러오지 못했습니다.')
+          }
         }
       }
       setLoading(false)
@@ -27,7 +33,6 @@ export default function MainImportant() {
   }, [session])
 
   if (loading) return <LoadingPage />
-  if (error) return <div>{error}</div>
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-4">

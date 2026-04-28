@@ -2,6 +2,7 @@
 import useTodoStore from '@/src/store/todoStore'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import ConnectMemoBox from '../Memo/ConnectMemoBox'
@@ -25,7 +26,7 @@ export default function ToDos() {
   const { todolist, setTodosStore } = useTodoStore()
   const [todolistOpen, setTodolistOpen] = useState(false)
   const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [newTask, setNewTask] = useState<string>('')
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newCompleted, setNewCompleted] = useState<boolean>(false)
@@ -47,8 +48,14 @@ export default function ToDos() {
         try {
           const todosData = await fetchTodos(session.user.email)
           setTodosStore(todosData)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch (err) {
+          if (err instanceof TypeError) {
+            toast.error(
+              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+            )
+          } else {
+            toast.error('할일 목록을 불러오지 못했습니다.')
+          }
         }
       }
       setLoading(false)
@@ -78,8 +85,14 @@ export default function ToDos() {
             targetPrevDateFormat
           )
           setThreeDaysTodos(todos)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch (err) {
+          if (err instanceof TypeError) {
+            toast.error(
+              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+            )
+          } else {
+            toast.error('날짜별 할일을 불러오지 못했습니다.')
+          }
         }
       } else {
         setThreeDaysTodos([])
@@ -95,8 +108,14 @@ export default function ToDos() {
       try {
         const todos = await fetchTodayTodo(session.user.email, today)
         setTodayTodos(todos)
-      } catch (error) {
-        setError((error as Error).message)
+      } catch (err) {
+        if (err instanceof TypeError) {
+          toast.error(
+            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+          )
+        } else {
+          toast.error('오늘의 할일을 불러오지 못했습니다.')
+        }
       }
     }
     handleTodayTodos()
@@ -108,8 +127,14 @@ export default function ToDos() {
       try {
         const todos = await fetchNoDateTodo(session.user.email)
         setNoDateTodos(todos)
-      } catch (error) {
-        setError((error as Error).message)
+      } catch (err) {
+        if (err instanceof TypeError) {
+          toast.error(
+            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+          )
+        } else {
+          toast.error('할일 목록을 불러오지 못했습니다.')
+        }
       }
     }
     handleNoDateTodos()
@@ -121,8 +146,14 @@ export default function ToDos() {
         try {
           const memos = await fetchConnectMemo(session.user.email)
           setConnectMemos(memos)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch (err) {
+          if (err instanceof TypeError) {
+            toast.error(
+              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+            )
+          } else {
+            toast.error('메모 목록을 불러오지 못했습니다.')
+          }
         }
       }
     }
@@ -145,6 +176,7 @@ export default function ToDos() {
         date: newDate != null ? newDate : undefined,
         memo_id: newMemoId != null ? newMemoId : undefined,
       }
+      setIsSubmitting(true)
       try {
         const result = await addTodo(todo, session.user.email)
         if (result) {
@@ -170,8 +202,16 @@ export default function ToDos() {
         setNewMemoId(null)
         setNewConnect(false)
         setConnectMemoContent('')
-      } catch (error) {
-        setError((error as Error).message)
+      } catch (err) {
+        if (err instanceof TypeError) {
+          toast.error(
+            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+          )
+        } else {
+          toast.error('할일 추가에 실패했습니다.')
+        }
+      } finally {
+        setIsSubmitting(false)
       }
     }
   }
@@ -181,7 +221,6 @@ export default function ToDos() {
   }
 
   if (loading) return <LoadingPage />
-  if (error) return <div>{error}</div>
 
   // Shared JSX rendered in two positions (mobile vs desktop) via visibility toggles
   const instructionBox = (
@@ -377,9 +416,10 @@ export default function ToDos() {
                 <Button
                   type="button"
                   onClick={handleAddTodo}
-                  className="w-full py-3 bg-secondary text-white rounded-xl hover:bg-primary transition-colors font-nanumgothic_bold shadow-sm"
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-secondary text-white rounded-xl hover:bg-primary transition-colors font-nanumgothic_bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  + Todo 추가
+                  {isSubmitting ? '추가 중...' : '+ Todo 추가'}
                 </Button>
               </div>
             </div>

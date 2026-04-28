@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer'
 import { HeaderWrapper } from '@/components/Header/HeaderClients'
 import GoogleAnalytics from '@/lib/GoogleAnalytics'
+import { Toaster } from 'sonner'
 import type { Metadata } from 'next'
 import { getServerSession } from 'next-auth'
 import localFont from 'next/font/local'
@@ -54,6 +55,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           </div>
         </SessionWrapper>
         <Footer />
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   )

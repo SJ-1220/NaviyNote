@@ -5,6 +5,7 @@ import useMemoStore from '@/src/store/memoStore'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
@@ -26,7 +27,6 @@ const MemoModal = () => {
   const unlock = useScrollLock()
 
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   const [newContent, setNewContent] = useState<string>('')
   const [newActive, setNewActive] = useState<boolean>(false)
@@ -57,7 +57,7 @@ const MemoModal = () => {
           const fetchModalMemos = await fetchMemos(session.user.email)
           setMemosStore(fetchModalMemos)
         } catch {
-          setError('데이터를 불러오지 못했습니다.')
+          toast.error('데이터를 불러오지 못했습니다.')
         }
       }
       setLoading(false)
@@ -99,8 +99,8 @@ const MemoModal = () => {
             end.toISOString()
           )
           setNewMonthTodolist(monthTodos)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch {
+          toast.error('할일 목록을 불러오지 못했습니다.')
         }
       }
     }
@@ -129,8 +129,8 @@ const MemoModal = () => {
     try {
       await deleteMemo(memoId, session.user.email)
       setMemosStore(memolist.filter((memo) => memo.id !== memoId))
-    } catch (error) {
-      setError((error as Error).message)
+    } catch {
+      toast.error('삭제에 실패했습니다.')
       return
     }
     unlock()
@@ -185,8 +185,8 @@ const MemoModal = () => {
       setNewConnect(false)
       setNewTodoId(null)
       setIsTodoNull(false)
-    } catch (error) {
-      setError((error as Error).message)
+    } catch {
+      toast.error('수정에 실패했습니다.')
     }
   }
   if (loading) {
@@ -197,29 +197,6 @@ const MemoModal = () => {
       >
         <div onClick={(e) => e.stopPropagation()}>
           <LoadingPage />
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div
-        className="fixed inset-0 bg-black/30 flex justify-center items-center p-2"
-        onClick={onClose}
-      >
-        <div
-          className="bg-white rounded-2xl p-8 shadow-2xl flex flex-col items-center gap-4"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <p className="font-nanumgothic_regular text-danger">{error}</p>
-          <Button
-            className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
-            type="button"
-            onClick={onClose}
-          >
-            닫기
-          </Button>
         </div>
       </div>
     )

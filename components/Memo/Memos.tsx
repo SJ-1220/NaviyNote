@@ -2,6 +2,7 @@
 import useMemoStore from '@/src/store/memoStore'
 import { useSession } from 'next-auth/react'
 import { useEffect, useMemo, useState } from 'react'
+import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
@@ -15,8 +16,8 @@ const Memos = () => {
   const { data: session } = useSession()
   const { memolist, setMemosStore } = useMemoStore()
   const [memolistOpen, setMemolistOpen] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [newContent, setNewContent] = useState<string>('')
   const [newActive, setNewActive] = useState<boolean>(false)
   const [newImportant, setNewImportant] = useState<boolean>(false)
@@ -32,8 +33,14 @@ const Memos = () => {
         try {
           const memosData = await fetchMemos(session.user.email)
           setMemosStore(memosData)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch (err) {
+          if (err instanceof TypeError) {
+            toast.error(
+              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+            )
+          } else {
+            toast.error('메모 목록을 불러오지 못했습니다.')
+          }
         }
       }
       setLoading(false)
@@ -56,8 +63,14 @@ const Memos = () => {
             end.toISOString()
           )
           setMonthTodolist(monthTodos)
-        } catch (error) {
-          setError((error as Error).message)
+        } catch (err) {
+          if (err instanceof TypeError) {
+            toast.error(
+              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+            )
+          } else {
+            toast.error('할일 목록을 불러오지 못했습니다.')
+          }
         }
       }
     }
@@ -81,6 +94,7 @@ const Memos = () => {
         important: newImportant,
         connect: newConnect,
       }
+      setIsSubmitting(true)
       try {
         const result = await addMemo(memo, session.user.email)
         if (result) {
@@ -104,8 +118,16 @@ const Memos = () => {
         setNewImportant(false)
         setNewTodoId(null)
         setNewConnect(false)
-      } catch (error) {
-        setError((error as Error).message)
+      } catch (err) {
+        if (err instanceof TypeError) {
+          toast.error(
+            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+          )
+        } else {
+          toast.error('메모 추가에 실패했습니다.')
+        }
+      } finally {
+        setIsSubmitting(false)
       }
     }
   }
@@ -129,8 +151,14 @@ const Memos = () => {
           { active: newActive, important: newImportant },
           session.user.email
         )
-      } catch (error) {
-        setError((error as Error).message)
+      } catch (err) {
+        if (err instanceof TypeError) {
+          toast.error(
+            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+          )
+        } else {
+          toast.error('메모 변경에 실패했습니다.')
+        }
       }
     }
   }
@@ -162,7 +190,7 @@ const Memos = () => {
   )
 
   if (loading) return <LoadingPage />
-  if (error) return <div>{error}</div>
+
   const instructionBox = (
     <div className="bg-secondary/5 border border-secondary/20 rounded-xl p-4 text-ui-sm">
       <div className="text-center font-nanumgothic_bold text-secondary mb-2">
@@ -279,10 +307,11 @@ const Memos = () => {
             )}
             <Button
               type="button"
-              className="my-4 py-3 w-full bg-secondary text-white rounded-xl font-nanumgothic_bold shadow-sm hover:bg-primary transition-colors"
+              disabled={isSubmitting}
+              className="my-4 py-3 w-full bg-secondary text-white rounded-xl font-nanumgothic_bold shadow-sm hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleAddMemo}
             >
-              + 메모 추가
+              {isSubmitting ? '추가 중...' : '+ 메모 추가'}
             </Button>
           </div>
         </div>
