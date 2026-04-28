@@ -40,6 +40,15 @@ export default {
         'ui-xl': ['3.2rem', { lineHeight: '4rem' }], // hero / landing headings
         'ui-mega': ['10rem', { lineHeight: '1' }], // loading spinner glyph
       },
+      keyframes: {
+        fadeInScale: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+      },
+      animation: {
+        'fade-in-scale': 'fadeInScale 0.15s ease-out forwards',
+      },
       textUnderlineOffset: {
         title: '1rem', // greeting underline in Main
       },

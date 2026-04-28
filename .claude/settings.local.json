@@ -8,7 +8,10 @@
       "Bash(where claude *)",
       "Bash(claude login *)",
       "Bash(grep -E \"\\\\.\\(tsx|ts\\)$\")",
-      "Bash(npx next *)"
+      "Bash(npx next *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\({...p.dependencies,...p.devDependencies}, null, 2\\)\\)\")",
+      "Bash(npm install *)",
+      "Bash(node *)"
     ]
   }
 }

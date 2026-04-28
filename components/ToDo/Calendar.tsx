@@ -5,6 +5,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/react'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
+import { toast } from 'sonner'
 import { useDrop } from 'react-dnd'
 import { Todo, updateTodo } from './todosServer'
 
@@ -45,8 +46,14 @@ export default function Calendar({
           : todo
       )
       setTodos(newTodos)
-    } catch (error) {
-      console.log('Error updating date:', error)
+    } catch (err) {
+      if (err instanceof TypeError) {
+        toast.error(
+          '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+        )
+      } else {
+        toast.error('날짜 변경에 실패했습니다. 다시 시도해 주세요.')
+      }
     }
   }
 
@@ -113,8 +120,15 @@ export default function Calendar({
         todo.id === todoId ? { ...todo, date: updatedDate } : todo
       )
       setTodos(newTodos)
-    } catch (error) {
-      console.log('Error updating date:', error)
+    } catch (err) {
+      eventDropInfo.revert()
+      if (err instanceof TypeError) {
+        toast.error(
+          '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+        )
+      } else {
+        toast.error('날짜 변경에 실패했습니다. 다시 시도해 주세요.')
+      }
     }
   }
 

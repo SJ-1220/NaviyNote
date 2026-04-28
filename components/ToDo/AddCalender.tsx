@@ -2,17 +2,16 @@
 
 import { useSession } from 'next-auth/react'
 import { useCallback } from 'react'
+import { toast } from 'sonner'
 import Button from '../Button'
 
 export default function AddCalendar() {
   const { data: session } = useSession()
-
   const handleAddCalendar = useCallback(async () => {
     if (!session?.accessToken) {
-      console.error('AccessToken is not available')
+      toast.error('로그인 세션이 만료되었습니다. 다시 로그인해 주세요.')
       return
     }
-
     const accessToken = session.accessToken
     const uid = crypto.randomUUID()
     const calendarId = 'defaultCalendarId'
@@ -62,16 +61,15 @@ export default function AddCalendar() {
         }),
       })
 
-      const data = await response.json()
-      console.log('Calendar event created:', data)
+      await response.json()
 
       if (response.ok) {
-        console.log('Event added')
+        toast.success('네이버 캘린더에 일정이 추가되었습니다.')
       } else {
-        console.log(`Event added Error : ${data?.error?.message}`)
+        toast.error('일정 추가에 실패했습니다.')
       }
-    } catch (error) {
-      console.error('Event added Error', error)
+    } catch {
+      toast.error('일정 추가 중 오류가 발생했습니다.')
     }
   }, [session])
 

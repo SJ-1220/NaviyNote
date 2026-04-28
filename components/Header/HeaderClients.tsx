@@ -2,6 +2,7 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
+import { toast } from 'sonner'
 import Header from './Header'
 
 export const HeaderWrapper = () => {
@@ -31,10 +32,14 @@ export const HeaderNaverAuth = () => {
   const { data: session } = useSession()
 
   const handleSignIn = () => {
-    signIn('naver').catch((error) => console.error('로그인 실패:', error))
+    signIn('naver').catch(() =>
+      toast.error('로그인에 실패했습니다. 다시 시도해 주세요.')
+    )
   }
   const handleSignOut = () => {
-    signOut().catch((error) => console.error('로그아웃 실패:', error))
+    signOut().catch(() =>
+      toast.error('로그아웃에 실패했습니다. 다시 시도해 주세요.')
+    )
   }
   return (
     <div className="mt-3 sm:mt-0">
