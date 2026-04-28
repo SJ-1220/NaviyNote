@@ -8,7 +8,7 @@ import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
 import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
-import YearMonthPicker from '../YearMonthPicker'
+import YearMonthPicker from './YearMonthPicker'
 import {
   deleteMemo,
   fetchMemos,

@@ -6,10 +6,10 @@ import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
 import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
-import YearMonthPicker from '../YearMonthPicker'
 import MemoBox from './MemoBox'
 import MemoDropZone from './MemoDropZone'
 import { addMemo, fetchMemos, Memo, updateMemo } from './memosServer'
+import YearMonthPicker from './YearMonthPicker'
 
 const Memos = () => {
   const { data: session } = useSession()
