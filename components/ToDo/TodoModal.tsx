@@ -1,4 +1,5 @@
 'use client'
+import { useScrollLock } from '@/src/hooks/useScrollLock'
 import useTodoStore from '@/src/store/todoStore'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
@@ -21,6 +22,7 @@ const TodoModal = () => {
   const { todoId } = useParams()
   const { data: session } = useSession()
   const router = useRouter()
+  const unlock = useScrollLock()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [newTask, setNewTask] = useState<string>('')
@@ -68,14 +70,11 @@ const TodoModal = () => {
   const todo = todolist.find((todo: Todo) => todo.id === todoId)
 
   useEffect(() => {
-    window.scroll(0, 0)
-  }, [])
+    if (!loading && !todo) router.replace('/todo')
+  }, [loading, todo, router])
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = ''
-    }
+    window.scroll(0, 0)
   }, [])
 
   useEffect(() => {
@@ -104,8 +103,9 @@ const TodoModal = () => {
   }
 
   const onClose = useCallback(() => {
+    unlock()
     router.back()
-  }, [router])
+  }, [router, unlock])
 
   const handleDeleteTodo = async (todoId: string) => {
     if (!session?.user?.email) return
@@ -116,7 +116,7 @@ const TodoModal = () => {
       setError((error as Error).message)
       return
     }
-    document.body.style.overflow = ''
+    unlock()
     router.push('/todo')
   }
   const handleEditTodo = (todo: Todo) => {
@@ -178,13 +178,42 @@ const TodoModal = () => {
   }
 
   if (loading) {
-    return <LoadingPage />
+    return (
+      <div
+        className="fixed inset-0 z-[100] bg-black/30 flex justify-center items-center p-2"
+        onClick={onClose}
+      >
+        <div onClick={(e) => e.stopPropagation()}>
+          <LoadingPage />
+        </div>
+      </div>
+    )
   }
-  if (error) return <div>{error}</div>
-  if (!todo) {
-    console.log('todo not found')
-    return null
+
+  if (error) {
+    return (
+      <div
+        className="fixed inset-0 z-[100] bg-black/30 flex justify-center items-center p-2"
+        onClick={onClose}
+      >
+        <div
+          className="bg-white rounded-2xl p-8 shadow-2xl flex flex-col items-center gap-4"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <p className="font-nanumgothic_regular text-danger">{error}</p>
+          <Button
+            className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
+            type="button"
+            onClick={onClose}
+          >
+            닫기
+          </Button>
+        </div>
+      </div>
+    )
   }
+
+  if (!todo) return null
 
   return (
     <div
