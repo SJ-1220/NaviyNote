@@ -72,14 +72,24 @@ NaviyNote는 두 기능을 하나로 연결해 효율적인 개인 기록 관리
 - 연동 시 기존 연결 자동 해제 (Supabase 수준 무결성 보장)
 - Memo → Todo, Todo → Memo 양방향 연결
 
-### 6. 디자인 시스템
+### 6. UX 개선 사항
 
-- 시맨틱 색상 토큰 (navy, secondary, surface, danger)
+- **Sonner 토스트 알림** — 로컬 에러 상태 제거, 전역 `<Toaster>`로 통합
+- **useScrollLock 훅** — 모달 열림/닫힘 시 body 스크롤 잠금 자동 관리
+- **삭제 확인 오버레이** — 실수 삭제 방지를 위한 인라인 확인 UI
+- **전역 Error 페이지** (`error.tsx`) — 재시도 및 홈 이동 버튼 포함
+
+### 7. 디자인 시스템
+
+- 시맨틱 색상 토큰 (primary, secondary, accent, surface, danger)
+- 레거시 토큰 병행 유지 (navy, navy2, navy3, lightnavy, red)
 - 커스텀 타이포그래피 스케일 (ui-caption ~ ui-mega)
+- 커스텀 레이아웃 토큰 (width, height, minHeight, maxWidth)
+- `fadeInScale` 애니메이션 토큰
 - NanumGothic 웹폰트 (Regular / Bold / ExtraBold)
 - 반응형 레이아웃 (sm 브레이크포인트: 768px)
 
-### 7. 통계 / 친구 관리
+### 8. 통계 / 친구 관리
 
 - 3차 배포 예정 (준비 중)
 
@@ -97,6 +107,7 @@ NaviyNote는 두 기능을 하나로 연결해 효율적인 개인 기록 관리
 | 데이터베이스   | 메모 & Todo 저장           | Supabase                             |
 | 캘린더         | 일정 UI                    | FullCalendar                         |
 | 드래그 앤 드롭 | 메모 상태 변경 & 일정 등록 | react-dnd                            |
+| 토스트 알림    | 사용자 피드백              | Sonner                               |
 | 차트           | 통계 시각화 (준비 중)      | Chart.js                             |
 | 배포           | 호스팅                     | Vercel                               |
 | 코드 품질      | 컨벤션 및 정적 분석        | ESLint, Prettier, Husky              |
@@ -138,8 +149,6 @@ npm run dev
 
 프로젝트 수행 결과(데모)는 페이지 최하단의 [데모 영상 보기](#8-demo) 섹션에서 확인하실 수 있습니다.
 
-
-
 </details>
 
 ---
@@ -153,6 +162,7 @@ Key design goals:
 - **"Write it quick, link it to a schedule."** Memos and todos live side-by-side and connect with a single action.
 - A drag-and-drop interface that makes state changes feel effortless.
 - A polished, consistent design system built on semantic Tailwind tokens.
+- Production-grade UX: global error recovery, accessible toast feedback, and scroll-safe modals.
 
 ---
 
@@ -197,7 +207,29 @@ Key design goals:
 - When a new link is created, the previous link is automatically nullified — enforced at both the application layer and the Supabase schema level
 - Linking works in both directions: Memo → Todo and Todo → Memo
 
-### 6. Statistics & Friends (`/stats`, `/friend`)
+### 6. Toast Notifications (Sonner)
+
+All user-facing feedback (errors, successes, warnings) is delivered through **Sonner**, mounted once via `<Toaster richColors position="top-center" />` in the root layout. Local error state variables have been removed from individual components in favor of `toast.error()` / `toast.success()` calls.
+
+### 7. Modal UX — `useScrollLock`
+
+A custom `useScrollLock` hook (`src/hooks/useScrollLock.ts`) manages `document.body.style.overflow` for every modal:
+
+- Sets `overflow: hidden` on mount to prevent background scroll while a modal is open.
+- Restores `overflow: ''` on unmount, including after the modal is closed via a delete action — fixing a previous scroll-lock regression.
+
+### 8. Delete Confirmation Overlay
+
+Destructive delete actions in memo and todo modals now render an **inline confirmation overlay** before executing, preventing accidental data loss.
+
+### 9. Global Error Boundary (`error.tsx`)
+
+A root-level `src/app/error.tsx` catches unhandled runtime errors anywhere in the app and renders a branded recovery screen with:
+
+- A **Retry** button (`reset()`) to re-render the failed subtree without a full reload.
+- A **Go Home** button that navigates back to `/`.
+
+### 10. Statistics & Friends (`/stats`, `/friend`)
 
 - Placeholder pages; full feature set planned for v3
 
@@ -207,18 +239,19 @@ Key design goals:
 
 <img src="https://github.com/user-attachments/assets/33a43891-a94e-455f-b4fd-440b5c4b019c" width="600">
 
-| Category         | Purpose                               | Technology                           |
-| ---------------- | ------------------------------------- | ------------------------------------ |
-| Frontend         | UI & routing                          | Next.js 15 (App Router), TypeScript  |
-| Styling          | Design system                         | Tailwind CSS 3                       |
-| State management | Client-side global state              | Zustand 5                            |
-| Authentication   | Naver OAuth sign-in                   | NextAuth.js 4                        |
-| Database         | Memo & todo persistence               | Supabase (PostgreSQL)                |
-| Calendar UI      | Schedule display & interaction        | FullCalendar 6                       |
-| Drag and drop    | Memo zone changes, calendar placement | react-dnd 16                         |
-| Charts           | Stats visualization (future)          | Chart.js 4                           |
-| Deployment       | Hosting & CI                          | Vercel                               |
-| Code quality     | Linting, formatting, git hooks        | ESLint, Prettier, Husky, lint-staged |
+| Category          | Purpose                               | Technology                           |
+| ----------------- | ------------------------------------- | ------------------------------------ |
+| Frontend          | UI & routing                          | Next.js 15 (App Router), TypeScript  |
+| Styling           | Design system                         | Tailwind CSS 3                       |
+| State management  | Client-side global state              | Zustand 5                            |
+| Authentication    | Naver OAuth sign-in                   | NextAuth.js 4                        |
+| Database          | Memo & todo persistence               | Supabase (PostgreSQL)                |
+| Calendar UI       | Schedule display & interaction        | FullCalendar 6                       |
+| Drag and drop     | Memo zone changes, calendar placement | react-dnd 16                         |
+| Toast feedback    | User notifications & error reporting  | Sonner                               |
+| Charts            | Stats visualization (future)          | Chart.js 4                           |
+| Deployment        | Hosting & CI                          | Vercel                               |
+| Code quality      | Linting, formatting, git hooks        | ESLint, Prettier, Husky, lint-staged |
 
 ---
 
@@ -230,7 +263,9 @@ Key design goals:
 naviynote/
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx                        # Root layout — fonts, session wrapper
+│   │   ├── layout.tsx                        # Root layout — fonts, session, <Toaster>
+│   │   ├── error.tsx                         # Global error boundary (reset + home)
+│   │   ├── not-found.tsx                     # 404 page
 │   │   ├── (pages)/
 │   │   │   ├── (landing)/page.tsx            # Landing / home
 │   │   │   ├── main/page.tsx                 # Dashboard
@@ -247,6 +282,8 @@ naviynote/
 │   │   └── api/
 │   │       ├── auth/[...nextauth]/           # NextAuth handler + SessionWrapper
 │   │       └── naver/add-schedule/           # Naver Calendar proxy endpoint
+│   ├── hooks/
+│   │   └── useScrollLock.ts                  # Body scroll lock/unlock for modals
 │   └── store/
 │       ├── memoStore.ts                      # Zustand memo store
 │       └── todoStore.ts                      # Zustand todo store
@@ -254,10 +291,10 @@ naviynote/
 │   ├── Header/                               # Global header & nav
 │   ├── Main/                                 # Dashboard widgets
 │   ├── Memo/                                 # Memo list, modal, drop zones
-│   │   └── memosServer.tsx                   # Server actions (Supabase CRUD)
+│   │   ├── memosServer.tsx                   # Server actions (Supabase CRUD)
+│   │   └── YearMonthPicker.tsx               # Date range selector for memo-todo linking
 │   ├── ToDo/                                 # Todo list, modal, calendar
 │   │   └── todosServer.tsx                   # Server actions (Supabase CRUD)
-│   ├── YearMonthPicker.tsx                   # Date range selector for memo-todo linking
 │   ├── Button.tsx
 │   ├── Loading.tsx
 │   └── Footer.tsx
@@ -271,6 +308,7 @@ naviynote/
 1. **Server fetch functions** (`memosServer.tsx`, `todosServer.tsx`) query Supabase directly on the server.
 2. **Client components** call these on mount (gated by `useSession`), then populate the Zustand stores (`useMemoStore`, `useTodoStore`).
 3. **CRUD mutations** update both Supabase and the store optimistically, so the UI reflects changes instantly.
+4. **User feedback** is delivered via `toast.error()` / `toast.success()` (Sonner) rather than local state variables, keeping component logic lean.
 
 ### 3. Modal Pattern
 
@@ -279,11 +317,15 @@ Both memo and todo detail pages use **Next.js parallel + intercepting routes**:
 - `@memoModal/(.)memoItem/[memoId]` — intercepts navigation to `/memo/memoItem/:id` and renders a modal overlay instead of a full page load.
 - `@todoModal/(.)todoItem/[todoId]` — same pattern for todos.
 
-This allows deep-linking to individual items while preserving the list page in the background.
+Every modal uses `useScrollLock` to lock the background page scroll on open and reliably restore it on close — including after a successful delete.
 
 ### 4. Memo–Todo 1:1 Link Invariant
 
 Each memo holds a `todo_id` foreign key; each todo holds a `memo_id` foreign key. When `addMemo` or `updateMemo` creates a new link, the server action first nullifies the old memo's `todo_id`, ensuring neither side ends up pointing to two records simultaneously.
+
+### 5. Global Error Boundary
+
+`src/app/error.tsx` is a Next.js App Router error boundary that wraps the entire page tree. It catches unhandled exceptions and renders a recovery UI without crashing the shell (header, footer remain intact). The `reset` function re-mounts the failed segment; the home button provides a full escape hatch.
 
 ---
 
@@ -293,13 +335,15 @@ NaviyNote ships with a custom Tailwind design system defined in `tailwind.config
 
 ### 1. Color Tokens
 
-| Token                   | Hex       | Usage                                           |
-| ----------------------- | --------- | ----------------------------------------------- |
-| `navy` / `primary`      | `#003366` | Brand color, headings, active nav               |
-| `navy2` / `secondary`   | `#4169E1` | Buttons, interactive elements, form focus rings |
-| `navy3` / `accent`      | `#6495ED` | Modal highlights, secondary accents             |
-| `lightnavy` / `surface` | `#99CCFF` | Card chip backgrounds, zone labels              |
-| `red` / `danger`        | `#FF6347` | Important flag, destructive actions             |
+Both **semantic aliases** and the original **raw brand names** are registered so existing code continues to work alongside new semantic usage.
+
+| Semantic token  | Raw alias    | Hex       | Usage                                           |
+| --------------- | ------------ | --------- | ----------------------------------------------- |
+| `primary`       | `navy`       | `#003366` | Brand color, headings, active nav               |
+| `secondary`     | `navy2`      | `#4169E1` | Buttons, interactive elements, form focus rings |
+| `accent`        | `navy3`      | `#6495ED` | Modal highlights, secondary accents             |
+| `surface`       | `lightnavy`  | `#99CCFF` | Card chip backgrounds, zone labels              |
+| `danger`        | `red`        | `#FF6347` | Important flag, destructive actions             |
 
 ### 2. Typography Scale
 
@@ -312,7 +356,24 @@ NaviyNote ships with a custom Tailwind design system defined in `tailwind.config
 | `text-ui-xl`      | 3.2rem / 4rem      | Hero headings               |
 | `text-ui-mega`    | 10rem / 1          | Loading spinner display     |
 
-### 3. Fonts
+### 3. Animation
+
+| Class              | Keyframes                                   | Use case             |
+| ------------------ | ------------------------------------------- | -------------------- |
+| `animate-fade-in-scale` | `opacity 0→1`, `scale 0.95→1` over 0.15s | Modal entrance       |
+
+### 4. Layout Tokens
+
+Custom `width` / `height` / `minHeight` / `maxWidth` values cover recurring layout measurements so magic numbers are eliminated from component code.
+
+| Category   | Key examples                                                                   |
+| ---------- | ------------------------------------------------------------------------------ |
+| `width`    | `content` (100rem), `calendar` (50rem), `form-sm/md/lg/xl/2xl`, `logo-*`      |
+| `height`   | `header` (8.6rem), `calendar` (50rem), `landing`, `not-found`, `page-loading` |
+| `minHeight`| `zone` (16rem — memo drop zones), `memo-panel` (59rem)                        |
+| `maxWidth` | `content` (100rem)                                                             |
+
+### 5. Fonts
 
 NanumGothic is loaded from `public/fonts/` via `next/font/local` and exposed as CSS variables:
 
@@ -320,7 +381,7 @@ NanumGothic is loaded from `public/fonts/` via `next/font/local` and exposed as 
 - `--font-nanumgothic-bold` (700)
 - `--font-nanumgothic-extrabold` (800)
 
-### 4. Responsive Breakpoints
+### 6. Responsive Breakpoints
 
 - `sm: 768px` — switches from stacked mobile layout to side-by-side desktop layout
 - Fine-grained overrides use Tailwind's arbitrary-value syntax (e.g., `max-[400px]:text-xs`)
@@ -383,4 +444,3 @@ Pre-commit hooks run automatically via **Husky + lint-staged**: ESLint `--fix` o
 ## (8) Demo
 
 https://github.com/user-attachments/assets/867e0e72-7616-4975-8436-04b97b8e3978
-
