@@ -49,8 +49,8 @@ const TodoModal = () => {
         try {
           const fetchModalTodos = await fetchTodos(session.user.email)
           setTodosStore(fetchModalTodos)
-        } catch (error) {
-          console.log(error)
+        } catch {
+          setError('데이터를 불러오지 못했습니다.')
         }
       }
       setLoading(false)

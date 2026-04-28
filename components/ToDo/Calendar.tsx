@@ -21,6 +21,7 @@ export default function Calendar({
 }: CalendarProps) {
   const { data: session } = useSession()
   const [events, setEvents] = useState<EventInput[]>([])
+  const [dateUpdateError, setDateUpdateError] = useState<string | null>(null)
   const calendarAllDayRef = useRef<HTMLTableCellElement[]>([])
   const calendarDropRef = useRef<HTMLDivElement>(null)
 
@@ -36,6 +37,7 @@ export default function Calendar({
         { date: calendarCorrectedDate.toISOString().split('T')[0] },
         session.user.email
       )
+      setDateUpdateError(null)
       const newTodos = todos.map((todo: Todo) =>
         todo.id === todoId
           ? {
@@ -45,8 +47,8 @@ export default function Calendar({
           : todo
       )
       setTodos(newTodos)
-    } catch (error) {
-      console.log('Error updating date:', error)
+    } catch {
+      setDateUpdateError('날짜 변경에 실패했습니다. 다시 시도해 주세요.')
     }
   }
 
@@ -109,12 +111,13 @@ export default function Calendar({
     const updatedDate = eventDropInfo.event.startStr
     try {
       await updateTodo(todoId, { date: updatedDate }, session.user.email)
+      setDateUpdateError(null)
       const newTodos = todos.map((todo: Todo) =>
         todo.id === todoId ? { ...todo, date: updatedDate } : todo
       )
       setTodos(newTodos)
-    } catch (error) {
-      console.log('Error updating date:', error)
+    } catch {
+      setDateUpdateError('날짜 변경에 실패했습니다. 다시 시도해 주세요.')
     }
   }
 
@@ -135,25 +138,32 @@ export default function Calendar({
   }, [])
 
   return (
-    <div
-      ref={calendarDropRef}
-      className="min-w-0 overflow-x-auto h-[500px] sm:h-calendar"
-    >
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView="dayGridMonth"
-        events={events}
-        editable={true}
-        droppable={true}
-        height="100%"
-        eventDrop={handleEventDrop}
-        displayEventTime={false}
-        dayCellDidMount={handleDayCellDidMount}
-        dateClick={(info) => {
-          const clickedDate = info.dateStr
-          onDateClick?.(clickedDate)
-        }}
-      />
+    <div>
+      {dateUpdateError && (
+        <p className="mb-2 text-ui-caption font-nanumgothic_regular text-red text-center">
+          {dateUpdateError}
+        </p>
+      )}
+      <div
+        ref={calendarDropRef}
+        className="min-w-0 overflow-x-auto h-[500px] sm:h-calendar"
+      >
+        <FullCalendar
+          plugins={[dayGridPlugin, interactionPlugin]}
+          initialView="dayGridMonth"
+          events={events}
+          editable={true}
+          droppable={true}
+          height="100%"
+          eventDrop={handleEventDrop}
+          displayEventTime={false}
+          dayCellDidMount={handleDayCellDidMount}
+          dateClick={(info) => {
+            const clickedDate = info.dateStr
+            onDateClick?.(clickedDate)
+          }}
+        />
+      </div>
     </div>
   )
 }

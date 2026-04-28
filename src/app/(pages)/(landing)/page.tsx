@@ -1,7 +1,7 @@
 'use client'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import LogoImage from '../../../../public/images/logo-image.svg'
 import TitleWhiteImage from '../../../../public/images/title-white-image.svg'
 
@@ -51,17 +51,29 @@ const steps = [
 ]
 
 function SignInButton({ className }: { className?: string }) {
+  const [authError, setAuthError] = useState<string | null>(null)
+
   const handleSignIn = () => {
-    signIn('naver').catch((error) => console.log('로그인 실패:', error))
+    setAuthError(null)
+    signIn('naver').catch(() =>
+      setAuthError('로그인에 실패했습니다. 다시 시도해 주세요.')
+    )
   }
   return (
-    <button
-      type="button"
-      onClick={handleSignIn}
-      className={`bg-white text-primary font-nanumgothic_bold text-ui-md px-12 py-4 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all ${className ?? ''}`}
-    >
-      네이버로 로그인하기
-    </button>
+    <>
+      <button
+        type="button"
+        onClick={handleSignIn}
+        className={`bg-white text-primary font-nanumgothic_bold text-ui-md px-12 py-4 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all ${className ?? ''}`}
+      >
+        네이버로 로그인하기
+      </button>
+      {authError && (
+        <p className="mt-3 text-white/80 font-nanumgothic_regular text-ui-caption">
+          {authError}
+        </p>
+      )}
+    </>
   )
 }
 

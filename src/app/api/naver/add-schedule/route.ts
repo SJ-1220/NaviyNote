@@ -21,8 +21,10 @@ export async function POST(req: NextRequest) {
     )
 
     const rawRes = await res.text()
-    console.log('[네이버 응답 상태코드]', res.status)
-    console.log('[네이버 응답 본문]', rawRes)
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[네이버 응답 상태코드]', res.status)
+      console.log('[네이버 응답 본문]', rawRes)
+    }
 
     try {
       const data = JSON.parse(rawRes)
@@ -34,9 +36,11 @@ export async function POST(req: NextRequest) {
       )
     }
   } catch (error) {
-    console.log('서버 프록시 에러', error)
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[네이버 프록시 에러]', error)
+    }
     return NextResponse.json(
-      { error: 'Server error', details: String(error) },
+      { error: '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.' },
       { status: 500 }
     )
   }

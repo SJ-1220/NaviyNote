@@ -56,8 +56,8 @@ const MemoModal = () => {
         try {
           const fetchModalMemos = await fetchMemos(session.user.email)
           setMemosStore(fetchModalMemos)
-        } catch (error) {
-          console.log(error)
+        } catch {
+          setError('데이터를 불러오지 못했습니다.')
         }
       }
       setLoading(false)
