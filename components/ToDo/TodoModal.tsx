@@ -73,7 +73,7 @@ const TodoModal = () => {
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
     }
   }, [])
 
@@ -113,7 +113,9 @@ const TodoModal = () => {
       setTodosStore(todolist.filter((todo) => todo.id !== todoId))
     } catch (error) {
       setError((error as Error).message)
+      return
     }
+    document.body.style.overflow = ''
     router.push('/todo')
   }
   const handleEditTodo = (todo: Todo) => {
@@ -180,7 +182,7 @@ const TodoModal = () => {
   if (error) return <div>{error}</div>
   if (!todo) {
     console.log('todo not found')
-    return
+    return null
   }
 
   return (

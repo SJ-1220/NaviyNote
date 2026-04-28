@@ -80,7 +80,7 @@ const MemoModal = () => {
   useEffect(() => {
     document.body.style.overflow = 'hidden'
     return () => {
-      document.body.style.overflow = 'unset'
+      document.body.style.overflow = ''
     }
   }, [])
 
@@ -130,7 +130,9 @@ const MemoModal = () => {
       setMemosStore(memolist.filter((memo) => memo.id !== memoId))
     } catch (error) {
       setError((error as Error).message)
+      return
     }
+    document.body.style.overflow = ''
     router.push('/memo')
   }
   const handleEditMemo = (memo: Memo) => {
@@ -192,7 +194,7 @@ const MemoModal = () => {
   if (error) return <div>{error}</div>
   if (!memo) {
     console.log('memo not found')
-    return
+    return null
   }
   return (
     <div
