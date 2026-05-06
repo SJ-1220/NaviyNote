@@ -1,14 +1,14 @@
 'use client'
+import { Todo } from '@/src/types/todo'
 import { DayCellMountArg, EventChangeArg, EventInput } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import FullCalendar from '@fullcalendar/react'
 import { useSession } from 'next-auth/react'
 import { useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
 import { useDrop } from 'react-dnd'
-import { Todo, updateTodo } from './todosServer'
-
+import { toast } from 'sonner'
+import { updateTodo } from './todosServer'
 interface CalendarProps {
   todos: Todo[]
   setTodos: (todos: Todo[]) => void

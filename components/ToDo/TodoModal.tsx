@@ -1,6 +1,8 @@
 'use client'
 import { useScrollLock } from '@/src/hooks/useScrollLock'
 import useTodoStore from '@/src/store/todoStore'
+import { Memo } from '@/src/types/memo'
+import { Todo, TodoWithMemo } from '@/src/types/todo'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -8,14 +10,12 @@ import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import ConnectMemoBox from '../Memo/ConnectMemoBox'
-import { fetchConnectMemo, Memo } from '../Memo/memosServer'
+import { fetchConnectMemo } from '../Memo/memosServer'
 import { formatDate } from './TodayDateFormat'
 import {
   deleteTodo,
   fetchTodos,
   fetchTodoWithMemo,
-  Todo,
-  TodoWithMemo,
   updateTodo,
 } from './todosServer'
 

@@ -1,7 +1,7 @@
 'use client'
+import { Todo } from '@/src/types/todo'
 import Link from 'next/link'
 import { formatDate } from './TodayDateFormat'
-import { Todo } from './todosServer'
 
 interface TodoBoxProps {
   todo: Todo

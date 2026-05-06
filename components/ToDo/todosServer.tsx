@@ -1,25 +1,6 @@
 import { supabase } from '@/lib/supabase'
 
-export interface Todo {
-  id: string
-  user_email: string
-  task: string
-  completed: boolean
-  date?: string | null
-  memo_id?: string | null
-  important: boolean
-}
-
-export interface TodoWithMemo {
-  id: string
-  user_email: string
-  task: string
-  completed: boolean
-  date?: string | null
-  memo_id?: string | null
-  important: boolean
-  memo?: { content: string }
-}
+import { Todo } from '@/src/types/todo'
 
 export const fetchTodos = async (userEmail: string) => {
   if (!userEmail) throw new Error('User email is required')

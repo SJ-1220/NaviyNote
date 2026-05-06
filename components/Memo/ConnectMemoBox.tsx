@@ -1,6 +1,6 @@
 'use client'
+import { Memo } from '@/src/types/memo'
 import Button from '../Button'
-import { Memo } from './memosServer'
 
 interface ConnectMemoBoxProps {
   memo: Memo

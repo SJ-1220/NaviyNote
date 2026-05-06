@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Todo } from '@/components/ToDo/todosServer'
+import { Todo } from '../types/todo'
 interface TodoStore {
   todolist: Todo[]
   setTodosStore: (updater: Todo[] | ((prev: Todo[]) => Todo[])) => void

@@ -1,5 +1,5 @@
+import { Memo } from '@/src/types/memo'
 import { create } from 'zustand'
-import { Memo } from '@/components/Memo/memosServer'
 interface MemoStore {
   memolist: Memo[]
   setMemosStore: (updater: Memo[] | ((prev: Memo[]) => Memo[])) => void

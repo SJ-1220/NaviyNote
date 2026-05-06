@@ -2,6 +2,8 @@
 
 import { useScrollLock } from '@/src/hooks/useScrollLock'
 import useMemoStore from '@/src/store/memoStore'
+import { Memo, MemoWithTodo } from '@/src/types/memo'
+import { Todo } from '@/src/types/todo'
 import { useSession } from 'next-auth/react'
 import { useParams, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
@@ -9,14 +11,12 @@ import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
-import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
+import { fetchMonthTodo } from '../ToDo/todosServer'
 import YearMonthPicker from './YearMonthPicker'
 import {
   deleteMemo,
   fetchMemos,
   fetchMemoWithTodo,
-  Memo,
-  MemoWithTodo,
   updateMemo,
 } from './memosServer'
 

@@ -1,12 +1,14 @@
 'use client'
 import useTodoStore from '@/src/store/todoStore'
+import { Memo } from '@/src/types/memo'
+import { Todo } from '@/src/types/todo'
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import ConnectMemoBox from '../Memo/ConnectMemoBox'
-import { fetchConnectMemo, Memo } from '../Memo/memosServer'
+import { fetchConnectMemo } from '../Memo/memosServer'
 import AddCalendar from './AddCalender'
 import Calendar from './Calendar'
 import NoDateTodos from './NoDateTodos'
@@ -18,7 +20,6 @@ import {
   fetchThreeDaysTodo,
   fetchTodayTodo,
   fetchTodos,
-  Todo,
 } from './todosServer'
 
 export default function ToDos() {
