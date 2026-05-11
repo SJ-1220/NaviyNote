@@ -1,195 +1,19 @@
 'use client'
-import useMemoStore from '@/src/store/memoStore'
-import { Memo } from '@/src/types/memo'
+import { useMemos } from '@/src/hooks/useMemos'
 import { Todo } from '@/src/types/todo'
-import { useSession } from 'next-auth/react'
-import { useEffect, useMemo, useState } from 'react'
-import { toast } from 'sonner'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
-import { fetchMonthTodo } from '../ToDo/todosServer'
 import MemoBox from './MemoBox'
 import MemoDropZone from './MemoDropZone'
-import { addMemo, fetchMemos, updateMemo } from './memosServer'
 import YearMonthPicker from './YearMonthPicker'
 
 const Memos = () => {
-  const { data: session } = useSession()
-  const { memolist, setMemosStore } = useMemoStore()
-  const [memolistOpen, setMemolistOpen] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [newContent, setNewContent] = useState<string>('')
-  const [newActive, setNewActive] = useState<boolean>(false)
-  const [newImportant, setNewImportant] = useState<boolean>(false)
-  const [newConnect, setNewConnect] = useState<boolean>(false)
-  const [newTodoId, setNewTodoId] = useState<string | null>(null)
-  const [selectedMonth, setSelectedMonth] = useState<string>('')
-  const [monthTodolist, setMonthTodolist] = useState<Todo[]>([])
-  const [connectTodoTask, setConnectTodoTask] = useState<string | null>(null)
+  const { state, actions } = useMemos()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (session && session.user && session.user.email) {
-        try {
-          const memosData = await fetchMemos(session.user.email)
-          setMemosStore(memosData)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('메모 목록을 불러오지 못했습니다.')
-          }
-        }
-      }
-      setLoading(false)
-    }
-    fetchData()
-  }, [session, setMemosStore])
-
-  useEffect(() => {
-    const fetchMonthTodoData = async () => {
-      if (!selectedMonth || selectedMonth.trim() === '') return
-      const year = Number(selectedMonth.split('-')[0])
-      const month = Number(selectedMonth.split('-')[1]) - 1
-      const start = new Date(year, month, 1)
-      const end = new Date(year, month + 1, 0, 23, 59, 59)
-      if (session && session.user && session.user.email) {
-        try {
-          const monthTodos = await fetchMonthTodo(
-            session.user.email,
-            start.toISOString(),
-            end.toISOString()
-          )
-          setMonthTodolist(monthTodos)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('할일 목록을 불러오지 못했습니다.')
-          }
-        }
-      }
-    }
-    fetchMonthTodoData()
-  }, [session, selectedMonth])
-
-  const MonthNull = () => {
-    setSelectedMonth('')
-    setConnectTodoTask(null)
-    setNewTodoId(null)
-  }
-
-  const handleAddMemo = async () => {
-    if (newContent.trim() === '') return
-    if (session && session.user && session.user.email) {
-      const memo: Omit<Memo, 'id'> = {
-        user_email: session.user.email,
-        content: newContent,
-        todo_id: newTodoId != null ? newTodoId : undefined,
-        active: newActive,
-        important: newImportant,
-        connect: newConnect,
-      }
-      setIsSubmitting(true)
-      try {
-        const result = await addMemo(memo, session.user.email)
-        if (result) {
-          const { newMemo, memosUpdate } = result
-          setMemosStore((prev) => {
-            let updated = prev.map((m) =>
-              m.id === newMemo.id
-                ? newMemo
-                : memosUpdate && m.id === memosUpdate.id
-                  ? memosUpdate
-                  : m
-            )
-            if (!prev.some((m) => m.id === newMemo.id)) {
-              updated = [...updated, newMemo]
-            }
-            return updated
-          })
-        }
-        setNewContent('')
-        setNewActive(false)
-        setNewImportant(false)
-        setNewTodoId(null)
-        setNewConnect(false)
-      } catch (err) {
-        if (err instanceof TypeError) {
-          toast.error(
-            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-          )
-        } else {
-          toast.error('메모 추가에 실패했습니다.')
-        }
-      } finally {
-        setIsSubmitting(false)
-      }
-    }
-  }
-
-  const handleDropMemo = async (
-    id: string,
-    newActive: boolean,
-    newImportant: boolean
-  ) => {
-    const updatedMemos = memolist.map((memo) => {
-      if (memo.id === id) {
-        return { ...memo, active: newActive, important: newImportant }
-      }
-      return memo
-    })
-    setMemosStore(updatedMemos)
-    if (session?.user?.email) {
-      try {
-        await updateMemo(
-          id,
-          { active: newActive, important: newImportant },
-          session.user.email
-        )
-      } catch (err) {
-        if (err instanceof TypeError) {
-          toast.error(
-            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-          )
-        } else {
-          toast.error('메모 변경에 실패했습니다.')
-        }
-      }
-    }
-  }
-
-  const TodoIDTask = (id: string, task: string) => {
-    setConnectTodoTask(task)
-    setNewTodoId(id)
-  }
-
-  const MemoOpen = () => {
-    setMemolistOpen(!memolistOpen)
-  }
-
-  const AcImMemolist = useMemo(
-    () => memolist.filter((memo) => memo.active && memo.important),
-    [memolist]
-  )
-  const InacImMemolist = useMemo(
-    () => memolist.filter((memo) => !memo.active && memo.important),
-    [memolist]
-  )
-  const InacUnimMemolist = useMemo(
-    () => memolist.filter((memo) => !memo.active && !memo.important),
-    [memolist]
-  )
-  const AcUnimMemolist = useMemo(
-    () => memolist.filter((memo) => memo.active && !memo.important),
-    [memolist]
-  )
+  const { memolist, loading } = state
+  const { setNewContent, setNewActive, setNewImportant, setNewConnect } =
+    actions
 
   if (loading) return <LoadingPage />
 
@@ -242,7 +66,7 @@ const Memos = () => {
             <input
               className="h-12 px-4 rounded-xl w-full text-gray-800 mb-4 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
               type="text"
-              value={newContent}
+              value={state.newContent}
               placeholder="새로운 Memo를 추가하세요"
               onChange={(e) => setNewContent(e.target.value)}
             />
@@ -252,7 +76,7 @@ const Memos = () => {
                 <input
                   type="checkbox"
                   className="size-6"
-                  checked={newImportant}
+                  checked={state.newImportant}
                   onChange={(e) => setNewImportant(e.target.checked)}
                 />
               </label>
@@ -261,7 +85,7 @@ const Memos = () => {
                 <input
                   type="checkbox"
                   className="size-6"
-                  checked={newActive}
+                  checked={state.newActive}
                   onChange={(e) => setNewActive(e.target.checked)}
                 />
               </label>
@@ -270,34 +94,35 @@ const Memos = () => {
                 <input
                   type="checkbox"
                   className="size-6"
-                  checked={newConnect}
+                  checked={state.newConnect}
                   onChange={(e) => setNewConnect(e.target.checked)}
                 />
               </label>
             </div>
-            {newConnect && (
+            {state.newConnect && (
               <div>
                 <div className="flex flex-col gap-2 mb-3 min-[586px]:flex-row min-[586px]:items-center min-[586px]:justify-between">
                   <div className="text-ui-sm">연결할 날짜 선택</div>
                   <Button
                     className="text-ui-sm py-2 px-4 bg-secondary text-white rounded-xl self-start hover:bg-primary transition-colors"
                     type="button"
-                    onClick={MonthNull}
+                    onClick={actions.MonthNull}
                   >
                     연동 초기화
                   </Button>
                 </div>
                 <div className="mb-4 w-full max-w-full">
                   <YearMonthPicker
-                    value={selectedMonth}
-                    onChange={setSelectedMonth}
+                    value={state.selectedMonth}
+                    onChange={actions.setSelectedMonth}
                   />
                 </div>
-                {connectTodoTask && connectTodoTask.trim() !== '' ? (
+                {state.connectTodoTask &&
+                state.connectTodoTask.trim() !== '' ? (
                   <div className="text-secondary bg-secondary/5 border border-secondary/20 rounded-lg px-3 py-2">
                     🔗 연결된 Todo:{' '}
                     <span className="font-nanumgothic_bold">
-                      {connectTodoTask}
+                      {state.connectTodoTask}
                     </span>
                   </div>
                 ) : (
@@ -309,11 +134,11 @@ const Memos = () => {
             )}
             <Button
               type="button"
-              disabled={isSubmitting}
+              disabled={state.isSubmitting}
               className="my-4 py-3 w-full bg-secondary text-white rounded-xl font-nanumgothic_bold shadow-sm hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleAddMemo}
+              onClick={actions.handleAddMemo}
             >
-              {isSubmitting ? '추가 중...' : '+ 메모 추가'}
+              {state.isSubmitting ? '추가 중...' : '+ 메모 추가'}
             </Button>
           </div>
         </div>
@@ -322,7 +147,7 @@ const Memos = () => {
         </div>
       </div>
 
-      {newConnect && selectedMonth && (
+      {state.newConnect && state.selectedMonth && (
         <div className="mb-8 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="p-6">
             <div className="text-ui-md font-nanumgothic_bold text-primary mb-2">
@@ -332,9 +157,9 @@ const Memos = () => {
               선택한 날짜의 Todo입니다. 연결할 Todo를 선택해주세요.
             </div>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-              {monthTodolist.map((todo: Todo) => (
+              {state.monthTodolist.map((todo: Todo) => (
                 <MonthTodoBox
-                  todoFetch={() => TodoIDTask(todo.id, todo.task)}
+                  todoFetch={() => actions.TodoIDTask(todo.id, todo.task)}
                   key={todo.id}
                   todo={todo}
                 />
@@ -351,7 +176,7 @@ const Memos = () => {
         <MemoDropZone
           zoneIsActive={true}
           zoneIsImportant={false}
-          MemoDrop={handleDropMemo}
+          MemoDrop={actions.handleDropMemo}
         >
           <div className="h-full min-h-zone bg-white border-2 border-dashed border-secondary/30 rounded-xl">
             <div className="p-4">
@@ -359,7 +184,7 @@ const Memos = () => {
                 안중요 + 활성 메모
               </div>
               <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                {AcUnimMemolist.map((memo) => (
+                {state.AcUnimMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
               </div>
@@ -370,7 +195,7 @@ const Memos = () => {
         <MemoDropZone
           zoneIsActive={true}
           zoneIsImportant={true}
-          MemoDrop={handleDropMemo}
+          MemoDrop={actions.handleDropMemo}
         >
           <div className="h-full min-h-zone bg-white border-2 border-dashed border-danger/30 rounded-xl">
             <div className="p-4">
@@ -378,7 +203,7 @@ const Memos = () => {
                 중요 + 활성화 메모
               </div>
               <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                {AcImMemolist.map((memo) => (
+                {state.AcImMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
               </div>
@@ -389,7 +214,7 @@ const Memos = () => {
         <MemoDropZone
           zoneIsActive={false}
           zoneIsImportant={false}
-          MemoDrop={handleDropMemo}
+          MemoDrop={actions.handleDropMemo}
         >
           <div className="h-full min-h-zone bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl">
             <div className="p-4">
@@ -397,7 +222,7 @@ const Memos = () => {
                 안중요 + 비활성 메모
               </div>
               <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                {InacUnimMemolist.map((memo) => (
+                {state.InacUnimMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
               </div>
@@ -408,7 +233,7 @@ const Memos = () => {
         <MemoDropZone
           zoneIsActive={false}
           zoneIsImportant={true}
-          MemoDrop={handleDropMemo}
+          MemoDrop={actions.handleDropMemo}
         >
           <div className="h-full min-h-zone bg-gray-50 border-2 border-dashed border-danger/20 rounded-xl">
             <div className="p-4">
@@ -416,7 +241,7 @@ const Memos = () => {
                 중요 + 비활성 메모
               </div>
               <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                {InacImMemolist.map((memo) => (
+                {state.InacImMemolist.map((memo) => (
                   <MemoBox key={memo.id} memo={memo} />
                 ))}
               </div>
@@ -425,7 +250,7 @@ const Memos = () => {
         </MemoDropZone>
       </div>
 
-      {!memolistOpen && (
+      {!state.memolistOpen && (
         <div className="my-8 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="px-6 py-4 flex items-center justify-between">
             <div className="text-ui-md font-nanumgothic_bold text-primary">
@@ -433,7 +258,7 @@ const Memos = () => {
             </div>
             <Button
               type="button"
-              onClick={MemoOpen}
+              onClick={actions.MemoOpen}
               className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
               보기
@@ -441,7 +266,7 @@ const Memos = () => {
           </div>
         </div>
       )}
-      {memolistOpen && (
+      {state.memolistOpen && (
         <div className="my-8 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
             <div className="text-ui-md font-nanumgothic_bold text-primary">
@@ -449,7 +274,7 @@ const Memos = () => {
             </div>
             <Button
               type="button"
-              onClick={MemoOpen}
+              onClick={actions.MemoOpen}
               className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
               숨기기
