@@ -3,8 +3,8 @@ export interface Todo {
   user_email: string
   task: string
   completed: boolean
-  date?: string | null
-  memo_id?: string | null
+  date: string | null
+  memo_id: string | null
   important: boolean
 }
 
@@ -13,8 +13,8 @@ export interface TodoWithMemo {
   user_email: string
   task: string
   completed: boolean
-  date?: string | null
-  memo_id?: string | null
+  date: string | null
+  memo_id: string | null
   important: boolean
   memo?: { content: string }
 }

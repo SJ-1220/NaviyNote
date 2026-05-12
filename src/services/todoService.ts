@@ -171,11 +171,16 @@ export const unlinkTodoFromMemo = async (
   updatedTodo: Todo,
   userEmail: string
 ): Promise<void> => {
-  const { error } = await supabase
+  let query = supabase
     .from('memo')
     .update({ todo_id: null })
     .eq('todo_id', todoId)
-    .neq('id', updatedTodo.memo_id)
     .eq('user_email', userEmail)
+
+  if (updatedTodo.memo_id) {
+    query = query.neq('id', updatedTodo.memo_id)
+  }
+  const { error } = await query
+
   if (error) throw new Error(error.message)
 }

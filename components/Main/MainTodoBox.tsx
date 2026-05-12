@@ -1,6 +1,6 @@
 interface MainTodoBoxProps {
   title: string
-  date?: string | null
+  date: string | null
   important: boolean
 }
 export default function MainTodoBox({

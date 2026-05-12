@@ -28,7 +28,7 @@ export const useMemoModal = () => {
   const [newActive, setNewActive] = useState<boolean>(false)
   const [newImportant, setNewImportant] = useState<boolean>(false)
   const [newConnect, setNewConnect] = useState<boolean>(false)
-  const [newTodoId, setNewTodoId] = useState<string | null>('')
+  const [newTodoId, setNewTodoId] = useState<string | null>(null)
 
   const [editMemo, setEditMemo] = useState<Memo | null>(null)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -140,7 +140,10 @@ export const useMemoModal = () => {
   const updateMemoInput = async () => {
     if (!editMemo || !session?.user?.email) return
 
-    const updatedTodoId = newTodoId ? newTodoId : null
+    const updatedTodoId =
+      newTodoId === 'null' || !newTodoId || newTodoId.trim() === ''
+        ? null
+        : newTodoId
     const updatedMemo = {
       ...editMemo,
       content: newContent,

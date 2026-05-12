@@ -108,7 +108,10 @@ export const update = async (
     .eq('user_email', userEmail)
     .select()
     .maybeSingle()
-  if (error) throw new Error(error.message)
+  if (error) {
+    throw new Error(error.message)
+  }
+
   return data
 }
 
@@ -117,12 +120,17 @@ export const unlinkMemoFromTodo = async (
   updatedMemo: Memo,
   userEmail: string
 ): Promise<void> => {
-  const { error } = await supabase
+  let query = supabase
     .from('todo')
     .update({ memo_id: null })
     .eq('memo_id', memoId)
-    .neq('id', updatedMemo.todo_id)
     .eq('user_email', userEmail)
+
+  if (updatedMemo.todo_id) {
+    query = query.neq('id', updatedMemo.todo_id)
+  }
+  const { error } = await query
+
   if (error) throw new Error(error.message)
 }
 
