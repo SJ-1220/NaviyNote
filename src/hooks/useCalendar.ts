@@ -29,10 +29,7 @@ export const useCalendar = (
       )
       const newTodos = todos.map((todo: Todo) =>
         todo.id === todoId
-          ? {
-              ...todo,
-              date: calendarCorrectedDate.toISOString().split('T')[0],
-            }
+          ? { ...todo, date: calendarCorrectedDate.toISOString().split('T')[0] }
           : todo
       )
       setTodos(newTodos)
@@ -47,31 +44,33 @@ export const useCalendar = (
     }
   }
 
+  // drop했을 때, 드롭된 위치의 날짜로 Todo 데이터 동기화하는 함수
+  const handleDropRef = useRef(handleDrop)
+  useEffect(() => {
+    handleDropRef.current = handleDrop
+  })
+
   // todo가 캘린더에 드롭된 좌표를 통해 날짜를 찾는 함수
   const [, drop] = useDrop(() => ({
     accept: 'TODO',
     drop: (item: { id: string }, monitor) => {
       // calendarDropDayInfo : 캘린더에 드롭된 좌표 반환
       const calendarDroppedInfo = monitor.getClientOffset()
-      if (calendarDroppedInfo) {
-        const dropX = calendarDroppedInfo.x
-        const dropY = calendarDroppedInfo.y
-        const calendarDroppedPoint = calendarAllDayRef.current.find((point) => {
-          if (!point) return false
-          const rect = point.getBoundingClientRect()
-          return (
-            dropX >= rect.left &&
-            dropX <= rect.right &&
-            dropY >= rect.top &&
-            dropY <= rect.bottom
-          )
-        })
-        if (calendarDroppedPoint) {
-          const calendarDroppedDate = calendarDroppedPoint.dataset.date
-          if (calendarDroppedDate) {
-            handleDrop(calendarDroppedDate, item.id)
-          }
-        }
+      if (!calendarDroppedInfo) return
+      const { x: dropX, y: dropY } = calendarDroppedInfo
+      const calendarDroppedPoint = calendarAllDayRef.current.find((point) => {
+        if (!point) return false
+        const rect = point.getBoundingClientRect()
+        return (
+          dropX >= rect.left &&
+          dropX <= rect.right &&
+          dropY >= rect.top &&
+          dropY <= rect.bottom
+        )
+      })
+      const calendarDroppedDate = calendarDroppedPoint?.dataset.date
+      if (calendarDroppedDate) {
+        handleDropRef.current(calendarDroppedDate, item.id)
       }
     },
     collect: (monitor) => ({
@@ -137,6 +136,7 @@ export const useCalendar = (
       calendarAllDayRef.current = []
     }
   }, [])
+
   return {
     events,
     calendarDropRef,

@@ -244,8 +244,6 @@ export const useToDos = () => {
       TodoOpen,
       handleAddTodo,
       setSelectedDate,
-      setSelectedPrevDate,
-      setSelectedNextDate,
       setConnectMemoContent,
       setTodosStore,
     },

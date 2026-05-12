@@ -16,67 +16,36 @@ export const useRecentTodos = () => {
   const [prevTodos, setPrevTodos] = useState<MainTodo[]>([])
 
   useEffect(() => {
-    const fetchTodayTodos = async () => {
-      if (session && session.user && session.user.email) {
-        try {
-          const todos = await fetchMainTodayTodos(session.user.email)
-          setTodayTodos(todos)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('할일 목록을 불러오지 못했습니다.')
-          }
-        }
+    const fetchAllTodos = async () => {
+      if (!session?.user?.email) {
+        setLoading(false)
+        return
       }
-      setLoading(false)
+      const email = session.user.email
+      try {
+        const [today, next, prev] = await Promise.all([
+          fetchMainTodayTodos(email),
+          fetchMainNextTodos(email),
+          fetchMainPrevTodos(email),
+        ])
+        setTodayTodos(today)
+        setNextTodos(next)
+        setPrevTodos(prev)
+      } catch (err) {
+        if (err instanceof TypeError) {
+          toast.error(
+            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
+          )
+        } else {
+          toast.error('할일 목록을 불러오지 못했습니다.')
+        }
+      } finally {
+        setLoading(false)
+      }
     }
-    fetchTodayTodos()
+    fetchAllTodos()
   }, [session])
 
-  useEffect(() => {
-    const fetchNextTodos = async () => {
-      if (session && session.user && session.user.email) {
-        try {
-          const todos = await fetchMainNextTodos(session.user.email)
-          setNextTodos(todos)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('할일 목록을 불러오지 못했습니다.')
-          }
-        }
-      }
-      setLoading(false)
-    }
-    fetchNextTodos()
-  }, [session])
-
-  useEffect(() => {
-    const fetchPrevTodos = async () => {
-      if (session && session.user && session.user.email) {
-        try {
-          const todos = await fetchMainPrevTodos(session.user.email)
-          setPrevTodos(todos)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('할일 목록을 불러오지 못했습니다.')
-          }
-        }
-      }
-      setLoading(false)
-    }
-    fetchPrevTodos()
-  }, [session])
   return {
     state: { loading, todayTodos, nextTodos, prevTodos },
   }

@@ -124,7 +124,6 @@ export const useMemoModal = () => {
   }
 
   const handleEditMemo = (memo: Memo) => {
-    if (!memo) return
     setEditMemo(memo)
     setNewContent(memo.content)
     setNewActive(memo.active)
@@ -208,7 +207,6 @@ export const useMemoModal = () => {
       setNewActive,
       setNewImportant,
       setNewConnect,
-      setNewTodoId,
       setNewSelectedMonth,
       NewMonthNull,
       TodoIDTask,

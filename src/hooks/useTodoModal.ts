@@ -115,7 +115,6 @@ export const useTodoModal = () => {
     router.push('/todo')
   }
   const handleEditTodo = (todo: Todo) => {
-    if (!todo) return
     setEditTodo(todo)
     setNewTask(todo.task)
     setNewImportant(todo.important)
@@ -196,7 +195,6 @@ export const useTodoModal = () => {
       setNewImportant,
       setNewCompleted,
       setNewDate,
-      setNewMemoId,
       setNewConnect,
       setShowDeleteConfirm,
       NewConnectNull,
