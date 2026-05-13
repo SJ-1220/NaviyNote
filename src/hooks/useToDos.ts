@@ -166,8 +166,8 @@ export const useToDos = () => {
         task: newTask,
         completed: newCompleted,
         important: newImportant,
-        date: newDate != null ? newDate : undefined,
-        memo_id: newMemoId != null ? newMemoId : undefined,
+        date: newDate,
+        memo_id: newMemoId,
       }
       setIsSubmitting(true)
       try {
