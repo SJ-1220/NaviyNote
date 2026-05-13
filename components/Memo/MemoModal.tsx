@@ -1,199 +1,21 @@
 'use client'
 
-import { useScrollLock } from '@/src/hooks/useScrollLock'
-import useMemoStore from '@/src/store/memoStore'
-import { useSession } from 'next-auth/react'
-import { useParams, useRouter } from 'next/navigation'
-import { useCallback, useEffect, useState } from 'react'
-import { toast } from 'sonner'
+import { useMemoModal } from '@/src/hooks/useMemoModal'
+import { Todo } from '@/src/types/todo'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import MonthTodoBox from '../ToDo/MonthTodoBox'
-import { fetchMonthTodo, Todo } from '../ToDo/todosServer'
 import YearMonthPicker from './YearMonthPicker'
-import {
-  deleteMemo,
-  fetchMemos,
-  fetchMemoWithTodo,
-  Memo,
-  MemoWithTodo,
-  updateMemo,
-} from './memosServer'
 
 const MemoModal = () => {
-  const { memoId } = useParams()
-  const { data: session } = useSession()
-  const router = useRouter()
-  const unlock = useScrollLock()
+  const { state, actions } = useMemoModal()
+  const { memo, loading, editMemo } = state
 
-  const [loading, setLoading] = useState(true)
-
-  const [newContent, setNewContent] = useState<string>('')
-  const [newActive, setNewActive] = useState<boolean>(false)
-  const [newImportant, setNewImportant] = useState<boolean>(false)
-  const [newConnect, setNewConnect] = useState<boolean>(false)
-  const [newTodoId, setNewTodoId] = useState<string | null>('')
-
-  const [editMemo, setEditMemo] = useState<Memo | null>(null)
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-
-  const [newSelectedMonth, setNewSelectedMonth] = useState<string>('')
-  const [newMonthTodolist, setNewMonthTodolist] = useState<Todo[]>([])
-  const [newConnectTodoTask, setNewConnectTodoTask] = useState<string | null>(
-    null
-  )
-
-  const memolist = useMemoStore((state) => state.memolist)
-  const setMemosStore = useMemoStore((state) => state.setMemosStore)
-
-  const [memoTodo, setMemoTodo] = useState<MemoWithTodo | null>(null)
-
-  const [isTodoNull, setIsTodoNull] = useState<boolean>(false)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (memolist.length === 0 && session?.user?.email) {
-        try {
-          const fetchModalMemos = await fetchMemos(session.user.email)
-          setMemosStore(fetchModalMemos)
-        } catch {
-          toast.error('데이터를 불러오지 못했습니다.')
-        }
-      }
-      setLoading(false)
-    }
-    fetchData()
-  }, [session, memolist.length, setMemosStore])
-
-  useEffect(() => {
-    const fetchMemoWithTodoData = async () => {
-      if (!memoId || typeof memoId !== 'string' || !session?.user?.email) return
-      const memoWithTodo = await fetchMemoWithTodo(memoId, session.user.email)
-      setMemoTodo(memoWithTodo)
-    }
-    fetchMemoWithTodoData()
-  }, [memoId, session])
-
-  const memo = memolist.find((memo: Memo) => memo.id === memoId)
-
-  useEffect(() => {
-    if (!loading && !memo) router.replace('/memo')
-  }, [loading, memo, router])
-
-  useEffect(() => {
-    window.scroll(0, 0)
-  }, [])
-
-  useEffect(() => {
-    const fetchMonthTodoData = async () => {
-      if (!newSelectedMonth || newSelectedMonth.trim() === '') return
-      const year = Number(newSelectedMonth.split('-')[0])
-      const month = Number(newSelectedMonth.split('-')[1]) - 1
-      const start = new Date(year, month, 1)
-      const end = new Date(year, month + 1, 0, 23, 59, 59)
-      if (session && session.user && session.user.email) {
-        try {
-          const monthTodos = await fetchMonthTodo(
-            session.user.email,
-            start.toISOString(),
-            end.toISOString()
-          )
-          setNewMonthTodolist(monthTodos)
-        } catch {
-          toast.error('할일 목록을 불러오지 못했습니다.')
-        }
-      }
-    }
-    fetchMonthTodoData()
-  }, [session, newSelectedMonth])
-
-  const NewMonthNull = () => {
-    setNewSelectedMonth('')
-    setNewConnectTodoTask('')
-    setNewTodoId(null)
-    setIsTodoNull(true)
-  }
-
-  const TodoIDTask = (id: string, task: string) => {
-    setNewConnectTodoTask(task)
-    setNewTodoId(id)
-  }
-
-  const onClose = useCallback(() => {
-    unlock()
-    router.back()
-  }, [router, unlock])
-
-  const handleDeleteMemo = async (memoId: string) => {
-    if (!session?.user?.email) return
-    try {
-      await deleteMemo(memoId, session.user.email)
-      setMemosStore(memolist.filter((memo) => memo.id !== memoId))
-    } catch {
-      toast.error('삭제에 실패했습니다.')
-      return
-    }
-    unlock()
-    router.push('/memo')
-  }
-  const handleEditMemo = (memo: Memo) => {
-    if (!memo) return
-    setEditMemo(memo)
-    setNewContent(memo.content)
-    setNewActive(memo.active)
-    setNewImportant(memo.important)
-    setNewConnect(memo.connect)
-    setNewTodoId(memo.todo_id || null)
-  }
-
-  const updateMemoInput = async () => {
-    if (!editMemo || !session?.user?.email) return
-
-    const updatedTodoId = newTodoId ? newTodoId : null
-    const updatedMemo = {
-      ...editMemo,
-      content: newContent,
-      active: newActive,
-      important: newImportant,
-      connect: newConnect,
-      todo_id: updatedTodoId,
-    }
-    try {
-      const updatedMemos = await updateMemo(
-        editMemo.id,
-        updatedMemo,
-        session.user.email
-      )
-
-      setMemosStore((prev) =>
-        prev.map((memo) => {
-          const updated = updatedMemos.find((m) => m.id === memo.id)
-          return updated ? updated : memo
-        })
-      )
-
-      const updatedMemoWithTodo = await fetchMemoWithTodo(
-        editMemo.id,
-        session.user.email
-      )
-      setMemoTodo(updatedMemoWithTodo)
-
-      setEditMemo(null)
-      setNewContent('')
-      setNewActive(false)
-      setNewImportant(false)
-      setNewConnect(false)
-      setNewTodoId(null)
-      setIsTodoNull(false)
-    } catch {
-      toast.error('수정에 실패했습니다.')
-    }
-  }
   if (loading) {
     return (
       <div
         className="fixed inset-0 bg-black/30 flex justify-center items-center p-2"
-        onClick={onClose}
+        onClick={actions.onClose}
       >
         <div onClick={(e) => e.stopPropagation()}>
           <LoadingPage />
@@ -203,10 +25,11 @@ const MemoModal = () => {
   }
 
   if (!memo) return null
+
   return (
     <div
       className="fixed inset-0 bg-black/30 flex justify-center items-center p-2"
-      onClick={onClose}
+      onClick={actions.onClose}
     >
       <div
         className="relative w-full max-w-2xl"
@@ -217,7 +40,7 @@ const MemoModal = () => {
             <Button
               className="rounded-xl bg-secondary text-white py-2 px-4 hover:bg-primary transition-colors"
               type="button"
-              onClick={onClose}
+              onClick={actions.onClose}
             >
               모달 닫기
             </Button>
@@ -225,7 +48,7 @@ const MemoModal = () => {
               <Button
                 className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
                 type="button"
-                onClick={updateMemoInput}
+                onClick={actions.updateMemoInput}
               >
                 적용
               </Button>
@@ -234,7 +57,7 @@ const MemoModal = () => {
                 className="rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
                 type="button"
                 onClick={() => {
-                  handleEditMemo(memo)
+                  actions.handleEditMemo(memo)
                 }}
               >
                 수정
@@ -243,7 +66,7 @@ const MemoModal = () => {
             <Button
               className="rounded-xl py-2 px-4 bg-danger text-white hover:opacity-80 transition-opacity"
               type="button"
-              onClick={() => setShowDeleteConfirm(true)}
+              onClick={() => actions.setShowDeleteConfirm(true)}
             >
               삭제
             </Button>
@@ -275,9 +98,9 @@ const MemoModal = () => {
                 <span className="text-gray-800">
                   {memo.todo_id &&
                   memo.todo_id.trim() !== '' &&
-                  memoTodo &&
-                  memoTodo.todo
-                    ? memoTodo.todo.task
+                  state.memoTodo &&
+                  state.memoTodo.todo
+                    ? state.memoTodo.todo.task
                     : '없음'}
                 </span>
               </div>
@@ -293,8 +116,8 @@ const MemoModal = () => {
                 <input
                   className="h-10 px-3 rounded-xl w-full text-gray-800 border border-gray-300 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular"
                   type="text"
-                  value={newContent}
-                  onChange={(e) => setNewContent(e.target.value)}
+                  value={state.newContent}
+                  onChange={(e) => actions.setNewContent(e.target.value)}
                 />
               </label>
               <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
@@ -302,8 +125,8 @@ const MemoModal = () => {
                   <div className="font-nanumgothic_regular">활성화</div>
                   <input
                     type="checkbox"
-                    checked={newActive}
-                    onChange={(e) => setNewActive(e.target.checked)}
+                    checked={state.newActive}
+                    onChange={(e) => actions.setNewActive(e.target.checked)}
                     className="size-6"
                   />
                 </label>
@@ -311,8 +134,8 @@ const MemoModal = () => {
                   <div className="font-nanumgothic_regular">중요</div>
                   <input
                     type="checkbox"
-                    checked={newImportant}
-                    onChange={(e) => setNewImportant(e.target.checked)}
+                    checked={state.newImportant}
+                    onChange={(e) => actions.setNewImportant(e.target.checked)}
                     className="size-6"
                   />
                 </label>
@@ -320,19 +143,19 @@ const MemoModal = () => {
                   <div className="font-nanumgothic_regular">연동</div>
                   <input
                     type="checkbox"
-                    checked={newConnect}
-                    onChange={(e) => setNewConnect(e.target.checked)}
+                    checked={state.newConnect}
+                    onChange={(e) => actions.setNewConnect(e.target.checked)}
                     className="size-6"
                   />
                 </label>
               </div>
-              {newConnect && (
+              {state.newConnect && (
                 <div className="mb-4">
                   {memo.todo_id && memo.todo_id.trim() !== '' && (
                     <div>
-                      {memoTodo && memoTodo.todo && (
+                      {state.memoTodo && state.memoTodo.todo && (
                         <div className="mb-4">
-                          기존 Todo의 Task : {memoTodo.todo.task}
+                          기존 Todo의 Task : {state.memoTodo.todo.task}
                         </div>
                       )}
                     </div>
@@ -343,28 +166,29 @@ const MemoModal = () => {
                     </div>
                     <div className="flex flex-col gap-3 mb-2">
                       <YearMonthPicker
-                        value={newSelectedMonth}
-                        onChange={setNewSelectedMonth}
+                        value={state.newSelectedMonth}
+                        onChange={actions.setNewSelectedMonth}
                       />
                       <Button
                         className="w-full rounded-xl py-2 px-4 bg-secondary text-white hover:bg-primary transition-colors"
                         type="button"
-                        onClick={NewMonthNull}
+                        onClick={actions.NewMonthNull}
                       >
                         Todo 연결 초기화
                       </Button>
                     </div>
-                    {newConnectTodoTask && newConnectTodoTask.trim() !== '' ? (
+                    {state.newConnectTodoTask &&
+                    state.newConnectTodoTask.trim() !== '' ? (
                       <div className="mt-2 text-secondary bg-secondary/5 border border-secondary/20 rounded-lg px-3 py-2">
                         🔗 새로운 Todo:{' '}
                         <span className="font-nanumgothic_bold">
-                          {newConnectTodoTask}
+                          {state.newConnectTodoTask}
                         </span>
                       </div>
                     ) : (
                       <div className="mt-2 font-nanumgothic_regular text-gray-500">
                         새로운 Todo :{' '}
-                        {isTodoNull ? <span>없음</span> : <span>❔</span>}
+                        {state.isTodoNull ? <span>없음</span> : <span>❔</span>}
                       </div>
                     )}
                   </div>
@@ -372,12 +196,12 @@ const MemoModal = () => {
               )}
             </div>
           )}
-          {editMemo && newSelectedMonth && (
+          {editMemo && state.newSelectedMonth && (
             <div>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-4">
-                {newMonthTodolist.map((todo: Todo) => (
+                {state.newMonthTodolist.map((todo: Todo) => (
                   <MonthTodoBox
-                    todoFetch={() => TodoIDTask(todo.id, todo.task)}
+                    todoFetch={() => actions.TodoIDTask(todo.id, todo.task)}
                     key={todo.id}
                     todo={todo}
                   />
@@ -386,7 +210,7 @@ const MemoModal = () => {
             </div>
           )}
         </div>
-        {showDeleteConfirm && (
+        {state.showDeleteConfirm && (
           <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-black/40 backdrop-blur-sm">
             <div className="animate-fade-in-scale bg-white rounded-2xl p-8 shadow-xl flex flex-col items-center gap-3 text-center">
               <p className="font-nanumgothic_bold text-primary text-ui-sm">
@@ -399,14 +223,14 @@ const MemoModal = () => {
                 <Button
                   className="rounded-xl py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
                   type="button"
-                  onClick={() => setShowDeleteConfirm(false)}
+                  onClick={() => actions.setShowDeleteConfirm(false)}
                 >
                   취소
                 </Button>
                 <Button
                   className="rounded-xl py-2 px-4 bg-danger text-white hover:opacity-80 transition-opacity"
                   type="button"
-                  onClick={() => handleDeleteMemo(memo.id)}
+                  onClick={() => actions.handleDeleteMemo(memo.id)}
                 >
                   삭제 확인
                 </Button>

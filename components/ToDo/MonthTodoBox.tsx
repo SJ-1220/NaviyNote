@@ -1,7 +1,7 @@
 'use client'
+import { Todo } from '@/src/types/todo'
 import Button from '../Button'
 import { formatDate } from './TodayDateFormat'
-import { Todo } from './todosServer'
 
 interface MonthTodoBoxProps {
   todo: Todo

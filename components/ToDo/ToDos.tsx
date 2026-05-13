@@ -1,224 +1,26 @@
 'use client'
-import useTodoStore from '@/src/store/todoStore'
-import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
-import { toast } from 'sonner'
+import { useToDos } from '@/src/hooks/useToDos'
+import { Memo } from '@/src/types/memo'
 import Button from '../Button'
 import LoadingPage from '../Loading'
 import ConnectMemoBox from '../Memo/ConnectMemoBox'
-import { fetchConnectMemo, Memo } from '../Memo/memosServer'
 import AddCalendar from './AddCalender'
 import Calendar from './Calendar'
 import NoDateTodos from './NoDateTodos'
-import { formatDate, todayDateFormat } from './TodayDateFormat'
+import { todayDateFormat } from './TodayDateFormat'
 import TodoBox from './TodoBox'
-import {
-  addTodo,
-  fetchNoDateTodo,
-  fetchThreeDaysTodo,
-  fetchTodayTodo,
-  fetchTodos,
-  Todo,
-} from './todosServer'
 
 export default function ToDos() {
-  const { data: session } = useSession()
-  const { todolist, setTodosStore } = useTodoStore()
-  const [todolistOpen, setTodolistOpen] = useState(false)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [newTask, setNewTask] = useState<string>('')
-  const [newImportant, setNewImportant] = useState<boolean>(false)
-  const [newCompleted, setNewCompleted] = useState<boolean>(false)
-  const [newDate, setNewDate] = useState<string | null>(null)
-  const [newMemoId, setNewMemoId] = useState<string | null>(null)
-  const [newConnect, setNewConnect] = useState<boolean>(false)
-  const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const [selectedPrevDate, setSelectedPrevDate] = useState<string | null>(null)
-  const [selectedNextDate, setSelectedNextDate] = useState<string | null>(null)
-  const [threeDaysTodos, setThreeDaysTodos] = useState<Todo[]>([])
-  const [todayTodos, setTodayTodos] = useState<Todo[]>([])
-  const [noDateTodos, setNoDateTodos] = useState<Todo[]>([])
-  const [connectMemos, setConnectMemos] = useState<Memo[]>([])
-  const [connectMemoContent, setConnectMemoContent] = useState<string>('')
+  const { state, actions } = useToDos()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (session && session.user && session.user.email) {
-        try {
-          const todosData = await fetchTodos(session.user.email)
-          setTodosStore(todosData)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('할일 목록을 불러오지 못했습니다.')
-          }
-        }
-      }
-      setLoading(false)
-    }
-    fetchData()
-  }, [session, setTodosStore])
-
-  useEffect(() => {
-    const handleFetchThreeDaysTodos = async () => {
-      if (session?.user?.email && selectedDate) {
-        try {
-          const targetDate = new Date(selectedDate)
-          const targetPrevDate = new Date(targetDate)
-          const targetNextDate = new Date(targetDate)
-
-          targetPrevDate.setDate(targetDate.getDate() - 1)
-          const targetPrevDateFormat = formatDate(targetPrevDate)
-          setSelectedPrevDate(targetPrevDateFormat)
-
-          targetNextDate.setDate(targetDate.getDate() + 1)
-          const targetNextDateFormat = formatDate(targetNextDate)
-          setSelectedNextDate(targetNextDateFormat)
-
-          const todos = await fetchThreeDaysTodo(
-            session.user.email,
-            targetNextDateFormat,
-            targetPrevDateFormat
-          )
-          setThreeDaysTodos(todos)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('날짜별 할일을 불러오지 못했습니다.')
-          }
-        }
-      } else {
-        setThreeDaysTodos([])
-      }
-    }
-    handleFetchThreeDaysTodos()
-  }, [session, selectedDate])
-
-  useEffect(() => {
-    const handleTodayTodos = async () => {
-      if (!session?.user?.email) return
-      const today = todayDateFormat()
-      try {
-        const todos = await fetchTodayTodo(session.user.email, today)
-        setTodayTodos(todos)
-      } catch (err) {
-        if (err instanceof TypeError) {
-          toast.error(
-            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-          )
-        } else {
-          toast.error('오늘의 할일을 불러오지 못했습니다.')
-        }
-      }
-    }
-    handleTodayTodos()
-  }, [todolist, session])
-
-  useEffect(() => {
-    const handleNoDateTodos = async () => {
-      if (!session?.user?.email) return
-      try {
-        const todos = await fetchNoDateTodo(session.user.email)
-        setNoDateTodos(todos)
-      } catch (err) {
-        if (err instanceof TypeError) {
-          toast.error(
-            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-          )
-        } else {
-          toast.error('할일 목록을 불러오지 못했습니다.')
-        }
-      }
-    }
-    handleNoDateTodos()
-  }, [todolist, session])
-
-  useEffect(() => {
-    const fetchConnectMemoData = async () => {
-      if (session && session.user && session.user.email) {
-        try {
-          const memos = await fetchConnectMemo(session.user.email)
-          setConnectMemos(memos)
-        } catch (err) {
-          if (err instanceof TypeError) {
-            toast.error(
-              '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-            )
-          } else {
-            toast.error('메모 목록을 불러오지 못했습니다.')
-          }
-        }
-      }
-    }
-    fetchConnectMemoData()
-  }, [session])
-
-  const MemoIDContent = (id: string, content: string) => {
-    setNewMemoId(id)
-    setConnectMemoContent(content)
-  }
-
-  const handleAddTodo = async () => {
-    if (newTask.trim() === '') return
-    if (session && session.user && session.user.email) {
-      const todo: Omit<Todo, 'id'> = {
-        user_email: session.user.email,
-        task: newTask,
-        completed: newCompleted,
-        important: newImportant,
-        date: newDate != null ? newDate : undefined,
-        memo_id: newMemoId != null ? newMemoId : undefined,
-      }
-      setIsSubmitting(true)
-      try {
-        const result = await addTodo(todo, session.user.email)
-        if (result) {
-          const { newTodo, todosUpdate } = result
-          setTodosStore((prev) => {
-            let updated = prev.map((m) =>
-              m.id === newTodo.id
-                ? newTodo
-                : todosUpdate && m.id === todosUpdate.id
-                  ? todosUpdate
-                  : m
-            )
-            if (!prev.some((m) => m.id === newTodo.id)) {
-              updated = [...updated, newTodo]
-            }
-            return updated
-          })
-        }
-        setNewTask('')
-        setNewImportant(false)
-        setNewCompleted(false)
-        setNewDate(null)
-        setNewMemoId(null)
-        setNewConnect(false)
-        setConnectMemoContent('')
-      } catch (err) {
-        if (err instanceof TypeError) {
-          toast.error(
-            '서버와 연결할 수 없습니다. 오프라인 상태인지 확인해주세요.'
-          )
-        } else {
-          toast.error('할일 추가에 실패했습니다.')
-        }
-      } finally {
-        setIsSubmitting(false)
-      }
-    }
-  }
-
-  const TodoOpen = () => {
-    setTodolistOpen(!todolistOpen)
-  }
+  const { todolist, loading } = state
+  const {
+    setNewTask,
+    setNewImportant,
+    setNewCompleted,
+    setNewDate,
+    setNewConnect,
+  } = actions
 
   if (loading) return <LoadingPage />
 
@@ -251,9 +53,9 @@ export default function ToDos() {
 
   const connectMemoGrid = (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-      {connectMemos.map((memo: Memo) => (
+      {state.connectMemos.map((memo: Memo) => (
         <ConnectMemoBox
-          memoFetch={() => MemoIDContent(memo.id, memo.content)}
+          memoFetch={() => actions.MemoIDContent(memo.id, memo.content)}
           key={memo.id}
           memo={memo}
         />
@@ -272,13 +74,13 @@ export default function ToDos() {
               <div className="text-ui-md text-center mb-4 font-nanumgothic_bold text-primary">
                 오늘({todayDateFormat()})의 Todo
               </div>
-              {todayTodos.length === 0 ? (
+              {state.todayTodos.length === 0 ? (
                 <div className="text-center text-ui-sm text-gray-500">
                   🍀오늘은 할일이 없습니다🍀
                 </div>
               ) : (
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                  {todayTodos.map((todo) => (
+                  {state.todayTodos.map((todo) => (
                     <TodoBox key={todo.id} todo={todo} />
                   ))}
                 </div>
@@ -299,13 +101,13 @@ export default function ToDos() {
                 날짜를 설정하고 싶다면, 캘린더로
                 <span className="font-bold text-gray-700"> 드래그앤드롭</span>
               </div>
-              {noDateTodos.length === 0 ? (
+              {state.noDateTodos.length === 0 ? (
                 <div className="text-center text-ui-sm text-gray-500">
                   🌻모든 Todo의 날짜가 있습니다🌻
                 </div>
               ) : (
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                  {noDateTodos.map((todo) => (
+                  {state.noDateTodos.map((todo) => (
                     <NoDateTodos key={todo.id} todo={todo} />
                   ))}
                 </div>
@@ -316,7 +118,7 @@ export default function ToDos() {
           {/* 선택 날짜 전후 3일 Todo */}
           <div className="mt-8 bg-white border border-gray-200 rounded-xl shadow-sm">
             <div className="p-6">
-              {(!selectedDate || !session?.user?.email) && (
+              {(!state.selectedDate || !state.session?.user?.email) && (
                 <div>
                   <div className="text-ui-md text-center font-nanumgothic_bold text-primary">
                     캘린더에서 날짜를 선택하세요
@@ -326,21 +128,21 @@ export default function ToDos() {
                   </div>
                 </div>
               )}
-              {selectedDate && session?.user?.email && (
+              {state.selectedDate && state.session?.user?.email && (
                 <div>
                   <div className="text-center text-ui-md font-nanumgothic_bold text-primary">
-                    {selectedPrevDate} ~ {selectedNextDate}의 Todo
+                    {state.selectedPrevDate} ~ {state.selectedNextDate}의 Todo
                   </div>
                   <div className="text-center text-ui-sm text-gray-500 mt-1 mb-4">
                     선택한 날짜의 전날, 당일, 다음날의 Todo
                   </div>
-                  {threeDaysTodos.length === 0 ? (
+                  {state.threeDaysTodos.length === 0 ? (
                     <div className="text-ui-sm text-center text-gray-500">
-                      🍀{selectedDate} 전후로는 할일이 없습니다🍀
+                      🍀{state.selectedDate} 전후로는 할일이 없습니다🍀
                     </div>
                   ) : (
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(9rem,1fr))] gap-2 sm:gap-4 justify-items-center">
-                      {threeDaysTodos.map((todo) => (
+                      {state.threeDaysTodos.map((todo) => (
                         <TodoBox key={todo.id} todo={todo} />
                       ))}
                     </div>
@@ -360,7 +162,7 @@ export default function ToDos() {
                 <input
                   className="h-12 rounded-xl px-4 w-full text-gray-800 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all placeholder:text-gray-400 font-nanumgothic_regular"
                   type="text"
-                  value={newTask}
+                  value={state.newTask}
                   placeholder="새로운 Todo를 입력하세요"
                   onChange={(e) => setNewTask(e.target.value)}
                 />
@@ -368,7 +170,7 @@ export default function ToDos() {
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={newImportant}
+                      checked={state.newImportant}
                       className="size-5 accent-danger"
                       onChange={(e) => setNewImportant(e.target.checked)}
                     />
@@ -377,7 +179,7 @@ export default function ToDos() {
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={newCompleted}
+                      checked={state.newCompleted}
                       className="size-5 accent-secondary"
                       onChange={(e) => setNewCompleted(e.target.checked)}
                     />
@@ -388,7 +190,7 @@ export default function ToDos() {
                     <input
                       className="h-9 px-3 rounded-xl text-gray-800 border border-gray-200 bg-gray-50 focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20 transition-all font-nanumgothic_regular flex-1 min-w-0"
                       type="date"
-                      value={newDate || ''}
+                      value={state.newDate || ''}
                       onChange={(e) => setNewDate(e.target.value || null)}
                     />
                   </label>
@@ -396,37 +198,37 @@ export default function ToDos() {
                 <label className="flex items-center gap-2 cursor-pointer text-gray-700">
                   <input
                     type="checkbox"
-                    checked={newConnect}
+                    checked={state.newConnect}
                     className="size-5 accent-secondary"
                     onChange={(e) => {
                       setNewConnect(e.target.checked)
-                      if (!e.target.checked) setConnectMemoContent('')
+                      if (!e.target.checked) actions.setConnectMemoContent('')
                     }}
                   />
                   <span>메모와 연결</span>
                 </label>
-                {connectMemoContent && (
+                {state.connectMemoContent && (
                   <div className="text-secondary bg-secondary/5 border border-secondary/20 rounded-lg px-3 py-2">
                     🔗 연결된 메모:{' '}
                     <span className="font-nanumgothic_bold">
-                      {connectMemoContent}
+                      {state.connectMemoContent}
                     </span>
                   </div>
                 )}
                 <Button
                   type="button"
-                  onClick={handleAddTodo}
-                  disabled={isSubmitting}
+                  onClick={actions.handleAddTodo}
+                  disabled={state.isSubmitting}
                   className="w-full py-3 bg-secondary text-white rounded-xl hover:bg-primary transition-colors font-nanumgothic_bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? '추가 중...' : '+ Todo 추가'}
+                  {state.isSubmitting ? '추가 중...' : '+ Todo 추가'}
                 </Button>
               </div>
             </div>
           </div>
 
           {/* 모바일 전용: 메모 선택 섹션을 Todo 추가 바로 아래에 */}
-          {newConnect && (
+          {state.newConnect && (
             <div className="mt-8 sm:hidden bg-white border border-gray-200 rounded-xl">
               <div className="p-6">
                 <div className="text-center text-ui-md font-nanumgothic_bold text-primary mb-4">
@@ -452,15 +254,15 @@ export default function ToDos() {
           <div className="w-full z-10">
             <Calendar
               todos={todolist}
-              setTodos={(newTodos) => setTodosStore(newTodos)}
-              onDateClick={setSelectedDate}
+              setTodos={(newTodos) => actions.setTodosStore(newTodos)}
+              onDateClick={actions.setSelectedDate}
             />
           </div>
         </div>
       </div>
 
       {/* 데스크탑 전용: 메모 선택 섹션 (양쪽 열 아래) */}
-      {newConnect && (
+      {state.newConnect && (
         <div className="hidden sm:block mt-8 border border-gray-200 rounded-xl bg-white">
           <div className="p-6">
             <div className="text-start text-ui-md font-nanumgothic_bold text-primary mb-4">
@@ -471,14 +273,14 @@ export default function ToDos() {
         </div>
       )}
 
-      {!todolistOpen && (
+      {!state.todolistOpen && (
         <div className="mt-8 mb-4 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="px-6 py-4 flex items-center justify-between">
             <div className="text-ui-md font-nanumgothic_bold text-primary">
               전체 Todo
             </div>
             <Button
-              onClick={TodoOpen}
+              onClick={actions.TodoOpen}
               type="button"
               className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >
@@ -487,14 +289,14 @@ export default function ToDos() {
           </div>
         </div>
       )}
-      {todolistOpen && (
+      {state.todolistOpen && (
         <div className="mt-8 mb-4 border border-gray-200 rounded-xl bg-white shadow-sm">
           <div className="px-6 py-4 flex items-center justify-between border-b border-gray-100">
             <div className="text-ui-md font-nanumgothic_bold text-primary">
               전체 Todo
             </div>
             <Button
-              onClick={TodoOpen}
+              onClick={actions.TodoOpen}
               type="button"
               className="py-1.5 px-4 text-ui-sm font-nanumgothic_regular bg-secondary/10 text-secondary rounded-xl hover:bg-secondary/20 transition-colors"
             >

@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react'
+import { Todo } from '@/src/types/todo'
+import { useEffect, useRef } from 'react'
 import { useDrag } from 'react-dnd'
-import { Todo } from './todosServer'
 import TodoBox from './TodoBox'
 
 interface NoDateTodosProps {

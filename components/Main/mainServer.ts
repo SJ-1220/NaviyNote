@@ -11,7 +11,7 @@ export interface MainTodo {
   id: string
   user_email: string
   task: string
-  date?: string | null
+  date: string | null
   important: boolean
 }
 

@@ -11,7 +11,8 @@
       "Bash(npx next *)",
       "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\(JSON.stringify\\({...p.dependencies,...p.devDependencies}, null, 2\\)\\)\")",
       "Bash(npm install *)",
-      "Bash(node *)"
+      "Bash(node *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\kindj\\\\react_project\\\\naviynote\" -Recurse -File | Select-Object FullName | ForEach-Object { $_.FullName -replace [regex]::Escape\\(\"C:\\\\Users\\\\kindj\\\\react_project\\\\naviynote\\\\\"\\), \"\" } | Sort-Object)"
     ]
   }
 }

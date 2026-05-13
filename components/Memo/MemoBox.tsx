@@ -1,7 +1,7 @@
+import { Memo } from '@/src/types/memo'
 import Link from 'next/link'
 import { useRef } from 'react'
 import { useDrag } from 'react-dnd'
-import { Memo } from './memosServer'
 
 interface MemoBoxProps {
   memo: Memo
