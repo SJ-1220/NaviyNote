@@ -84,7 +84,7 @@ export const useMemos = () => {
       const memo: Omit<Memo, 'id'> = {
         user_email: session.user.email,
         content: newContent,
-        todo_id: newTodoId != null ? newTodoId : undefined,
+        todo_id: newTodoId,
         active: newActive,
         important: newImportant,
         connect: newConnect,
