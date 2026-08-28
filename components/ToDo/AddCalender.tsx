@@ -15,6 +15,7 @@ export default function AddCalendar() {
     const accessToken = session.accessToken
     const uid = crypto.randomUUID()
     const calendarId = 'defaultCalendarId'
+    const organizerEmail = process.env.NEXT_PUBLIC_CALENDAR_ORGANIZER_EMAIL
     const scheduleIcalString = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
@@ -39,7 +40,9 @@ export default function AddCalendar() {
       'SUMMARY:NaviyNote 2차 배포일',
       'DESCRIPTION:SJ-1220가 만든 NaviyNote의 2차 배포일입니다',
       'LOCATION:Online',
-      'ORGANIZER;CN=Test Organizer:mailto:kindjin12@naver.com',
+      ...(organizerEmail
+        ? [`ORGANIZER;CN=Test Organizer:mailto:${organizerEmail}`]
+        : []),
       'CREATED:20250625T000000Z',
       'LAST-MODIFIED:20250625T000000Z',
       'DTSTAMP:20250625T000000Z',
